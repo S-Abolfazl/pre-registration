@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # new
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'user',
 ]
 
 REST_FRAMEWORK = {
@@ -96,14 +97,21 @@ WSGI_APPLICATION = 'Back.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+#/DATABASES = {
+    #'default': {
+       # 'ENGINE': os.getenv('DATABASE_ENGINE'),
+      #  'NAME': os.getenv('DATABASE_NAME'),
+     #   'USER': os.getenv('DATABASE_USER'),
+    #    'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+   #     'HOST': os.getenv('DATABASE_HOST'),
+  #      'PORT': os.getenv('DATABASE_PORT'),
+ #   }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv('DATABASE_ENGINE'),
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
