@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
 
 
@@ -84,3 +85,24 @@ class UserLoginApi(APIView):
                 "msg": "error",
                 "data": "Invalid username or password"
             }, status=status.HTTP_401_UNAUTHORIZED)
+            
+
+
+class UserLogoutApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            print("User logged out")
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(data={
+                "msg": "ok",
+                "data": "Successfully logged out"
+            }, status=status.HTTP_200_OK)
+        except (TokenError, InvalidToken):
+            return Response(data={
+                "msg": "error",
+                "data": "Invalid token or token already blacklisted"
+            }, status=status.HTTP_400_BAD_REQUEST)
