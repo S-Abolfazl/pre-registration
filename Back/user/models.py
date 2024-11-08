@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 import uuid
 
-class User(models.Model):
+class User(AbstractUser):
     
     USER_TYPE={
         ('student', 'student'),
@@ -11,7 +12,7 @@ class User(models.Model):
     }
     
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    username = models.CharField(max_length=255)
+    username = models.CharField(unique=True,max_length=255)
     password = models.CharField(max_length=255)
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
