@@ -8,7 +8,7 @@ from .serializers import UserSerializer
 
 from django.views.decorators.csrf import csrf_exempt
 
-class UserCreateApi(APIView):
+class UserSignupApi(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -44,4 +44,4 @@ class UserListApi(APIView):
                 "data":"user not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        
+    
