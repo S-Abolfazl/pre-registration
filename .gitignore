@@ -1,10 +1,11 @@
 Back/*
-Back/Back
-Back/user
+Back/Back/*
+Back/user/*
+myenv
+.idea
+Back/*
+cource/*
 
 node_modules
 .nuxt
-
-Front/package-lock.json
-package.json
 
