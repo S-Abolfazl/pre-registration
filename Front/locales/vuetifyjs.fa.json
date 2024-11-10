@@ -1,0 +1,47 @@
+{
+  "badge": "",
+  "close": "بستن",
+  "dataIterator": {
+    "loadingText": "در حال بارگیری ...",
+    "rowsPerPageText": "ردیف در صفحه:",
+    "rowsPerPageAll": "همه",
+    "pageText": "{0} تا {1} از {2}",
+    "noResultsText": "نتیجه‌ای یافت نشد",
+    "nextPage": "صفحه بعد",
+    "prevPage": "صفحه قبل"
+  },
+  "dataTable": {
+    "itemsPerPageText": "ردیف در هر صفحه:",
+    "ariaLabel": {
+      "activateAscending": "غیرفعال‌سازی مرتب‌سازی صعودی",
+      "sortDescending": ": نزولی مرتب شده است برای حذف مرتب سازی فعال کنید.",
+      "sortAscending": ": صعودی مرتب شده است. برای مرتب سازی نزولی فعال کنید.",
+      "sortNone": ": طبقه بندی نشده اند برای مرتب سازی صعودی فعال کنید."
+    },
+    "rowsPerPageText": "ردیف در صفحه:"
+  },
+  "dataFooter": {
+    "pageText": "{0} تا {1} از {2}",
+    "itemsPerPageText": "موارد در هر صفحه:",
+    "itemsPerPageAll": "همه",
+    "nextPage": "بعدی",
+    "prevPage": "قبلی",
+    "firstPage": "اولین صفحه",
+    "lastPage": "آخرین صفحه"
+  },
+  "datePicker": {
+    "itemsSelected": "{0} انتخاب شده"
+  },
+  "noDataText": "اطلاعاتی یافت نشد",
+  "calendar": {
+    "moreEvents": "{0} بیشتر"
+  },
+  "pagination": {
+    "ariaLabel": {
+      "previous": "قبلی",
+      "next": "بعدی",
+      "page": "صفحه",
+      "currentPage": "صفحه فعلی"
+    }
+  }
+}

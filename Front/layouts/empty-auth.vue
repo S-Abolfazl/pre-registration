@@ -16,7 +16,6 @@ export default {
     this.checkAuth()
   },
   head() {
-    this.checkDomain()
     return {
       title: this.title,
     }

@@ -22,7 +22,7 @@
     "jalali-moment": "^3.3.11",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.25",
-    "nuxt": "^2.17.1",
+    "nuxt": "^2.18.1",
     "vue": "^2.6.14",
     "vue-json-pretty": "^1.8.2",
     "vue-persian-datetime-picker": "^2.10.4",

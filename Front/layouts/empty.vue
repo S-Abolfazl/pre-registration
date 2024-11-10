@@ -12,7 +12,6 @@ export default {
     title: '',
   }),
   head() {
-    this.checkDomain()
     return {
       title: this.title,
     }

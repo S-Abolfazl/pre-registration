@@ -26,9 +26,7 @@ export default {
     ],
   },
   plugins: [
-    '~/plugins/base',
     '~/plugins/axios',
-    '~/plugins/axios-processmaker',
     '~/plugins/helper',
     { src: '~/plugins/other.js', ssr: false },
     { src: '~/plugins/vue-persian-datetime-picker', ssr: false },

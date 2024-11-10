@@ -14,6 +14,8 @@ export const mutations = {
       data = app_name;
     }
     state.page_title = data;
+    console.log('asd', state.page_title);
+
   },
   set_logo(state, data) {
     state.logo = data;

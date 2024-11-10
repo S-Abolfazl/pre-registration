@@ -9,22 +9,20 @@
 <script>
 export default {
   name: 'default',
-  head() {},
+  head() {
+
+  },
   data: () => ({
-    title: '',
-    show_body: false,
+    show_body: true,
   }),
   watch: {},
   beforeMount() {
     this.checkAuth();
   },
-  mounted() {
-    this.$store.dispatch('setPageTitle', this.title);
-  },
   methods: {
     checkAuth() {
       let user = this.$store.state.auth.user
-      document.getElementById('loading-parent').style.display = 'flex'
+      // document.getElementById('loading-parent')?.style.display = 'flex'
       if (Boolean(user)) {
         this.show_body = true;
       } else {
