@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-
+from .views import CourseCreateApi
 urlpatterns = [
     path('create/', CourseCreateApi.as_view(), name='create_course'),
     path('list/', CourseListApi.as_view(), name='list_course'),
