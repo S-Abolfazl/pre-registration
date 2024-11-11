@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 
-from .models import User
+
+from.models import Course
 from .serializers import CourseSerializer
 
 from django.views.decorators.csrf import csrf_exempt
