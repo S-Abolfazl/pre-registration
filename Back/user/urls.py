@@ -8,5 +8,6 @@ urlpatterns = [
     path('signup/', UserSignupApi.as_view(), name='signup_user'),
     path('login/', UserLoginApi.as_view(), name='login_user'),
     path('logout/', UserLogoutApi.as_view(), name='logout_user'),
+    path('update/<pk>', UserUpdateApi.as_view(), name='update_user'),
 ]
 
