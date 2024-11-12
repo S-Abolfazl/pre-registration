@@ -45,3 +45,30 @@ class CourseListApi(APIView):
                 "msg":"error",
                 "data":"course not found"
             }, status=status.HTTP_404_NOT_FOUND)
+  
+        
+
+class CourseUpdateApi(APIView):
+    permission_classes = [AllowAny]
+    def put(self, request, pk):
+        try:
+            course = Course.objects.get(id=pk)
+            serializer = CourseSerializer(course, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data={
+                    "msg":"ok",
+                    "data":f'course by id:{course.id} updated'
+                }, status=status.HTTP_200_OK)
+            return Response(
+                data={
+                    "msg":"error",
+                    "data": serializer.errors
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Course.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"course not found"
+            }, status=status.HTTP_404_NOT_FOUND)
