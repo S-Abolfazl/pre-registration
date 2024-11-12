@@ -1,6 +1,7 @@
 Back/sib6/
-.DS_Store
+Back/.DS_Store
 Back/sib/
 Back/moz/
 **/__pycache__/
 __pycache__/
+.env
