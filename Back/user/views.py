@@ -64,9 +64,8 @@ class UserLoginApi(APIView):
 
         username = request.data.get('username')
         password = request.data.get('password')
-        
         user = authenticate(request, username=username, password=password)
-        
+
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
@@ -143,6 +142,30 @@ class UserUpdateApi(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+        except User.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"user not found"
+            }, status=status.HTTP_404_NOT_FOUND)
+            
+            
+class UserResetPasswordApi(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        try:
+            user = User.objects.get(username=request.user.username)
+            if request.data["password"] == request.data["confirm_password"]:
+                user.set_password(request.data["password"])
+                user.save()
+                return Response(data={
+                    "msg":"ok",
+                    "data":"password reset"
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response(data={
+                    "msg":"error",
+                    "data":"passwords do not match"
+                }, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             return Response(data={
                 "msg":"error",
