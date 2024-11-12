@@ -106,3 +106,36 @@ class UserLogoutApi(APIView):
                 "msg": "error",
                 "data": "Invalid token or token already blacklisted"
             }, status=status.HTTP_400_BAD_REQUEST)
+
+class UserDeleteApi(APIView):
+    permission_classes = [AllowAny]
+    def delete(self, request, pk):
+        try:
+            user = User.objects.get(id=pk)
+            user.delete()
+            return Response(data={
+                "msg":"ok",
+                "data":f'user by id:{pk} deleted'
+            }, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"user not found"
+            }, status=status.HTTP_404_NOT_FOUND)
+
+class UserDeleteApi(APIView):
+    permission_classes = [AllowAny]
+    def delete(self, request, pk):
+        try:
+            user = User.objects.get(id=pk)
+            user.delete()
+            return Response(data={
+                "msg":"ok",
+                "data":f'user by id:{pk} deleted'
+            }, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"user not found"
+            }, status=status.HTTP_404_NOT_FOUND)
+        
