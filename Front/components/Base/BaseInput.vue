@@ -1,6 +1,6 @@
 <template>
   <div v-if="end_render" :class="parentClass">
-    <amp-labale
+    <BaseLable
       :text="text"
       :color="color"
       :disabled="disabled"
@@ -13,6 +13,10 @@
     />
     <v-text-field
       dense
+      :style="{
+        width: width,
+        borderRadius: borderRadius,
+      }"
       :type="inp_type"
       :outlined="outlined"
       :rounded="rounded"
@@ -31,7 +35,7 @@
       :background-color="backgroundColor"
       :prepend-inner-icon="prependInnerIcon"
       :autocomplete="type == 'password' ? 'new-password' : ''"
-      :class="[cClass, isFloat || isNumber || isPrice ? 'ltr-item' : '', (disabled || readonly) && activeOpacity ? 'opacity_input' : '']"
+      :class="[cClass, isFloat || isNumber ? 'ltr-item' : '', (disabled || readonly) && activeOpacity ? 'opacity_input' : '']"
     >
     </v-text-field>
   </div>
@@ -40,9 +44,13 @@
 <script>
 export default {
   props: {
-    isPrice: {
-      type: Boolean,
-      default: false,
+    width: {
+      type: String,
+      default: '100px'
+    },
+    borderRadius: {
+      type: String,
+      default: '6px'
     },
     activeOpacity: {
       type: Boolean,
@@ -144,7 +152,7 @@ export default {
       default: '',
     },
     parentClass: {
-      default: 'px-md-3',
+      default: '',
     },
   },
   data: () => ({

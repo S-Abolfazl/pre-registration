@@ -1,8 +1,10 @@
 <template>
   <div>
-    the login page
-    <br>
-    sdfsdf
+    <div>
+      <span class="black1--text">ورود به حساب کاربری</span>
+    </div>
+
+
   </div>
 </template>
 
@@ -16,3 +18,17 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .line {
+    width: 45%;
+    color: #CBCAD7 !important;
+  }
+  .div-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .underline {
+    text-decoration: underline;
+  }
+</style>

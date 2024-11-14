@@ -63,10 +63,19 @@ export default {
           accent: '#1A2238',
           success: '#169e1a',
           warning: '#ffbb00',
-          primary: '#602EAA',
-          darkpurple: '#2f1753',
-          secondary: '#0649dc',
-          background: '#e4e4e4'
+
+          primary: '#6938EF',
+
+          orange1: '#FF8B37',
+
+          gray1: '#686677',
+          gray2: '#CBCAD7',
+          gray3: '#9794AA',
+
+          black1: '#100F14',
+          black2: '#19181F',
+
+          white1: '#FFFFFF',
         }
       },
     },

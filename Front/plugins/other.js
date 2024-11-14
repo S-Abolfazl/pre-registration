@@ -5,6 +5,7 @@ import 'vue-json-pretty/lib/styles.css';
 import BaseHelp from '~/components/Base/BaseHelp.vue'
 import BaseCard from '~/components/Base/BaseCard.vue'
 import BaseInput from '~/components/Base/BaseInput.vue'
+import BaseLable from '~/components/Base/BaseLable.vue';
 import BaseTitle from '~/components/Base/BaseTitle.vue'
 import BaseJdate from '~/components/Base/BaseJdate.vue'
 import BaseSelect from '~/components/Base/BaseSelect.vue'
@@ -18,6 +19,7 @@ Vue.component('persian-date-picker', VuePersianDatetimePicker)
 Vue.component('BaseHelp', BaseHelp)
 Vue.component('BaseCard', BaseCard)
 Vue.component('BaseInput', BaseInput)
+Vue.component('BaseLable', BaseLable)
 Vue.component('BaseTitle', BaseTitle)
 Vue.component('BaseJdate', BaseJdate)
 Vue.component('BaseSelect', BaseSelect)

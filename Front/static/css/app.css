@@ -224,3 +224,7 @@ tr {
 .theme--light.v-select .v-select__selection--disabled {
   color: #5c5c5c !important;
 }
+
+.theme--light.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot fieldset {
+  color: #CBCAD7 !important;
+}

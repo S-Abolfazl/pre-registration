@@ -1,182 +1,117 @@
 <template>
   <v-btn
-    depressed
-    :type="type"
-    :block="block"
-    :large="large"
-    :small="small"
-    @click="onClick"
-    :x-large="xlarge"
-    :x-small="xSmall"
-    :width="end_width"
-    :color="end_color"
-    :loading="loading"
-    :height="amp_height"
+    :class="cClass"
+    :disabled="disabled || loading"
     :outlined="outlined"
-    :disabled="disabled"
-    @mouseover="is_mouseover = true"
-    @mouseleave="is_mouseover = false"
-    :class="[disabled ? 'opacity_input' : '', cClass, 'amp-btn']"
+    @click="handleClick"
+    :loading="loading"
+    :color="color"
+    :width="width"
+    :height="height"
+    :fab="fab"
+    :block="fullWidth"
+    :small="size === 'small'"
+    :medium="size === 'medium'"
+    :large="size === 'large'"
+    :style="{ borderRadius: borderRadius }"
   >
-    <span :class="['pa-5', 'white--text', end_color, 'amp-btn_text']">
-      {{ text }}
-    </span>
-    <span v-if="icon" class="pa-6"></span>
-    <v-icon
-      v-if="icon"
-      :class="[iClass, icon_color, 'pa-3 py-5', 'amp-btn-icon']"
-    >
-      {{ icon }}
-    </v-icon>
+    <v-icon v-if="icon">{{ icon }}</v-icon>
+
+    <span v-if="!loading" :class="textClass">{{ text }}</span>
   </v-btn>
 </template>
 
 <script>
 export default {
   props: {
-    height: {
-      type: String,
-    },
-    large: {
-      default: true,
-      required: false,
-    },
-    xlarge: {
-      default: false,
-      required: false,
-    },
-    small: {
-      default: false,
-      required: false,
-    },
-    xSmall: {
-      default: false,
-      required: false,
-    },
-    type: {
-      default: 'button',
-      required: false,
-    },
-    block: {
-      default: false,
-      required: false,
-    },
-    color: {
-      type: String,
-      required: false,
-      default: 'primary',
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-      required: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-      required: false,
-    },
-    icon: {
-      type: String,
-      required: false,
-    },
     text: {
       type: String,
       required: true,
     },
+    color: {
+      type: String,
+      default: 'primary',
+    },
+    textClass: {
+      type: String,
+    },
+    borderRadius: {
+      type: String,
+      default: '6px'
+    },
     width: {
       type: String,
-      default: '',
+      default: '100%',
     },
-    cClass: {
+    height: {
       type: String,
-      default: '',
+      default: '44px',
     },
-    iClass: {
+    size: {
       type: String,
-      default: '',
+      default: 'medium',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
     outlined: {
       type: Boolean,
       default: false,
     },
+    icon: {
+      type: String,
+      default: '',
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    fullWidth: {
+      type: Boolean,
+      default: false,
+    },
+    fab: {
+      type: Boolean,
+      default: false, // Set to true for floating action buttons
+    },
   },
-  data: () => ({
-    is_mouseover: false,
-  }),
   computed: {
-    end_width() {
-      if (this.width) {
-        return this.width
-      }
-      if (this.icon) {
-        return 184
-      }
-      return ''
-    },
-    end_color() {
-      if (this.is_mouseover) {
-        return `${this.color} darken-1`
-      }
-      return this.color
-    },
-    icon_color() {
-      if (this.color == 'accent') {
-        return `${this.color} darken-3`
-      }
-      return `${this.color} darken-1`
-    },
-    amp_height() {
-      if (this.height) {
-        return this.height
-      }
-      return 44
+    cClass() {
+      return [
+        'base-button',
+        { 'btn-disabled': this.disabled || this.loading },
+      ];
     },
   },
   methods: {
-    onClick(event) {
-      if (this.loading || this.disabled) {
-        return
-      }
-      this.$emit('click', event)
+    handleClick() {
+      this.$emit('click');
     },
   },
-}
+};
 </script>
 
-<style>
-
-.v-btn--disabled .success 
-{
-    background-color: #9a9a9a !important;
-}
-.amp-btn {
-  overflow: hidden;
-  padding: 0 0 !important;
-}
-.amp-btn-icon {
-  left: 0;
-  color: #fff !important;
-  position: absolute !important;
-}
-.amp-btn_text {
-  width: 100%;
-}
-.theme--light.v-btn.v-btn--disabled .v-icon,
-.theme--light.v-btn.v-btn--disabled .v-btn__loading {
-  color: #fff !important;
-}
-/* .amp-btn  {
-  transition-delay: 0.3s;
-  -webkit-transition-delay: 0.3s;
-  transition: background-color 0.3s ease-in-out;
-  -webkit-transition: background-color 0.3s ease-in-out;
-} */
-
-.theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn-outlined) .amp-btn_text,
-.theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn-outlined) .amp-btn-icon
-{
-    background-color: #9a9a9a !important;
+<style scoped>
+.base-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 8px 16px;
 }
 
+.v-btn--outlined {
+  border: 1px solid #CBCAD7;
+}
+
+.base-button .v-icon {
+  margin-right: 8px;
+}
+
+.base-button .v-btn--loading {
+  pointer-events: none;
+}
 </style>
