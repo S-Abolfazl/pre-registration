@@ -9,24 +9,24 @@
 <script>
 export default {
   name: 'default',
-  head() {
-
-  },
   data: () => ({
-    show_body: true,
+    show_body: false,
   }),
-  watch: {},
   beforeMount() {
     this.checkAuth();
   },
   methods: {
     checkAuth() {
       let user = this.$store.state.auth.user
-      // document.getElementById('loading-parent')?.style.display = 'flex'
+
+      document.getElementById('loading').style.display = 'none';
+
       if (Boolean(user)) {
         this.show_body = true;
-      } else {
+      }
+      else {
         this.$store.dispatch('auth/nuxtServerInit').then(() => {
+          document.getElementById('loading').style.display = 'none';
           this.show_body = true;
         })
       }

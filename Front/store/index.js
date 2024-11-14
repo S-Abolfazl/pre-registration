@@ -1,8 +1,5 @@
-let app_name = 'سامانه پیش ثبت نام'
-
-
 export const state = () => ({
-  page_title: 'صفحه اصلی',
+  page_title: 'سامانه پیش ثبت نام',
   server_url: '127.0.0.1:8000',
   // TODO
   // file_url: 'https://file.ir/',
@@ -10,12 +7,7 @@ export const state = () => ({
 
 export const mutations = {
   set_title(state, data) {
-    if (typeof data != 'string' && data.length == 0) {
-      data = app_name;
-    }
     state.page_title = data;
-    console.log('asd', state.page_title);
-
   },
   set_logo(state, data) {
     state.logo = data;

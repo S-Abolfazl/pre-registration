@@ -1,18 +1,18 @@
 <template>
   <div>
-    asdasddads
+    the login page
+    <br>
+    sdfsdf
   </div>
 </template>
 
 <script>
 export default {
-  data: () => ({
-    title: 'ورود به سامانه',
-  }),
-  mounted() {
-    this.$store.dispatch('setPageTitle', this.title)
+  layout: 'site',
+  head() {
+    return {
+      title: 'ورود به سامانه',
+    }
   },
-  methods: {
-  }
-}
+};
 </script>

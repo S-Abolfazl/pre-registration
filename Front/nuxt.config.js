@@ -7,7 +7,7 @@ export default {
   target: 'static',
   telemetry: false,
   head: {
-    title: 'صفحه اصلی',
+    title: 'سامانه پیش ثبت‌نام',
     titleTemplate: '%s',
     htmlAttrs: {
       lang: 'fa',
