@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     # new
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'corsheaders',
+
     'user',
     'course',
     'student',
-    'corsheaders',
+    'registrationForm'
 ]
 
 REST_FRAMEWORK = {
