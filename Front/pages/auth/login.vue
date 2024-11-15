@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-max">
     <LoginForm />
   </div>
 </template>

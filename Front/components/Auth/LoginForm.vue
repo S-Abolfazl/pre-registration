@@ -1,8 +1,10 @@
 <template>
   <v-form v-model="valid">
     <v-row no-gutters class="d-flex">
+
+      <v-col cols="2" />
       <!-- main form -->
-      <v-col cols="6" class="d-flex flex-column align-center">
+      <v-col cols="4" class="d-flex flex-column align-center">
         <div class="mb-5">
           <b class="black1--text font_32">ورود به حساب کاربری</b>
         </div>
@@ -61,16 +63,18 @@
           <span class="font_16">
             حساب کاربری ندارید؟
           </span>
-          <span @click="signup" class="primary--text underline pointer font_16">
+          <span @click="signup" class="primary--text underline pointer font_16 mr-1">
             ثبت نام کنید
           </span>
         </div>
       </v-col>
 
       <!-- the img -->
-      <v-col cols="6" class="d-flex justify-center align-center">
+      <v-col cols="5" class="d-flex justify-center align-center">
         <img src="/image/login/light.png" alt="png" width="90%">
       </v-col>
+
+      <v-col cols="1" />
     </v-row>
   </v-form>
 </template>
@@ -89,7 +93,7 @@ export default {
     login_with_google() {},
     passwordForgot() {},
     login() {
-      this.$reqApi('/user/login/', this.form)
+      this.$reqApi('user/login/', this.form)
         .then((response) => {
           console.log('the response : ', response);
 
@@ -98,6 +102,7 @@ export default {
           // })
         })
         .catch((error) => {
+          console.log('the error : ', error);
           this.loading = false
         })
     },
