@@ -19,7 +19,6 @@ export default {
     const loadingElement = document.getElementById('loading');
     if (loadingElement) loadingElement.style.display = 'none';
 
-    console.log("Mounted: Checking authentication...");
     await this.checkAuth();
   },
   head() {
@@ -43,7 +42,6 @@ export default {
       }
     },
     showBody() {
-      console.log("Showing body...");
       this.show_body = true;
 
       // Hide loading after a short delay

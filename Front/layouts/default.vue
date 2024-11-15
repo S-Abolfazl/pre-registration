@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main v-if="show_body">
+    <v-main v-if="show_body" class="ma-3 h-max w-max">
       <nuxt />
     </v-main>
   </v-app>

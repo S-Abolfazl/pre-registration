@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div>
+    <div class="ma-3 h-max w-max d-flex align-center">
       <nuxt />
     </div>
   </v-app>

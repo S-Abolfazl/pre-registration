@@ -1,6 +1,6 @@
-import { version } from './package.json'
-import colors from 'vuetify/es5/util/colors'
-const fa = require('./locales/vuetifyjs.fa.json')
+import { version } from './package.json';
+import colors from 'vuetify/es5/util/colors';
+const fa = require('./locales/vuetifyjs.fa.json');
 
 export default {
   ssr: false,
@@ -40,11 +40,7 @@ export default {
     duration: 3000,
     position: 'bottom-left',
   },
-  // moment: {
-  //   defaultTimezone: 'Asia/Tehran'
-  // },
   vuetify: {
-    // customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: false,
       themes: {
@@ -63,18 +59,13 @@ export default {
           accent: '#1A2238',
           success: '#169e1a',
           warning: '#ffbb00',
-
           primary: '#6938EF',
-
           orange1: '#FF8B37',
-
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
-
           black1: '#100F14',
           black2: '#19181F',
-
           white1: '#FFFFFF',
         }
       },
@@ -85,10 +76,12 @@ export default {
       current: 'fa',
     },
     icons: {
-      iconfont: 'md',
+      defaultSet: 'mdi', // Use the Material Design Icons
+      iconfont: 'mdi',    // Ensure the correct font is used
     },
-    defaultAssets: false,
-    materialIcons: false,
+    defaultAssets: {
+      icons: 'mdi', // Ensure default assets are loaded
+    },
   },
   router: {
     mode: 'hash'
@@ -99,7 +92,10 @@ export default {
   build: {
     postcss: null,
     extend(config, ctx) {
-      config.resolve.alias['vue'] = 'vue/dist/vue.common'
+      config.resolve.alias['vue'] = 'vue/dist/vue.common';
     },
-  }
-}
+  },
+  css: [
+    '@mdi/font/css/materialdesignicons.css'
+  ]
+};

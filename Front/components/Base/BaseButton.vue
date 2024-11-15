@@ -15,6 +15,8 @@
     :large="size === 'large'"
     :style="{ borderRadius: borderRadius }"
   >
+    <img v-if="svg" :src="svg" class="button-svg" />
+
     <v-icon v-if="icon">{{ icon }}</v-icon>
 
     <span v-if="!loading" :class="textClass">{{ text }}</span>
@@ -31,6 +33,10 @@ export default {
     color: {
       type: String,
       default: 'primary',
+    },
+    svg: {
+      type: String,
+      default: '',
     },
     textClass: {
       type: String,
@@ -113,5 +119,11 @@ export default {
 
 .base-button .v-btn--loading {
   pointer-events: none;
+}
+.button-svg {
+  height: 24px;
+  width: 24px;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 </style>

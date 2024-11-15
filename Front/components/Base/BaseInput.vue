@@ -1,5 +1,5 @@
 <template>
-  <div v-if="end_render" :class="parentClass">
+  <div v-if="end_render" :class="parentClass" :style="{width: width,}">
     <BaseLable
       :text="text"
       :color="color"
@@ -14,7 +14,7 @@
     <v-text-field
       dense
       :style="{
-        width: width,
+        width: '100%',
         borderRadius: borderRadius,
       }"
       :type="inp_type"
@@ -169,7 +169,7 @@ export default {
         return this.appendIcon
       }
       if (this.type == 'password') {
-        return this.password_click ? 'visibility' : 'visibility_off'
+        return this.password_click ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
       }
     },
     inp_type() {
