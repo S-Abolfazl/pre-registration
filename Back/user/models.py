@@ -24,3 +24,12 @@ class User(AbstractUser):
     
     def __str__(self) -> str:
         return self.username
+    
+
+class EducationalAssisstant(User):
+
+    class Meta:
+        db_table = "educational_assessment"
+
+    def __str__(self) -> str:
+        return self.usernamede
