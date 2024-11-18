@@ -14,10 +14,9 @@ class User(AbstractUser):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     username = models.CharField(unique=True,max_length=255)
     password = models.CharField(max_length=255)
-    firstname = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
     email = models.EmailField()
     type = models.CharField(max_length=30, choices=USER_TYPE)
+    entry_year = models.IntegerField(null=True)
     
     class Meta:
         db_table = "User"
