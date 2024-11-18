@@ -26,7 +26,7 @@ class User(AbstractUser):
         return self.username
     
 
-class EducationalAssessment(User):
+class EducationalAssisstant(User):
 
     class Meta:
         db_table = "educational_assessment"
