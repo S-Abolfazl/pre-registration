@@ -27,8 +27,8 @@ class Course(models.Model):
         return self.course_id
     
 class Prereq(models.Model):
-    Course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="prereqs for")
-    prereq_course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="is prereq of")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="prereqs_for")
+    prereq_course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="is_prereq_of")
   
   
   #Course = models.ManyToManyField(Course, related_name="prereqs")
@@ -38,7 +38,7 @@ class Prereq(models.Model):
 
     class Meta:
       db_table = "Prereq"
-      unique_together = (('Course', 'prereq_course'),)
+      unique_together = (('course', 'prereq_course'),)
 
     def __str__(self) :
       return f"{self.course_id} - {self.prereq_id}"
