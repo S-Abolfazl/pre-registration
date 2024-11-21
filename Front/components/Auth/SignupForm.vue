@@ -10,10 +10,12 @@
           </div>
         
           <BaseAutocomplete
-          placeholder="نوع كاربري خود را مشخص كنيد"
-          rules="require"
-          width="75%"
-          text="نوع كاربر"
+            v-model="form.user_type"
+            :items="userTypes"
+            placeholder="نوع كاربري خود را مشخص كنيد"
+            rules="require"
+            width="75%"
+            text="نوع كاربر"
           />
 
           
@@ -26,7 +28,7 @@
           />
         
           <BaseInput
-            v-model="form.username"
+            v-model="form.email"
             text="آدرس ايميل"
             rules="require"
             placeholder=" آدرس ايميل خود را وارد کنید"
@@ -102,16 +104,19 @@ import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
       form: {
         username: '',
         password: '',
+        email: '',
+        user_type: '',
       },
+      userTypes: ['دانشجو', 'معاون آموزشی'],
     }),
     methods: {
       Signup_with_google() {},
       signup() {
-        this.$reqApi('user/login/', this.form)
+        this.$reqApi('user/signup/', this.form)
           .then((response) => {
             console.log('the response : ', response);
   
-            this.$store.dispatch('auth/login', response).then((data) => {
+            this.$store.dispatch('auth/signup', response).then((data) => {
               this.$router.push('/panel')
             })
           })
