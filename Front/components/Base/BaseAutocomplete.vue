@@ -1,6 +1,6 @@
 <template>
   <div v-if="end_render" class="px-md-3" :style="{width: width,}">
-    <amp-labale
+    <BaseLable
       :text="text"
       :color="color"
       test-tag="labale"
