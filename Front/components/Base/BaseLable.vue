@@ -1,9 +1,9 @@
 <template>
-  <div class="d-flex justify-space-between rtl-item">
+  <div class="d-flex rtl-item">
     <div class="py-1">
       <span :class="[color, textClass, 'font_16', 'gray3--text']" v-html="text"> </span>
     </div>
-    <div v-if="required" class="pt-1">
+    <div v-if="required" class="pt-1 mr-1">
       <span class="red--text font_16">*</span>
     </div>
   </div>

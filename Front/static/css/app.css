@@ -53,6 +53,10 @@
   height: 100% !important;
 }
 
+.h-90 {
+  height: 90% !important;
+}
+
 .fit {
   padding: 0 !important;
   margin: 0 !important;
@@ -62,12 +66,18 @@
   cursor: pointer;
 }
 
-.ltr-item {
-  direction: ltr !important;
-}
-
 .rtl-item {
   direction: rtl !important;
+}
+
+.ltr-item input::placeholder {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr-item input {
+  direction: ltr;
+  text-align: left;
 }
 
 .v-btn {
