@@ -1,8 +1,8 @@
 <template>
   <v-form v-model="valid">
-    <v-row no-gutters class="d-flex">
+    <v-row no-gutters class="d-flex justify-center align-center">
 
-      <v-col cols="2" />
+      <v-col cols="1" />
       <!-- main form -->
       <v-col cols="4" class="d-flex flex-column align-center">
         <div class="mb-5">
@@ -15,6 +15,7 @@
           rules="require"
           placeholder="آدرس ایمیل یا نام کابری خود را وارد کنید"
           width="75%"
+          cClass="ltr-item"
         />
 
         <BaseInput
@@ -24,6 +25,7 @@
           placeholder="رمز عبور خود را وارد کنید"
           type="password"
           width="75%"
+          cClass="ltr-item"
         />
 
         <div class="div-line">

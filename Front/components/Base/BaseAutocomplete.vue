@@ -1,5 +1,5 @@
 <template>
-  <div v-if="end_render" class="px-md-3" :style="{width: width,}">
+  <div v-if="end_render" class="px-md-3">
     <BaseLable
       :text="text"
       :color="color"
@@ -14,11 +14,6 @@
       dense
       eager
       outlined
-      :style="{
-        width: '100%',
-        borderRadius: borderRadius,
-      }"
-      :rounded="rounded"
       :error="error"
       :chips="chips"
       :items="items"
@@ -31,7 +26,7 @@
       :disabled="disabled"
       :multiple="multiple"
       :item-text="itemText"
-      :placeholder="placeholder"
+      placeholder="انتخاب کنید..."
       @click:append="$emit('click:append', $event)"
       :class="[disabled || readonly ? 'opacity_input' : '', classC]"
     ></v-autocomplete>
@@ -41,10 +36,6 @@
 <script>
 export default {
   props: {
-    width: {
-      type: String,
-      default: '100px'
-    },
     value: {
       required: false,
     },
@@ -96,10 +87,6 @@ export default {
     starRight: {
       type: Boolean,
       default: false,
-    },
-    placeholder: {
-      type: String,
-      default: '',
     },
     help_text: {
       type: String,
