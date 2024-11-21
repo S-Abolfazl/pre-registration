@@ -53,6 +53,10 @@
   height: 100% !important;
 }
 
+.h-90 {
+  height: 90% !important;
+}
+
 .fit {
   padding: 0 !important;
   margin: 0 !important;

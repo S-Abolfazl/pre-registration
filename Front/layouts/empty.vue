@@ -8,19 +8,8 @@
 
 <script>
 export default {
-  data: () => ({
-    title: '',
-  }),
-  head() {
-    return {
-      title: this.title,
-    }
-  },
   mounted() {
-    setTimeout(() => {
-      document.getElementById('loading-parent').style.display = 'none'
-    }, 2000)
-  },
-  methods: {},
+    document.getElementById('loading').style.display = 'none';
+  }
 }
 </script>

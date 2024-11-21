@@ -1,8 +1,8 @@
 <template>
   <v-form v-model="valid">
-    <v-row no-gutters class="d-flex">
+    <v-row no-gutters class="d-flex justify-center align-center">
 
-      <v-col cols="2" />
+      <v-col cols="1" />
       <!-- main form -->
       <v-col cols="4" class="d-flex flex-column align-center">
         <div class="mb-5">
