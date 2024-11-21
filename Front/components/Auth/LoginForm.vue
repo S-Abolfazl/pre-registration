@@ -15,6 +15,7 @@
           rules="require"
           placeholder="آدرس ایمیل یا نام کابری خود را وارد کنید"
           width="75%"
+          cClass="ltr-item"
         />
 
         <BaseInput
@@ -24,6 +25,7 @@
           placeholder="رمز عبور خود را وارد کنید"
           type="password"
           width="75%"
+          cClass="ltr-item"
         />
 
         <div class="div-line">

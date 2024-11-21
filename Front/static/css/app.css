@@ -66,12 +66,18 @@
   cursor: pointer;
 }
 
-.ltr-item {
-  direction: ltr !important;
-}
-
 .rtl-item {
   direction: rtl !important;
+}
+
+.ltr-item input::placeholder {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr-item input {
+  direction: ltr;
+  text-align: left;
 }
 
 .v-btn {
