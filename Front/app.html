@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html {{ HTML_ATTRS }}>
+<head {{ HEAD_ATTRS }}>
+  {{ HEAD }}
+  <style>
+    /* Loader Container */
+    #loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #FFFFFF; /* White background */
+      z-index: 9999;
+    }
+
+    /* Line Loader Style */
+    .line-loader {
+      width: 60%; /* Adjust width as needed */
+      height: 6px; /* Adjust height of the line */
+      border-radius: 4px;
+      background: linear-gradient(to right, #6938EF 0%, #6938EF 50%, transparent 50%);
+      background-size: 200% 100%;
+      animation: loading 1.5s linear infinite;
+    }
+
+    @keyframes loading {
+      from {
+        background-position: 0% 0;
+      }
+      to {
+        background-position: -100% 0;
+      }
+    }
+  </style>
+</head>
+<body {{ BODY_ATTRS }}>
+  <!-- Centered Loader -->
+  <div id="loading">
+    <div class="line-loader"></div>
+  </div>
+
+  <!-- Nuxt.js application content -->
+  {{ APP }}
+</body>
+<script>
+
+</script>
+</html>
