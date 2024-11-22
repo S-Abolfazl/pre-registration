@@ -31,6 +31,7 @@
             v-model="form.email"
             text="آدرس ايميل"
             rules="require"
+            type="email"
             placeholder=" آدرس ايميل خود را وارد کنید"
             width="75%"
           />
