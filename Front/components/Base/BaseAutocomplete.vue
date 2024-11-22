@@ -1,5 +1,5 @@
 <template>
-  <div v-if="end_render" class="px-md-3">
+  <div v-if="end_render" class="px-md-3" :style="{width: width,}">
     <BaseLable
       :text="text"
       :color="color"
@@ -12,6 +12,12 @@
     />
     <v-autocomplete
       dense
+      :style="{
+        width: '100%',
+        borderRadius: borderRadius,
+        padding: '0', 
+        margin: '0',
+      }"
       eager
       outlined
       :error="error"
@@ -36,6 +42,10 @@
 <script>
 export default {
   props: {
+    width: {
+      type: String,
+      default: '100px'
+    },
     value: {
       required: false,
     },
