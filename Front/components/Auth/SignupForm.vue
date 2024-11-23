@@ -1,16 +1,16 @@
 <template>
     <v-form v-model="valid">
       <v-row no-gutters class="d-flex">
-  
+
         <v-col cols="2" />
         <!-- main form -->
         <v-col cols="4" class="d-flex flex-column align-center">
           <div class="mb-5">
             <b class="black1--text font_32">ثبت نام</b>
           </div>
-        
+
           <BaseAutocomplete
-            v-model="form.user_type"
+            v-model="form.type"
             :items="userTypes"
             placeholder="نوع كاربري خود را مشخص كنيد"
             rules="require"
@@ -18,15 +18,16 @@
             text="نوع كاربر"
           />
 
-          
+
           <BaseInput
             v-model="form.username"
             text=" نام کاربری"
             rules="require"
             placeholder=" نام کابری خود را وارد کنید"
             width="75%"
+            help_text="نام کاربری برای دانشجویان، همان شماره دانشجویی میباشد"
           />
-        
+
           <BaseInput
             v-model="form.email"
             text="آدرس ايميل"
@@ -44,14 +45,15 @@
             placeholder="رمز عبور خود را وارد کنید"
             type="password"
             width="75%"
+            help_text="رمز عبور باید شامل حداقل 8 کاراکتر، حروف کوچک و بزرگ، عدد و کاراکتر های خاص باشد"
           />
-  
+
           <div class="div-line">
             <hr class="line" />
             <span class="mx-4"> یا </span>
             <hr class="line" />
           </div>
-  
+
           <BaseButton
             color="white1"
             text="ورود با گوگل"
@@ -62,9 +64,9 @@
             class="my-5"
             @click="Signup_with_google"
           />
-  
 
-  
+
+
           <BaseButton
             color="primary"
             text="ثبت نام"
@@ -74,7 +76,7 @@
             :disabled="!valid || loading"
             @click="signup"
           />
-  
+
           <div class="d-flex flex-end w-75">
             <span class="font_16">
               حساب کاربری دارید؟
@@ -84,17 +86,17 @@
             </span>
           </div>
         </v-col>
-  
+
         <!-- the img -->
         <v-col cols="5" class="d-flex justify-center align-center">
           <img src="/image/signup/light.png" alt="png" width="90%">
         </v-col>
-  
+
         <v-col cols="1" />
       </v-row>
     </v-form>
   </template>
-  
+
   <script>
 import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
 
@@ -106,23 +108,24 @@ import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
         username: '',
         password: '',
         email: '',
-        user_type: '',
+        type: '',
       },
-      userTypes: ['دانشجو', 'معاون آموزشی'],
+      userTypes: [],
     }),
+    mounted() {
+      this.userTypes = this.$store.state.static.user_types;
+    },
     methods: {
       Signup_with_google() {},
       signup() {
         this.$reqApi('user/signup/', this.form)
           .then((response) => {
-            console.log('the response : ', response);
-  
-            this.$store.dispatch('auth/signup', response).then((data) => {
-              this.$router.push('/panel')
+            this.$store.dispatch('auth/login', response)
+            .then((_) => {
+              this.$router.push('/')
             })
           })
           .catch((error) => {
-            console.log('the error : ', error);
             this.loading = false
           })
       },
@@ -150,4 +153,3 @@ import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
       width: 75%;
     }
   </style>
-  

@@ -16,12 +16,13 @@
           placeholder="آدرس ایمیل یا نام کابری خود را وارد کنید"
           width="75%"
           cClass="ltr-item"
+          help_text="نام کاربری برای دانشجویان، همان شماره دانشجویی میباشد"
         />
 
         <BaseInput
           v-model="form.password"
           text="رمز عبور"
-          rules="require"
+          rules="require, passwoed"
           placeholder="رمز عبور خود را وارد کنید"
           type="password"
           width="75%"
@@ -99,9 +100,9 @@ export default {
         .then((response) => {
           console.log('the response : ', response);
 
-          // this.$store.dispatch('auth/login', response).then((data) => {
-          //   this.$router.push('/panel')
-          // })
+          this.$store.dispatch('auth/login', response).then((data) => {
+            this.$router.push('/')
+          })
         })
         .catch((error) => {
           console.log('the error : ', error);

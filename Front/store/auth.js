@@ -75,7 +75,7 @@ export const actions = {
             'token': token,
             'refresh_token': refresh_token,
            })
-          await this.$reqApi(`/auth/user`, { get_token: true})
+          await this.$reqApi(`/user/login`, { get_token: true})
             .then(async (response) => {
               await dispatch('setAction', response.user)
               await commit('set_user', response.user)
@@ -114,13 +114,14 @@ export const actions = {
       }
     })
   },
-  async login({ commit, dispatch }, { user, Authorization }) {
-    commit('set_user', user)
-    await dispatch('setAction', user)
-    await dispatch('setRole', user)
+  async login({ commit, dispatch }, data) {
+
+    commit('set_user', data.user)
+    // await dispatch('setAction', data.user.type)
+    await dispatch('setRole', data.user.type)
     await commit('set_token', {
-      token: Authorization.token,
-      refresh_token: Authorization.refresh_token,
+      token: data.access_token,
+      refresh_token: data.refresh_token,
     });
   },
   async logout({ dispatch }) {

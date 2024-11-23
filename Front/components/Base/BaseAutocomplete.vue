@@ -1,5 +1,5 @@
 <template>
-  <div v-if="end_render" class="px-md-3" :style="{width: width,}">
+  <div v-if="end_render" :style="{width: width,}">
     <BaseLable
       :text="text"
       :color="color"
@@ -15,8 +15,6 @@
       :style="{
         width: '100%',
         borderRadius: borderRadius,
-        padding: '0', 
-        margin: '0',
       }"
       eager
       outlined
@@ -109,6 +107,10 @@ export default {
     chips: {
       type: Boolean,
       default: false,
+    },
+    borderRadius: {
+      type: String,
+      default: '6px'
     },
     itemText: { require: false, default: 'text' },
   },

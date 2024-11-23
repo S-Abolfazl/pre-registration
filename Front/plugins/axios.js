@@ -18,7 +18,7 @@ export default async ({ $axios, $toast, store }, inject) => {
               .then((response) => {
                 let check = checkResponse(response, getOnlyData, config)
                 if (check.status) {
-                    resolve(check.data)
+                    resolve(response.data)
                 } else {
                     reject()
                 }
@@ -107,8 +107,9 @@ export default async ({ $axios, $toast, store }, inject) => {
   )
 
   function checkResponse(response) {
-    if (response && response.status) {
-      if (response.status == 200) {
+    // TODO : check response.statusCode
+    if (response) {
+      if (response.msg == 'ok') {
         return {
           status: true,
           data: response.data,

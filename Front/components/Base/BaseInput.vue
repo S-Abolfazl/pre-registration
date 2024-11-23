@@ -7,7 +7,7 @@
       test-tag="labale"
       :required="required"
       :textClass="textClass"
-      :help-text="helpText"
+      :help_text="help_text"
       :starRight="starRight"
       v-if="text && showLable"
     />
@@ -144,7 +144,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    helpText: {
+    help_text: {
       type: String,
       default: '',
     },
