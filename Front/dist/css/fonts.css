@@ -1,0 +1,98 @@
+@font-face {
+  font-family: 'Sahel';
+  src: url('../fonts/Sahel-FD.ttf');
+}
+
+* {
+  font-family: 'Sahel', 'Sahel';
+  font-size: 14px;
+}
+
+text,
+h2 {
+  font-family: 'Sahel', 'Sahel' !important;
+}
+
+.overline {
+  font-family: 'Sahel', 'Sahel' !important;
+}
+
+.font_bold {
+  font-family: 'SahelBold', 'SahelBold' !important;
+}
+
+.font_10 {
+  font-size: 10px !important;
+}
+
+.font_12 {
+  font-size: 12px !important;
+}
+
+.font_14 {
+  font-size: 14px !important;
+}
+
+.font_16 {
+  font-size: 16px !important;
+}
+
+.font_18 {
+  font-size: 18px !important;
+}
+
+.font_19 {
+  font-size: 19px !important;
+}
+
+.font_20 {
+  font-size: 20px !important;
+}
+
+.font_24 {
+  font-size: 24px !important;
+}
+
+.font_30 {
+  font-size: 30px !important;
+}
+
+.font_32 {
+  font-size: 32px !important;
+}
+
+.font_35 {
+  font-size: 35px !important;
+}
+
+.font_13 > .v-btn__content {
+  font-size: 13px !important;
+}
+
+.font_12 > .v-btn__content {
+  font-size: 12px !important;
+}
+
+.font_18 > .v-btn__content {
+  font-size: 18px !important;
+}
+
+.font_15 > .v-btn__content {
+  font-size: 15px !important;
+}
+
+.font_16 > .v-btn__content {
+  font-size: 16px !important;
+}
+
+.font_17 > .v-btn__content {
+  font-size: 17px !important;
+}
+
+.font_24 > .v-btn__content {
+  font-size: 24px !important;
+}
+
+.font_30 > .v-btn__content {
+  font-size: 30px !important;
+}
