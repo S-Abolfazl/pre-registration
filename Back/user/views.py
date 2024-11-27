@@ -28,14 +28,16 @@ class UserSignupApi(APIView):
                 "data":{
                     "user": serializer.data,
                     "access_token": access_token,
-                    "refresh_token": refresh_token
+                    "refresh_token": refresh_token,
+                    "status": status.HTTP_201_CREATED
                 }
             }, status=status.HTTP_201_CREATED)
         
         return Response(
             data={
                 "msg":"error",
-                "data": serializer.errors
+                "data": serializer.errors,
+                "status": status.HTTP_400_BAD_REQUEST
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -54,7 +56,8 @@ class UserListApi(APIView):
         except User.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"user not found"
+                "data":"user not found",
+                "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
 
 class UserLoginApi(APIView):
@@ -64,7 +67,7 @@ class UserLoginApi(APIView):
 
         username = request.data.get('username')
         password = request.data.get('password')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
@@ -76,13 +79,15 @@ class UserLoginApi(APIView):
                 "data": {
                     "user": UserSerializer(user).data,
                     "access_token": access_token,
-                    "refresh_token": refresh_token
+                    "refresh_token": refresh_token,
+                    "status": status.HTTP_200_OK
                 }
             }, status=status.HTTP_200_OK)
         else:
             return Response(data={
                 "msg": "error",
-                "data": "Invalid username or password"
+                "data": "Invalid username or password",
+                "status": status.HTTP_401_UNAUTHORIZED
             }, status=status.HTTP_401_UNAUTHORIZED)
             
 
@@ -98,12 +103,14 @@ class UserLogoutApi(APIView):
             token.blacklist()
             return Response(data={
                 "msg": "ok",
-                "data": "Successfully logged out"
+                "data": "Successfully logged out",
+                "status": status.HTTP_200_OK
             }, status=status.HTTP_200_OK)
         except (TokenError, InvalidToken):
             return Response(data={
                 "msg": "error",
-                "data": "Invalid token or token already blacklisted"
+                "data": "Invalid token or token already blacklisted",
+                "status": status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDeleteApi(APIView):
@@ -114,12 +121,14 @@ class UserDeleteApi(APIView):
             user.delete()
             return Response(data={
                 "msg":"ok",
-                "data":f'user by id:{pk} deleted'
+                "data":f'user by id:{pk} deleted',
+                "status": status.HTTP_200_OK
             }, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"user not found"
+                "data":"user not found",
+                "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -133,19 +142,22 @@ class UserUpdateApi(APIView):
                 serializer.save()
                 return Response(data={
                     "msg":"ok",
-                    "data":f'user by id:{user.id} updated'
+                    "data":f'user by id:{user.id} updated',
+                    "status": status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
                 data={
                     "msg":"error",
-                    "data": serializer.errors
+                    "data": serializer.errors,
+                    "status": status.HTTP_400_BAD_REQUEST
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
         except User.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"user not found"
+                "data":"user not found",
+                "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
             
             
@@ -159,15 +171,18 @@ class UserResetPasswordApi(APIView):
                 user.save()
                 return Response(data={
                     "msg":"ok",
-                    "data":"password reset"
+                    "data":"password reset",
+                    "status": status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             else:
                 return Response(data={
                     "msg":"error",
-                    "data":"passwords do not match"
+                    "data":"passwords do not match",
+                    "status": status.HTTP_400_BAD_REQUEST
                 }, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"user not found"
+                "data":"user not found",
+                "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
