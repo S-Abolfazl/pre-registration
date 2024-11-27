@@ -2,8 +2,10 @@ Back/sib6/
 Back/.DS_Store
 Back/sib/
 Back/moz/
+node_modules
 **/__pycache__/
 __pycache__/
+.venv
 .env
 **/migrations/*.py
 !**/migrations/__init__.py
