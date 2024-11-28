@@ -23,6 +23,8 @@ class IsAcademicAssistant(BasePermissions):
         except User.DoesNotExist:
             is_academic_assistant = False
         
+        return is_academic_assistant
+    
 class IsSupport(BasePermissions):
     def has_permission(self, request, view):
         
