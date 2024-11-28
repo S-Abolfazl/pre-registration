@@ -61,4 +61,4 @@ class CourseRule(models.Model):
         unique_together = (('course', 'rule'),)
 
     def __str__(self) :
-        return f"{self.course_id} - {self.rule_id}"
+        return f"{self.course.course_id} - {self.rule.rule_id}"
