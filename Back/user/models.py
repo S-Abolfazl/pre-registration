@@ -58,3 +58,21 @@ class Comment(models.Model):
         
     def __str__(self) -> str:
         return f"Comment ID: {self.comment_id}, User ID: {self.user.id}"
+    
+class CommentAction(models.Model):
+    
+    Action_Type = {
+        ('like','like'),
+        ('dislike','dislike')
+    }
+    
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    action = models.CharField(max_length=30, choices=Action_Type)    
+    
+    class Meta:
+        db_table = "CommentAction"
+        unique_together = (('comment', 'user'),)
+        
+    def __str__(self) -> str:
+        return f"Comment ID: {self.comment.comment_id}, User ID: {self.user.id}"
