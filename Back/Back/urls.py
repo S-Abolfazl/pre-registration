@@ -22,5 +22,6 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('course/', include('course.urls')),
     path('student/', include('student.urls')),
+    path('support/', include('support.urls')),
     path('registration-form/', include('registrationForm.urls')),
 ]
