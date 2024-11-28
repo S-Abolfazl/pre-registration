@@ -23,3 +23,14 @@ class IsAcademicAssistant(BasePermissions):
         except User.DoesNotExist:
             is_academic_assistant = False
         
+class IsSupport(BasePermissions):
+    def has_permission(self, request, view):
+        
+        is_support = False
+        try:
+            user = User.objects.get(id=request.user.id)
+            is_support = user.type == 'support'
+        except User.DoesNotExist:
+            is_support = False
+        
+        return is_support
