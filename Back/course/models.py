@@ -10,8 +10,7 @@ class Course(models.Model):
       ('basic_course', 'basic course'),
     }
 
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    course_id = models.CharField(max_length=255)
+    course_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
     courseName = models.CharField(max_length=255)
     teacherName = models.CharField(max_length=255)
     isExperimental = models.BooleanField()
