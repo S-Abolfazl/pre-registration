@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 
-from .models import Course
-from .serializers import CourseSerializer
+from .models import Course, AllCourses
+from .serializers import CourseSerializer, AllCoursesSerializer
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -86,3 +86,24 @@ class CourseDeleteApi(APIView):
                 "msg":"error",
                 "data":"course not found"
             }, status=status.HTTP_404_NOT_FOUND)
+            
+class AllCourseCreateApi(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = AllCoursesSerializer(data=request.data)
+        if serializer.is_valid():
+            course = serializer.save()
+            return Response(data={
+                "msg":"ok",
+                "data":f'course by id:{course.course_id} created',
+                "status":status.HTTP_201_CREATED
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response(
+            data={
+                "msg":"error",
+                "data": serializer.errors,
+                "status":status.HTTP_400_BAD_REQUEST
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
