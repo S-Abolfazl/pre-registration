@@ -28,4 +28,4 @@ class SelectedCourse(models.Model):
         unique_together = (('form', 'course'),)
 
     def __str__(self):
-        return f"Form ID: {self.form.form_id}, Course ID: {self.course.course_id}"
+        return f"Form ID: {self.form.form_id}, Course ID: {self.course.c_id}"
