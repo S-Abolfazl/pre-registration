@@ -40,7 +40,7 @@ class CourseListApi(APIView):
     def get(self, request, pk=None):
         try:
             if pk:
-                course = Course.objects.get(id=pk)
+                course = Course.objects.get(c_id=pk)
                 serializer = CourseSerializer(course)
             else:
                 courses = Course.objects.all()
@@ -86,16 +86,18 @@ class CourseDeleteApi(APIView):
     permission_classes = [AllowAny]
     def delete(self, request, pk):
         try:
-            course = Course.objects.get(id=pk)
+            course = Course.objects.get(c_id=pk)
             course.delete()
             return Response(data={
                 "msg":"ok",
-                "data":f'course by id:{pk} deleted'
+                "data":f'course by id:{pk} deleted',
+                "status":status.HTTP_200_OK
             }, status=status.HTTP_200_OK)
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"course not found"
+                "data":"course not found",
+                "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
             
 class AllCourseCreateApi(APIView):
@@ -159,6 +161,25 @@ class AllCourseUpdateApi(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+        except AllCourses.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"course not found",
+                "status":status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+    
+            
+class AllCourseDeleteApi(APIView):
+    permission_classes = [AllowAny]
+    def delete(self, request, pk):
+        try:
+            course = AllCourses.objects.get(course_id=pk)
+            course.delete()
+            return Response(data={
+                "msg":"ok",
+                "data":f'course by id:{pk} deleted',
+                "status":status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
         except AllCourses.DoesNotExist:
             return Response(data={
                 "msg":"error",
