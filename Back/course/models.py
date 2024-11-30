@@ -26,6 +26,7 @@ class AllCourses(models.Model):
     
     course_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
     courseName = models.CharField(max_length=255, unique=True)
+    unit = models.IntegerField()
     type = models.CharField(max_length=30, choices=CourseType)
 
     class Meta:
