@@ -56,18 +56,23 @@ class CourseUpdateApi(APIView):
     permission_classes = [AllowAny]
     def put(self, request, pk):
         try:
-            course = Course.objects.get(id=pk)
-            serializer = CourseSerializer(course, data=request.data)
+            course = Course.objects.get(c_id=pk)
+            c = AllCourses.objects.get(courseName=request.data['courseName'])
+            request_data = request.data.copy()
+            request_data['course'] = c.course_id
+            serializer = CourseSerializer(course, data=request_data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
                     "msg":"ok",
-                    "data":f'course by id:{course.id} updated'
+                    "data":f'course by id:{course.c_id} updated',
+                    "status":status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
                 data={
                     "msg":"error",
-                    "data": serializer.errors
+                    "data": serializer.errors,
+                    "satatus":status.HTTP_400_BAD_REQUEST
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
