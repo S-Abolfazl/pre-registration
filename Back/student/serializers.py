@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
 from .models import EducationalChart
+import base64
 
 class EducationalChartSerializer(serializers.ModelSerializer):
+        
     class Meta:
         model = EducationalChart
         fields = '__all__'

@@ -27,3 +27,21 @@ class EducationalChartCreateApi(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+        
+class EducationalChartListApi(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, pk=None):
+        try:
+            if pk:
+                educationalChart = EducationalChart.objects.get(chart_id=pk)
+                serializer = EducationalChartSerializer(educationalChart)
+            else:
+                educationalCharts = EducationalChart.objects.all()
+                serializer = EducationalChartSerializer(educationalCharts, many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except EducationalChart.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"educational chart not found",
+                "status": status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
