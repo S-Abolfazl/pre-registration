@@ -5,7 +5,7 @@ data = {
     "course1":{ 
         "courseName": "زبان خارجی",
         "unit": "3",
-        "type": "basic_course"
+        "type": "public_course"
     },
     "course2":{ 
         "courseName": "مهارت های کاربردی کامپیوتر",
@@ -211,6 +211,31 @@ data = {
         "courseName": "سیستم های عامل",
         "unit": "3",
         "type": "theory_course"
+    },
+    "course43":{ 
+        "courseName": "تربیت بدنی 1",
+        "unit": "1",
+        "type": "public_course"
+    },
+    "course44":{ 
+        "courseName": "تربیت بدنی 2",
+        "unit": "1",
+        "type": "public_course"
+    },
+    "course45":{ 
+        "courseName": "گروه معارف",
+        "unit": "2",
+        "type": "public_course"
+    },
+    "course46":{ 
+        "courseName": "دانش خانواده",
+        "unit": "2",
+        "type": "public_course"
+    },
+    "course47":{ 
+        "courseName": "فارسی",
+        "unit": "3",
+        "type": "public_course"
     }
 }
 
