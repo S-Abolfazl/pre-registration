@@ -22,6 +22,7 @@ class AllCourses(models.Model):
       ('practical_course', 'practical course'), #amali
       ('elective_course', 'elective course'), #ekhtiari
       ('basic_course', 'basic course'), #paye
+      ('public_course', 'public course'), #omumi
     }
     
     course_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
