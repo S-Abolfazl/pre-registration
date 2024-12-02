@@ -46,7 +46,16 @@ class Prereq(models.Model):
     def __str__(self) :
       return f"{self.course.course_id} - {self.prereq_course.course_id}"
 
+class Coreq(models.Model):
+    course = models.ForeignKey(AllCourses, on_delete=models.CASCADE, related_name="coreqs_for")
+    coreq_course = models.ForeignKey(AllCourses, on_delete=models.CASCADE, related_name="is_coreq_of") 
+    
+    class Meta:
+      db_table = "Coreq"
+      unique_together = (('course', 'coreq_course'),)
 
+    def __str__(self) :
+      return f"{self.course.course_id} - {self.coreq_course.course_id}"
 
 class Rule(models.Model):
     type = {
