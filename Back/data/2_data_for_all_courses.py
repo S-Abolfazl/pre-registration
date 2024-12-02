@@ -13,7 +13,7 @@ data = {
         "type": "practical_course"
     },
     "course3":{ 
-        "courseName": "مبانی کامپیوz",
+        "courseName": "مبانی کامپیوتر و برنامه سازی",
         "unit": "3",
         "type": "theory_course"
     },
@@ -158,7 +158,7 @@ data = {
         "type": "theory_course"
     },
     "course32":{ 
-        "courseName": "آز سیستمهای عامل",
+        "courseName": "آز سیستم های عامل",
         "unit": "1",
         "type": "practical_course"
     },
@@ -204,6 +204,11 @@ data = {
     },
     "course41":{ 
         "courseName": "طراحی کامپیوتری سیستمهای دیجیتال",
+        "unit": "3",
+        "type": "theory_course"
+    },
+    "course42":{ 
+        "courseName": "سیستم های عامل",
         "unit": "3",
         "type": "theory_course"
     }
