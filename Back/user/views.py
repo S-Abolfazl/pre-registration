@@ -5,7 +5,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from .models import User
 from .serializers import UserSerializer
@@ -14,6 +15,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 class UserSignupApi(APIView):
     permission_classes = [AllowAny]
+    
+    @swagger_auto_schema(
+        operation_summary="User Signup",
+        operation_description="Endpoint to create a new user and return tokens.",
+        request_body=UserSerializer,
+    )
+    
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
