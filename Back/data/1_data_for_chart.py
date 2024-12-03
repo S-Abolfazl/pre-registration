@@ -5,6 +5,7 @@ data = {
     "chart1":{
         "year": "1400",
         "type": "even",
+        "units": ["16", "18", "17", "17", "18", "18", "17", "19"],
         "term1":["زبان خارجی", 
         "مهارت های کاربردی کامپیوتر",
         "مبانی کامپیوتر و برنامه سازی",
@@ -66,6 +67,7 @@ data = {
     "chart2":{
         "year": "1400",
         "type": "odd",
+        "units": ["16", "18", "20", "18", "18", "16", "18", "16"],
         "term1":["زبان خارجی", 
         "مهارت های کاربردی کامپیوتر",
         "مبانی کامپیوتر و برنامه سازی",
@@ -130,6 +132,7 @@ for chart_name, chart_data in data.items():
     EducationalChart.objects.create(
         year=chart_data["year"],
         type=chart_data["type"],
+        units=chart_data.get("units", []),
         term1=chart_data.get("term1", []),
         term2=chart_data.get("term2", []),
         term3=chart_data.get("term3", []),
