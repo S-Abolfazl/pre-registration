@@ -70,6 +70,19 @@ class UserListApi(APIView):
 
 class UserLoginApi(APIView):
     permission_classes = [AllowAny]
+    
+    @swagger_auto_schema(
+        operation_summary="User Login",
+        operation_description="Endpoint to login a user and return tokens.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['username', 'password'],
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password')
+            }
+        )
+    )
 
     def post(self, request):
 
@@ -103,6 +116,18 @@ class UserLoginApi(APIView):
 class UserLogoutApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="User Logout",
+        operation_description="Endpoint to logout a user and blacklist the refresh token.",
+        # security=[{'Bearer': []}],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['refresh_token'],
+            properties={
+                'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh Token')
+            }
+        )
+    )
     def post(self, request):
         try:
             print("User logged out")
