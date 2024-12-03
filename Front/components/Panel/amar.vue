@@ -4,12 +4,16 @@
       <v-col no-gutters align="center">
         <!-- متن توضیحات -->
         <v-row rows="1" >
-          <div class="font_35 font_bold title" >آمار</div>
+          <div>
+            <b class="font_35">
+              آمار
+            </b>
+          </div>
           <v-div class="font_16 description" >
         ببین کدوم درسا بیشترین دانشجو رو داره
         </v-div>
         </v-row>
-        
+
         <!-- تصویر موشک و مرد -->
         <v-row rows="2" class="d-flex justify-center image-wrapper">
           <img src="/image/panel/amar.png" alt="amar" class="amar-image" />
@@ -26,8 +30,8 @@
   border-radius: 10%;
   border: 3px solid #FF8B37;
   background-color: #ffD7C7;
-  width: 13%; 
-  height: 250px; 
+  width: 13%;
+  height: 250px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
