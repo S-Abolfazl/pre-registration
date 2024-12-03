@@ -19,11 +19,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "PreSignupCard",
-};
-</script>
 
 <style scoped>
 .amar-card {
