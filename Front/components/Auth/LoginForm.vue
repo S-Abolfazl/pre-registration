@@ -74,7 +74,11 @@
 
       <!-- the img -->
       <v-col cols="5" class="d-flex justify-center align-center">
-        <img src="/image/login/light.png" alt="png" width="90%">
+        <img
+          :src="this.$vuetify.theme.dark ? '/image/login/dark.png' : '/image/login/light.png'"
+          alt="png"
+          width="90%"
+        >
       </v-col>
 
       <v-col cols="1" />
@@ -101,6 +105,7 @@ export default {
           console.log('the response : ', response);
 
           this.$store.dispatch('auth/login', response).then((data) => {
+            this.$toast.success("با موفقیت وارد شدید")
             this.$router.push('/')
           })
         })
