@@ -35,6 +35,7 @@ class EducationalChart(models.Model):
 
     class Meta:
         db_table = 'EducationalChart'
+        unique_together = (('year', 'type'),)
 
     def __str__(self):
         return f"Educational Chart {self.year} ({self.type})"
