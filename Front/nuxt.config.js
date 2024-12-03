@@ -45,13 +45,23 @@ export default {
       dark: false,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.blue.darken4,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
+          info: '#00ABE1',
+          error: '#ff0000',
+          accent: '#1A2238',
+          success: '#169e1a',
+          warning: '#ffbb00',
+          primary: '#6938EF',
+
+          orange1: '#FF8B37',
+
+          gray1: '#686677',
+          gray2: '#CBCAD7',
+          gray3: '#9794AA',
+
+          black1: '#FFFFFF',
+          black2: '#FFFFAA',
+
+          white1: '#19181F',
         },
         light: {
           info: '#00ABE1',
@@ -64,8 +74,10 @@ export default {
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
+
           black1: '#100F14',
           black2: '#19181F',
+
           white1: '#FFFFFF',
         }
       },

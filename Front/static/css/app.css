@@ -238,3 +238,8 @@ tr {
 .theme--light.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot fieldset {
   color: #CBCAD7 !important;
 }
+
+.theme--dark.v-application {
+  background: #19181F !important;
+  color: #fff !important;
+}
