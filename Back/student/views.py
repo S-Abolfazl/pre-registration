@@ -43,24 +43,24 @@ class EducationalChartGetApi(APIView):
             data = {}
             course_name = None
             for key, value in serializer.data.items():
-                if key == "year" or key == "type" or key == "chart_id":
+                if key == "units" or key == "year" or key == "type" or key == "chart_id":
                     data[key] = value
-                    continue
-                
+                    continue            
                 try:
                     data[key] = {
-                        course_name: {
-                            "prereq": list(
-                                AllCourses.objects.filter(courseName=course_name)
-                                .first()
-                                .prereqs_for.values_list("prereq_course__courseName", flat=True)
-                            ) if AllCourses.objects.filter(courseName=course_name).exists() else [],
-                            "coreq": list(
-                                AllCourses.objects.filter(courseName=course_name)
-                                .first()
-                                .coreqs_for.values_list("coreq_course__courseName", flat=True)
-                            ) if AllCourses.objects.filter(courseName=course_name).exists() else [],
-                        } 
+                        course_name: (
+                            {
+                                "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)),
+                                "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)),
+                                "unit": course.unit,
+                                "kind": course.type
+                            } if (course := AllCourses.objects.filter(courseName=course_name).first()) else {
+                                "prereq": [],
+                                "coreq": [],
+                                "unit": 3,
+                                "kind": "elective_course"
+                            }
+                        )
                         for course_name in value
                     }
                 except Exception as e:
