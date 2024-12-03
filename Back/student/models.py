@@ -23,6 +23,7 @@ class EducationalChart(models.Model):
     year = models.PositiveIntegerField()
     type = models.CharField(max_length=4, choices=[('odd', 'Odd'), ('even', 'Even')])
     
+    units = models.JSONField(default=list, blank=True)
     term1 = models.JSONField(default=list, blank=True)
     term2 = models.JSONField(default=list, blank=True)
     term3 = models.JSONField(default=list, blank=True)
