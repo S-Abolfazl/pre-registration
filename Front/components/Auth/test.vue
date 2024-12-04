@@ -8,12 +8,15 @@
         <div class="mb-5">
           <b class="black1--text font_32">ورود به حساب کاربری</b>
         </div>
-        <BaseCourse
-      outlined-text="ریاضی گسسته"
-      filled-text="مدار منطقی"
+        <YearSelection>
+
+        </YearSelection>
+        <Course
+      text="ریاضی گسسته"
       chip-color="purple"
       :is-outlined="true"
     />
+    <ChartSelect></ChartSelect>
         <BaseButton text="here"/>
 
 
@@ -33,8 +36,11 @@
 </template>
 
 <script>
+import { Chart } from 'chart.js';
 import BaseButton from '../Base/BaseButton.vue';
-import BaseCourse from '../Base/BaseCourse.vue';
+import ChartSelect from '../PassedCourses/ChartSelect.vue';
+import Course from '../PassedCourses/Course.vue';
+import YearSelection from '../PassedCourses/YearSelection.vue';
 
 export default {
   data: () => ({
@@ -46,7 +52,9 @@ export default {
     },
   }),
   components:{
-    BaseCourse,
+    Course,
+    ChartSelect,
+    YearSelection,
   },
   methods: {
     login_with_google() {},

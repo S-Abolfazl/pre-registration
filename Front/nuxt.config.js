@@ -67,6 +67,7 @@ export default {
           black1: '#100F14',
           black2: '#19181F',
           white1: '#FFFFFF',
+          purple: '#7B5FF1',
         }
       },
     },
