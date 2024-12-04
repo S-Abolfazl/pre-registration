@@ -1,11 +1,12 @@
 <template>
-    <div class="btn-toggle-wrapper">
+    <div class="btn-toggle-wrapper" :style="{ height: height }">
       <v-btn-toggle
         v-model="selected"
         :rounded='true'
         class="custom-btn-toggle"
         mandatory
         :width="width"
+        :style="{ height: height }" 
       >
         <v-btn
           v-for="(option, index) in options"
@@ -14,6 +15,7 @@
           class="toggle-btn"
           :class="{ 'selected-btn': selected === option.value }"
           :text="selected !== option.value"
+          :style="{ height: height }" 
         >
           {{ option.text }}
         </v-btn>
@@ -38,7 +40,14 @@
       type: String,
       default: '300px'
     },
+    height: {
+        type: String,
+        default: '100px',
+      },
 },
+mounted() {
+}
+
   };
   </script>
   
@@ -46,8 +55,8 @@
   /* Wrapper for alignment */
   .btn-toggle-wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center !important;
+    align-items: center !important;
   }
   
   /* Custom style for the toggle container */
@@ -61,14 +70,19 @@
   
   /* Base button styles */
   .toggle-btn {
-    font-weight: bold;
-    font-size: 14px;
-    background-color: white; 
-    color:#FF8B37;
-    border: none;
-    width: 50%;
-    text-align: center;
-  }
+  font-weight: bold;
+  font-size: 14px;
+  background-color: white; 
+  color: #FF8B37;
+  border: none;
+  width: 50%;
+  text-align: center; /* Horizontal centering */
+  
+  display: flex;           /* Enable Flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+}
+
   
   /* Selected button styling */
   .selected-btn {

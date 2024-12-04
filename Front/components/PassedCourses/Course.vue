@@ -6,7 +6,8 @@
       :dark="isSelected"
       :text-color="isSelected ? 'white' : 'purple'"
       @click="toggleSelection"
-      class="outlined-chip "
+      class="outlined-chip large-chip"
+      
     >
       {{ text }}
     </v-chip>
@@ -37,6 +38,11 @@ export default {
 </script>
 
 <style scoped>
+.large-chip {
+  height: 30px; /* Example height for large size */
+  font-size: 16px; /* Adjust font size */
+  padding: 0 16px; /* Adjust padding */}
+
 .outlined-chip {
   border-color: #6938EF !important; 
 }

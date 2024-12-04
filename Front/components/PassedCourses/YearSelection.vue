@@ -1,11 +1,12 @@
 <template>
-    <div class="slide-group-wrapper">
+    <div class="slide-group-wrapper" >
       <!-- Slide Group Container -->
       <v-slide-group
         v-model="selected"
         class="custom-slide-group"
         center-active
         show-arrows
+        :style="{ height: height }" 
       >
         <!-- Left Arrow -->
         <template v-slot:prev>
@@ -41,6 +42,10 @@
       width: {
         type: String,
         default: '400px',
+      },
+      height: {
+        type: String,
+        default: '10px',
       },
     },
     data() {
@@ -79,7 +84,6 @@
   .slide-group-wrapper {
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
   }
   
   /* Slide Group Container */
@@ -88,6 +92,7 @@
     background-color: #FF8B37; /* Orange background */
     border-radius: 50px; /* Fully rounded container */
     position: relative;
+    align-items: center;
   }
   
   /* Each Slide Item */
@@ -95,6 +100,7 @@
     justify-content: center !important;
     align-items: center !important;
     width: v-bind('width') !important;
+    align-items: center;
   }
   
   .entry-content {
@@ -102,6 +108,7 @@
     font-weight: bold;
     color: white;
     text-align: center;
+    align-items: center;
   }
   
   /* Arrow Button Styling */
