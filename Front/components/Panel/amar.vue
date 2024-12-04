@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="amar-card" elevation="3">
+    <v-card class="amar-card" elevation="3" @click="goToAmar">
       <v-col no-gutters align="center">
         <!-- متن توضیحات -->
         <v-row rows="1" >
@@ -22,6 +22,16 @@
     </v-card>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    goToAmar() {
+      this.$router.push('/panel/Amar');
+    },
+  },
+};
+</script>
 
 
 <style scoped>

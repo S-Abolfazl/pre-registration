@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-card class="professors-card" >
+      <v-card class="professors-card" @click="goToProfessor">
         <v-row no-gutters align="center">
           <!-- متن توضیحات -->
           <v-col cols="6" >
@@ -23,8 +23,17 @@
     </div>
   </template>
   
-  
-  <style scoped>
+<script>
+    export default {
+      methods: {
+        goToProfessor() {
+          this.$router.push('/panel/Professor');
+        },
+      },
+    };
+</script>
+
+<style scoped>
   .professors-card {
     box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
     border-radius: 25px;
@@ -59,5 +68,5 @@
     
   }
   
-  </style>
+</style>
   

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="signup-card" >
+    <v-card class="signup-card" @click="goToPishsabt">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -23,6 +23,16 @@
   </div>
 </template>
 
+
+<script>
+    export default {
+      methods: {
+        goToPishsabt() {
+          this.$router.push('/panel/pishsabt');
+        },
+      },
+    };
+</script>
 
 <style scoped>
 .signup-card {

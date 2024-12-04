@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="taghvim-card" elevation="3">
+    <v-card class="taghvim-card" elevation="3" @click="goToTaghvim">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -22,6 +22,16 @@
     </v-card>
   </div>
 </template>
+
+<script>
+    export default {
+      methods: {
+        goToTaghvim() {
+          this.$router.push('/panel/Taghvim');
+        },
+      },
+    };
+</script>
 
 <style scoped>
 .taghvim-card {
