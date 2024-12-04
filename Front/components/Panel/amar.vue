@@ -5,7 +5,7 @@
         <!-- متن توضیحات -->
         <v-row rows="1" >
           <div class="title">
-            <b class="font_44">
+            <b class="font_43">
               آمار
             </b>
           </div>
