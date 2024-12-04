@@ -4,14 +4,14 @@
       <v-col no-gutters align="center">
         <!-- متن توضیحات -->
         <v-row rows="1" >
-          <div>
-            <b class="font_35">
+          <div class="title">
+            <b class="font_44">
               آمار
             </b>
           </div>
-          <v-div class="font_16 description" >
+          <div class="font_20 description" >
         ببین کدوم درسا بیشترین دانشجو رو داره
-        </v-div>
+        </div>
         </v-row>
 
         <!-- تصویر موشک و مرد -->
@@ -49,9 +49,9 @@
   /* z-index: 2; تصویر بالاتر از کارت قرار بگیرد */
 }
 .title{
-  text-align: right;
-  margin: 8px 8px auto auto;
-  width: 100%;
+  /* text-align: right; */
+  margin: 16px 14px auto auto;
+  /* width: 100%; */
   /* z-index: 2; تصویر بالاتر از کارت قرار بگیرد */
 }
 .description {
