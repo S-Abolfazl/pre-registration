@@ -23,7 +23,7 @@
   
   <script>
   export default {
-    
+    name:"ChartSelect",
     data() {
       return {
         selected: "even", 

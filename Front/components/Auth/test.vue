@@ -13,8 +13,6 @@
         </YearSelection>
         <Course
       text="ریاضی گسسته"
-      chip-color="purple"
-      :is-outlined="true"
     />
     <ChartSelect></ChartSelect>
         <BaseButton text="here"/>

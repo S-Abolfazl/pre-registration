@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import LoginForm from "~/components/Auth/test.vue";
+import LoginForm from "~/components/Auth/PassedCoursesForm.vue";
 export default {
   layout: 'site',
   head() {

@@ -36,6 +36,7 @@
   
   <script>
   export default {
+    name:"YearSelection",
     props: {
       width: {
         type: String,
