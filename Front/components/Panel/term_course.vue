@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="term-course-card" elevation="3" @click="goToTermcourse">
+    <v-card class="term-course-card white1" elevation="3" @click="goToTermcourse">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -38,7 +38,6 @@
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   border: 3px solid #7B5FF1;
-  background-color: #FFFFFF;
   width: 25%; 
   height: 280px; 
   margin: auto;

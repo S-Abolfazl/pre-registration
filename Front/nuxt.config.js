@@ -61,6 +61,7 @@ export default {
           warning: '#ffbb00',
           primary: '#6938EF',
           orange1: '#FF8B37',
+          orange2: '#FFD7C7',
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
@@ -69,6 +70,7 @@ export default {
           black3: '#000000',
           white1: '#FFFFFF',
           blue1: '#E3E3FF',
+          blue2: '#7B5FF1',
         }
       },
     },

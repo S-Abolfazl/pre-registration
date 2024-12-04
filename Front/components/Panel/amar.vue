@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="amar-card" elevation="3" @click="goToAmar">
+    <v-card class="amar-card orange2" elevation="3" @click="goToAmar">
       <v-col no-gutters align="center">
         <!-- متن توضیحات -->
         <v-row rows="1" >
@@ -39,7 +39,7 @@ export default {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   border: 3px solid #FF8B37;
-  background-color: #ffD7C7;
+  /* background-color: #ffD7C7; */
   width: 13%;
   height: 280px;
   margin: auto;

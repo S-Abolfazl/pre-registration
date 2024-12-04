@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="signup-card" @click="goToPishsabt">
+    <v-card class="signup-card blue2" @click="goToPishsabt">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -38,7 +38,6 @@
 .signup-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
-  background-color: #7B5FF1;
   width: 33%; 
   height: 280px; 
   margin: auto;

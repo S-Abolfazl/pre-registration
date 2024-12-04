@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-card class="chart-card" elevation="3" @click="goToChart">
+      <v-card class="chart-card orange1" elevation="3" @click="goToChart">
         <v-row no-gutters align="center">
           
           <v-col cols="6" >
@@ -36,7 +36,6 @@
   .chart-card {
     box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
     border-radius: 25px;
-    background-color: #FF8B37;
     width: 15%; 
     height: 280px; 
     margin: auto;
