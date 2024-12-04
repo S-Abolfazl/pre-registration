@@ -1,21 +1,21 @@
 <template>
   <div>
-    <v-card class="signup-card" @click="goToPishsabt">
+    <v-card class="term-course-card" elevation="3" @click="goToTermcourse">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
-          <div class="title" >
-            <b class="font_43">پیش ثبت نام</b>
+          <div class="title">
+            <b class="font_43">دروس ارائه شده در ترم</b>
           </div>
           <div class="font_20 description" >
-            شما اینجا میتوانید به صورت آزمایشی انتخاب واحد کنید تا دانشگاه بهتر بتونه برنامه و ظرفیت کلاس ها رو مشخص کنه.
+          دروس ارائه شده در دانشکده، اساتید و ظرفیت اونارو ببینید.
           </div>
         </v-col>
 
         <!-- تصویر موشک و مرد -->
         <v-col cols="6" class="d-flex justify-center">
           <div class="image-wrapper">
-            <img src="/image/panel/pishsabt.png" alt="Rocket Man" class="rocket-image" />
+            <img src="/image/panel/term_courses.png" alt="course" class="course-image" />
           </div>
         </v-col>
       </v-row>
@@ -23,48 +23,49 @@
   </div>
 </template>
 
-
 <script>
     export default {
       methods: {
-        goToPishsabt() {
-          this.$router.push('/panel/pishsabt');
+        goToTermcourse() {
+          this.$router.push('/panel/termcourse');
         },
       },
     };
 </script>
 
 <style scoped>
-.signup-card {
+.term-course-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
-  background-color: #7B5FF1;
-  width: 33%; 
+  border: 3px solid #7B5FF1;
+  background-color: #FFFFFF;
+  width: 25%; 
   height: 280px; 
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
+  box-shadow: 200px 0px 20px rgba(0, 0, 0, 0.2);
+
 }
 
 .image-wrapper {
   position: absolute;
-  top: -4%; /* تصویر را از بالا بیرون بیاورید */
-  right: 1%; /* تصویر را از سمت راست کمی خارج کنید */
+  top: 36%; 
+  right: -5%; 
   width: 100%;
   display: flex;
   justify-content: flex-end;
 }
 
-.rocket-image {
-  width: 47%; /* تنظیم سایز تصویر */
+.course-image {
+  width: 60%; /* تنظیم سایز تصویر */
 }
 .title{
   margin: 16px 14px auto auto;
-
+  width: 170%;
 }
 .description {
   margin: 30px 14px auto auto;
-  width: 100%; /* تنظیم سایز تصویر */
+  width: 90%; /* تنظیم سایز تصویر */
 }
-
 </style>

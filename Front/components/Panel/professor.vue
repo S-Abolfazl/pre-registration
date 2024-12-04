@@ -23,7 +23,7 @@
     </div>
   </template>
   
-<script>
+  <script>
     export default {
       methods: {
         goToProfessor() {
@@ -31,16 +31,16 @@
         },
       },
     };
-</script>
-
-<style scoped>
+  </script>
+  
+  <style scoped>
   .professors-card {
     box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
     border-radius: 25px;
     background-color: #E3E3FF;
     border: 3px solid #7B5FF1;
-    width: 30%; 
-    height: 250px; 
+    width: 33%; 
+    height: 280px; 
     margin: auto;
     position: relative; /* برای کنترل موقعیت فرزندان مطلق */
     overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -48,25 +48,25 @@
   
   .image-wrapper {
     position: absolute;
-    top: 1%; /* تصویر را از بالا بیرون بیاورید */
-    right: -2%; /* تصویر را از سمت راست کمی خارج کنید */
+    top: -1%; /* تصویر را از بالا بیرون بیاورید */
+    right: -3%; /* تصویر را از سمت راست کمی خارج کنید */
     width: 100%;
     display: flex;
     justify-content: flex-end;
   }
   
   .teacher-image {
-    width: 52%; /* تنظیم سایز تصویر */
+    width: 53%; /* تنظیم سایز تصویر */
   }
   .title{
     margin: 16px 14px auto auto;
    
   }
   .description {
-    margin: 20px 14px auto auto;
+    margin: 30px 14px auto auto;
     width: 88%; /* تنظیم سایز تصویر */
     
   }
   
-</style>
+  </style>
   

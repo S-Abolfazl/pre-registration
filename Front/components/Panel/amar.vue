@@ -10,7 +10,7 @@
             </b>
           </div>
           <div class="font_20 description" >
-        ببین کدوم درسا بیشترین دانشجو رو داره
+        ببین کدوم درسا بیشترین دانشجو رو داره.
         </div>
         </v-row>
 
@@ -41,7 +41,7 @@ export default {
   border: 3px solid #FF8B37;
   background-color: #ffD7C7;
   width: 13%;
-  height: 250px;
+  height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -49,26 +49,25 @@ export default {
 
 .image-wrapper {
   position: absolute;
-  top: 48%; /* تصویر را از بالا بیرون بیاورید */
-  right: 4%; /* تصویر را از سمت راست کمی خارج کنید */
+  top: 53%; /* تصویر را از بالا بیرون بیاورید */
+  right: 5%; /* تصویر را از سمت راست کمی خارج کنید */
   width: 100%;
 }
 
 .amar-image {
-  width: 75%; /* تنظیم سایز تصویر */
-  /* z-index: 2; تصویر بالاتر از کارت قرار بگیرد */
+  width: 76%; 
 }
 .title{
-  /* text-align: right; */
+  text-align: right;
   margin: 16px 14px auto auto;
-  /* width: 100%; */
-  /* z-index: 2; تصویر بالاتر از کارت قرار بگیرد */
+  width: 100%; 
+ 
 }
 .description {
   width: 100%;
   text-align: right;
-  margin: 8px 8px auto auto;
-  /* z-index: 2; تصویر بالاتر از کارت قرار بگیرد */
+  margin: 30px 8px auto auto;
+  
 }
 
 </style>

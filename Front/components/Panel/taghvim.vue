@@ -39,8 +39,8 @@
   border-radius: 25px;
   border: 3px solid #7B5FF1;
   background-color: #FFFFFF;
-  width: 20%; 
-  height: 250px; 
+  width: 25%; 
+  height: 280px; 
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -50,7 +50,7 @@
 
 .image-wrapper {
   position: absolute;
-  top: 38%; 
+  top: 30%; 
   right: 5%; 
   width: 100%;
   display: flex;
@@ -65,7 +65,7 @@
   width: 150%;
 }
 .description {
-  margin: 20px 14px auto auto;
+  margin: 30px 14px auto auto;
   width: 100%; /* تنظیم سایز تصویر */
 }
 </style>
