@@ -66,7 +66,9 @@ export default {
           gray3: '#9794AA',
           black1: '#100F14',
           black2: '#19181F',
+          black3: '#000000',
           white1: '#FFFFFF',
+          blue1: '#E3E3FF',
         }
       },
     },
