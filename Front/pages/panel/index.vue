@@ -1,10 +1,84 @@
 <template>
+  <v-container fluid>
+    
+    <v-row justify="center" class="my-4">
+      
+      <v-col cols="6" style="flex: 0 0 33%;">
+        <pishsabt />
+      </v-col>
 
+      <v-col cols="4" style="flex: 0 0 100%;">
+        <term_course />
+      </v-col>
+
+      <v-col cols="2" style="flex: 0 0 15%;">
+        <chart />
+      </v-col>
+    </v-row>
+
+
+    <v-row justify="center" align="center" class="my-4">
+
+      <v-col cols="6" >
+        <amar />
+      </v-col>
+
+      <v-col cols="4" >
+        <taghvim />
+      </v-col>
+
+      <v-col cols="2" >
+        <professor />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+
 export default {
-  components: {},
+  components: {
+    amar,
+    chart,
+    pishsabt,
+    professor,
+    taghvim,
+    term_course,
+  },
+};
+</script>
+
+<style scoped>
+.v-col {
+  margin-bottom: 16px; 
+  padding: 0 8px; 
+}
+
+@media (max-width: 600px) {
+  .v-col {
+    flex: 0 0 100% !important; 
+  }
+}
+</style>
+
+
+<script>
+import amar from '~/components/Panel/amar.vue';
+import chart from '~/components/Panel/chart.vue';
+import pishsabt from '~/components/Panel/pishsabt.vue';
+import professor from '~/components/Panel/professor.vue';
+import taghvim from '~/components/Panel/taghvim.vue';
+import term_course from '~/components/Panel/term_course.vue';
+
+export default {
+  components: {
+    amar,
+    chart,
+    pishsabt,
+    professor,
+    taghvim,
+    term_course,
+  },
   data: () => ({
     title: 'پنل اصلی',
   }),

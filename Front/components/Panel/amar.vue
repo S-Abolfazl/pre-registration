@@ -2,8 +2,8 @@
   <div>
     <v-card class="amar-card orange2" elevation="3" @click="goToAmar">
       <v-col no-gutters align="center">
-        <!-- متن توضیحات -->
-        <v-row rows="1" >
+        
+        <v-row  >
           <div class="title">
             <b class="font_43">
               آمار
@@ -14,8 +14,8 @@
         </div>
         </v-row>
 
-        <!-- تصویر موشک و مرد -->
-        <v-row rows="2" class="d-flex justify-center image-wrapper">
+        
+        <v-row class="d-flex justify-center image-wrapper">
           <img src="/image/panel/amar.png" alt="amar" class="amar-image" />
         </v-row>
       </v-col>
