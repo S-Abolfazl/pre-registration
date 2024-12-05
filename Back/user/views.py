@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
@@ -51,7 +51,7 @@ class UserSignupApi(APIView):
         )
 
 class UserListApi(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     def get(self, request, pk=None):
         try:
             if pk:
@@ -147,7 +147,20 @@ class UserLogoutApi(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 class UserDeleteApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, IsAdminUser]
+    
+    @swagger_auto_schema(
+        operation_summary="User Delete",
+        operation_description="Endpoint to delete a user by id.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['id'],
+            properties={
+                'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='User ID')
+            }
+        )
+    )
+    
     def delete(self, request, pk):
         try:
             user = User.objects.get(id=pk)
@@ -166,7 +179,23 @@ class UserDeleteApi(APIView):
 
 
 class UserUpdateApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny, IsAdminUser]
+    
+    @swagger_auto_schema(
+        operation_summary="User Update",
+        operation_description="Endpoint to update a user by id.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type')
+            }
+        )
+    )
+    
     def put(self, request, pk):
         try:
             user = User.objects.get(id=pk)

@@ -18,8 +18,26 @@ class UserSerializer(serializers.ModelSerializer):
             
         if user_type == 'student':
             user.entry_year = int(username[:3])
+        elif user_type == 'admin':
+            user.is_staff = True
+            user.is_superuser = True
         
         user.is_active = True
+        user.save()
+        return user
+    
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        user_type = validated_data.get('type', None)
+        username = validated_data.get('username', None)
+        user = super().update(instance, validated_data)
+        
+        if password:
+            user.set_password(password)
+        
+        if user_type == 'student':
+            user.entry_year = int(username[:3])
+        
         user.save()
         return user
     
