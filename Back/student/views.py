@@ -43,10 +43,28 @@ class EducationalChartCreateApi(APIView):
 class EducationalChartGetApi(APIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(
+        operation_summary="Educational Chart Get",
+        operation_description="Endpoint to get a specific educational chart.",
+        manual_parameters=[
+            openapi.Parameter(
+                'year',
+                openapi.IN_QUERY,
+                description="Year of the educational chart",
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'type',
+                openapi.IN_QUERY,
+                description="Type of the educational chart",
+                type=openapi.TYPE_STRING
+            )
+        ]
+    )
     def get(self, request):
         try:
-            year = int(request.data['year'])
-            type = request.data['type']
+            year = int(request.query_params.get('year'))
+            type = request.query_params.get('type')
             chart = EducationalChart.objects.get(year=year, type=type)
             serializer = EducationalChartSerializer(chart)
             data = {}
