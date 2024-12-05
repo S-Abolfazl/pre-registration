@@ -2,12 +2,21 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 
 from .models import EducationalChart
 from .serializers import EducationalChartSerializer
 from course.models import AllCourses
 class EducationalChartCreateApi(APIView):
     permission_classes = [AllowAny]
+    
+    @swagger_auto_schema(
+        operation_summary="Educational Chart Create",
+        operation_description="Endpoint to create a new educational chart.",
+        request_body=EducationalChartSerializer
+    )
 
     def post(self, request):
         serializer = EducationalChartSerializer(data=request.data)
