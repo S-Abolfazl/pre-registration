@@ -34,20 +34,6 @@
   </v-container>
 </template>
 
-<script>
-
-export default {
-  components: {
-    amar,
-    chart,
-    pishsabt,
-    professor,
-    taghvim,
-    term_course,
-  },
-};
-</script>
-
 <style scoped>
 .v-col {
   margin-bottom: 16px; 
