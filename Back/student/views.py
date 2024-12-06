@@ -103,3 +103,74 @@ class EducationalChartGetApi(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+            
+
+class CoursesForPassedCoursesApi(APIView):
+    permission_classes = [AllowAny]
+    
+    @swagger_auto_schema(
+        operation_summary="Courses For Passed Courses",
+        operation_description="Endpoint to get courses for passed courses.",
+        manual_parameters=[
+            openapi.Parameter(
+                'year',
+                openapi.IN_QUERY,
+                description="Year of the educational chart",
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'type',
+                openapi.IN_QUERY,
+                description="Type of the educational chart",
+                type=openapi.TYPE_STRING
+            )
+        ]
+    )
+    
+    def get(self, request):
+        try:
+            year = int(request.query_params.get('year'))
+            type = request.query_params.get('type')
+            chart = EducationalChart.objects.get(year=year, type=type)
+            serializer = EducationalChartSerializer(chart)
+            data = {}
+            for key, value in serializer.data.items():
+                if key == "year" or key == "type":
+                    data[key] = value
+                    continue
+                if key == "units" or key == "chart_id":
+                    continue            
+                try:
+                    data[key] = {
+                        str(num):{
+                            "id":  course.course_id,
+                            "courseName": course.courseName,
+                        } for num, course in enumerate(AllCourses.objects.filter(
+                            courseName__in=value,
+                            type__in=['theory_course', 'practical_course','basic_course']
+                        ), start=1) 
+                    }   
+                except Exception as e:
+                    print(f"Error processing courses in key {key}: {e}")
+                
+            data["elective_course"] = {
+                str(num):{
+                    {
+                        "id":  course.course_id,
+                        "courseName": course.courseName,
+                    }
+                } for num, course in enumerate(AllCourses.objects.filter(
+                    type='elective_course'
+                ), start=1) 
+            }
+
+            return Response(data=data, status=status.HTTP_200_OK)
+        except EducationalChart.DoesNotExist:
+            return Response(
+                data={
+                    "msg": "error",
+                    "data": f"EducationalChart not found",
+                    "status":status.HTTP_404_NOT_FOUND
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
