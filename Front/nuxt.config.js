@@ -22,7 +22,7 @@ export default {
       { rel: 'stylesheet', href: '/css/fonts.css' },
       { rel: 'stylesheet', href: '/css/mobile.css' },
       { rel: 'stylesheet', href: '/css/google_font.css' },
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }
     ],
   },
   plugins: [
