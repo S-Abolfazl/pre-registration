@@ -2,8 +2,8 @@
   <div>
     <v-card class="amar-card orange2" elevation="3" @click="goToAmar">
       <v-col no-gutters align="center">
-        
-        <v-row  >
+
+        <v-row>
           <div class="title">
             <b class="font_43">
               آمار
@@ -14,7 +14,7 @@
         </div>
         </v-row>
 
-        
+
         <v-row class="d-flex justify-center image-wrapper">
           <img src="/image/panel/amar.png" alt="amar" class="amar-image" />
         </v-row>
@@ -40,7 +40,7 @@ export default {
   border-radius: 25px;
   border: 3px solid #FF8B37;
   /* background-color: #ffD7C7; */
-  width: 13%;
+  /* width: 13%; */
   height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
@@ -55,19 +55,19 @@ export default {
 }
 
 .amar-image {
-  width: 76%; 
+  width: 60%;
 }
 .title{
   text-align: right;
   margin: 16px 14px auto auto;
-  width: 100%; 
- 
+  width: 100%;
+
 }
 .description {
   width: 100%;
   text-align: right;
   margin: 30px 8px auto auto;
-  
+
 }
 
 </style>

@@ -19,7 +19,8 @@ export default {
     const loadingElement = document.getElementById('loading');
     if (loadingElement) loadingElement.style.display = 'none';
 
-    await this.checkAuth();
+    // should set
+    // await this.checkAuth();
   },
   head() {
     return {

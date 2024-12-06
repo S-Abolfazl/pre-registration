@@ -38,8 +38,8 @@
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   border: 3px solid #7B5FF1;
-  width: 25%; 
-  height: 280px; 
+  /* width: 25%;  */
+  height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -49,8 +49,8 @@
 
 .image-wrapper {
   position: absolute;
-  top: 30%; 
-  right: 5%; 
+  top: 30%;
+  right: 5%;
   width: 100%;
   display: flex;
   justify-content: flex-end;

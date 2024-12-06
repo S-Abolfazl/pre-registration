@@ -1,25 +1,24 @@
 <template>
-  <v-container fluid>
-    
-    <v-row justify="center" class="my-4">
-      
-      <v-col cols="6" style="flex: 0 0 33%;">
+  <v-container fluid class="pa-0">
+
+    <v-row justify="center" class="my-4 mx-0 ml-7">
+
+      <v-col cols="5">
         <pishsabt />
       </v-col>
 
-      <v-col cols="4" style="flex: 0 0 100%;">
+      <v-col cols="4">
         <term_course />
       </v-col>
 
-      <v-col cols="2" style="flex: 0 0 15%;">
+      <v-col cols="3">
         <chart />
       </v-col>
     </v-row>
 
+    <v-row justify="center" align="center" class="my-4 mx-0 ml-7">
 
-    <v-row justify="center" align="center" class="my-4">
-
-      <v-col cols="6" >
+      <v-col cols="3" >
         <amar />
       </v-col>
 
@@ -27,10 +26,11 @@
         <taghvim />
       </v-col>
 
-      <v-col cols="2" >
+      <v-col cols="5" >
         <professor />
       </v-col>
     </v-row>
+
   </v-container>
 </template>
 
@@ -50,13 +50,13 @@ export default {
 
 <style scoped>
 .v-col {
-  margin-bottom: 16px; 
-  padding: 0 8px; 
+  margin-bottom: 16px;
+  padding: 0 8px;
 }
 
 @media (max-width: 600px) {
   .v-col {
-    flex: 0 0 100% !important; 
+    flex: 0 0 100% !important;
   }
 }
 </style>

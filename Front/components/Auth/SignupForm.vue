@@ -89,7 +89,11 @@
 
         <!-- the img -->
         <v-col cols="5" class="d-flex justify-center align-center">
-          <img src="/image/signup/light.png" alt="png" width="90%">
+          <img
+            :src="this.$vuetify.theme.dark ? '/image/signup/dark.png' : '/image/signup/light.png'"
+            alt="png"
+            width="90%"
+          >
         </v-col>
 
         <v-col cols="1" />
@@ -122,6 +126,7 @@ import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
           .then((response) => {
             this.$store.dispatch('auth/login', response)
             .then((_) => {
+              this.$toast.success("با موفقیت وارد شدید")
               this.$router.push('/')
             })
           })

@@ -1,7 +1,11 @@
 <template>
   <v-col class="w-max h-max pa-0">
     <v-row no-gutters class="d-flex flex-column justify-center align-center w-max">
-      <img src="/image/error/404.png" alt="png" width="40%">
+      <img
+        :src="this.$vuetify.theme.dark ? '/image/error/404-dark.png' : '/image/error/404-light.png'"
+        alt="png"
+        width="40%"
+      >
       <b class="font_30 mt-15">
         متاسفانه صفحه مورد نظر یافت نشد
       </b>
