@@ -74,22 +74,16 @@ class EducationalChartGetApi(APIView):
                     data[key] = value
                     continue            
                 try:
-                    data[key] = {
-                        course_name: (
-                            {
-                                "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)),
-                                "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)),
-                                "unit": course.unit,
-                                "kind": course.type
-                            } if (course := AllCourses.objects.filter(courseName=course_name).first()) else {
-                                "prereq": [],
-                                "coreq": [],
-                                "unit": 3,
-                                "kind": "elective_course"
-                            }
-                        )
+                    data[key] = [
+                        {
+                            "courseName": course_name,
+                            "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
+                            "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)) if course else [],
+                            "unit": course.unit if course else 3,
+                            "kind": course.type if course else "elective_course",
+                        }
                         for course_name in value
-                    }
+                    ]
                 except Exception as e:
                     print(f"Error processing courses in key {key}: {e}")
                     
@@ -142,23 +136,23 @@ class CoursesForPassedCoursesApi(APIView):
                     continue            
                 try:
                     data[key] = {
-                        str(num):{
-                            "id":  course.course_id,
-                            "courseName": course.courseName,
-                        } for num, course in enumerate(AllCourses.objects.filter(
-                            courseName__in=value,
-                            type__in=['theory_course', 'practical_course','basic_course']
-                        ), start=1) 
-                    }   
+                        str(num): {
+                            "id": course.course_id if course else None,
+                            "courseName": course_name,
+                        }
+                        for num, course_name in enumerate(value, start=1)
+                        if (course := AllCourses.objects.filter(
+                            courseName=course_name,
+                            type__in=['theory_course', 'elective_course', 'practical_course', 'basic_course', 'public_course']
+                        ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first())
+                    }  
                 except Exception as e:
                     print(f"Error processing courses in key {key}: {e}")
                 
             data["elective_course"] = {
                 str(num):{
-                    {
-                        "id":  course.course_id,
-                        "courseName": course.courseName,
-                    }
+                    "id":  course.course_id,
+                    "courseName": course.courseName,
                 } for num, course in enumerate(AllCourses.objects.filter(
                     type='elective_course'
                 ), start=1) 
