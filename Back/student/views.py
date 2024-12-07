@@ -152,13 +152,7 @@ class AddCompletedCourseApi(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        try:
-            student = User.objects.get(id=student_id)
-        except User.DoesNotExist:
-            return Response(
-                {"msg": f"Student with ID {student_id} does not exist."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
+        student = request.user
         added_courses = []
         for course_id in course_ids:
             try:
