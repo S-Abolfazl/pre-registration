@@ -17,6 +17,7 @@
       </template>
       <v-spacer></v-spacer>
       <BaseButton
+        class="font_20 description" 
         text="پيش ثبت نام"
         color="primary"
         width="10%"
@@ -25,17 +26,17 @@
       <v-spacer></v-spacer>
       <v-btn icon @click="navigateToFeedback">
   <v-icon>mdi-forum</v-icon>
-  <span>نظرات</span>
+  <span class="font_20 description" >نظرات</span>
 </v-btn>
 <v-spacer></v-spacer>
 <v-btn icon @click="navigateToNotifications">
   <v-icon>mdi-bell</v-icon>
-  <span>اعلانات</span>
+  <span class="font_20 description" >اعلانات</span>
 </v-btn>
 <v-spacer></v-spacer>
 <v-btn icon @click="navigateToSupport">
   <v-icon>mdi-headset</v-icon>
-  <span style="position: relative;">پشتیبانی</span>
+  <span class="font_20 description"  style="position: relative;">پشتیبانی</span>
 </v-btn>
       <v-spacer></v-spacer>
       <img :src="require('@/static/image/navbar/sbulogo.png')" alt="sbulogo"  width="4%" height="90%" style=" padding-left: 0.5%">
