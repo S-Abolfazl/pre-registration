@@ -236,6 +236,11 @@ data = {
         "courseName": "فارسی",
         "unit": "3",
         "type": "public_course"
+    },
+    "course48":{ 
+        "courseName": "اختیاری",
+        "unit": "3",
+        "type": "elective_course"
     }
 }
 
