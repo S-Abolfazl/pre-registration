@@ -2,13 +2,29 @@ from django.db import models
 import uuid
 
 class Course(models.Model):
+    ClassTimeChoices = {
+      "شنبه": "شنبه",
+      "یکشنبه": "یکشنبه",
+      "دوشنبه": "دوشنبه",
+      "سه شنبه": "سه شنبه",
+      "چهارشنبه": "چهارشنبه",
+      "پنجشنبه": "پنجشنبه",
+      "جمعه": "جمعه",
+    }
+  
     c_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
     course = models.ForeignKey('AllCourses', on_delete=models.CASCADE)
     teacherName = models.CharField(max_length=255)
     isExperimental = models.BooleanField()
-    dateTime = models.DateTimeField(auto_now_add=True)
-    exam_dateTime = models.DateTimeField()
+    class_time1 = models.CharField(max_length=255, choices=ClassTimeChoices)
+    class_time2 = models.CharField(max_length=255, choices=ClassTimeChoices)
+    class_start_time= models.TimeField()
+    class_end_time = models.TimeField()
+    exam_date = models.DateField()
+    exam_start_time = models.TimeField()
+    exam_end_time = models.TimeField()
     capacity = models.IntegerField()
+    registered = models.IntegerField(default=0)
     
     class Meta:
             db_table = "Course"
@@ -34,7 +50,7 @@ class AllCourses(models.Model):
         db_table = "AllCourses"
         
     def __str__(self) :
-        return self.course_id
+        return str(self.course_id)
     
 class Prereq(models.Model):
     course = models.ForeignKey(AllCourses, on_delete=models.CASCADE, related_name="prereqs_for")
@@ -82,4 +98,6 @@ class CourseRule(models.Model):
 
     def __str__(self) :
         return f"{self.course.c_id} - {self.rule.rule_id}"
-      
+
+
+
