@@ -43,7 +43,7 @@ data = {
         "type": "basic_course"
     },
     "course9":{ 
-        "courseName": "مدار های الکتریکی و الکترونیکی",
+        "courseName": "مدارهای الکتریکی و الکترونیکی",
         "unit": "3",
         "type": "theory_course"
     },
@@ -58,12 +58,12 @@ data = {
         "type": "basic_course"
     },
     "course12":{ 
-        "courseName": "ریاضی گسسته",
+        "courseName": "ریاضیات گسسته",
         "unit": "3",
         "type": "theory_course"
     },
     "course13":{ 
-        "courseName": "مدار منطقی",
+        "courseName": "مدارهای منطقی",
         "unit": "3",
         "type": "theory_course"
     },
@@ -78,7 +78,7 @@ data = {
         "type": "theory_course"
     },
     "course16":{ 
-        "courseName": "مدار مجتمع دیجیتال",
+        "courseName": "مدارهای مجتمع دیجیتال",
         "unit": "3",
         "type": "theory_course"
     },
@@ -98,7 +98,7 @@ data = {
         "type": "theory_course"
     },
     "course20":{ 
-        "courseName": "آز منطقی معماری",
+        "courseName": "آزمایشگاه مدارهای منطقی و معماری کامپیوتر",
         "unit": "1",
         "type": "practical_course"
     },
@@ -118,32 +118,32 @@ data = {
         "type": "theory_course"
     },
     "course24":{ 
-        "courseName": "طراحی الگوریتم",
+        "courseName": "طراحی الگوریتم ها",
         "unit": "3",
         "type": "theory_course"
     },
     "course25":{ 
-        "courseName": "تحلیل و طراحی سیستم",
+        "courseName": "تحلیل و طراحی سیستم ها",
         "unit": "3",
         "type": "theory_course"
     },
     "course26":{ 
-        "courseName": "هوش و سیستم خبره",
+        "courseName": "هوش مصنوعی و سیستم های خبره",
         "unit": "3",
         "type": "theory_course"
     },
     "course27":{ 
-        "courseName": "کامپایلر",
+        "courseName": "اصول طراحی کامپایلر",
         "unit": "3",
         "type": "theory_course"
     },
     "course28":{ 
-        "courseName": "روش پژوهش",
+        "courseName": "روش پژوهش و ارائه",
         "unit": "2",
         "type": "theory_course"
     },
     "course29":{ 
-        "courseName": "پایگاه داده",
+        "courseName": "پایگاه داده ها",
         "unit": "3",
         "type": "theory_course"
     },
@@ -158,17 +158,17 @@ data = {
         "type": "theory_course"
     },
     "course32":{ 
-        "courseName": "آز سیستم های عامل",
+        "courseName": "آزمایشگاه سیستم های عامل",
         "unit": "1",
         "type": "practical_course"
     },
     "course33":{ 
-        "courseName": "آز ریزپردازنده",
+        "courseName": "آزمایشگاه ریزپردازنده",
         "unit": "1",
         "type": "practical_course"
     },
     "course34":{ 
-        "courseName": "ریزپردازنده و مدار واسط",
+        "courseName": "ریزپردازنده و مدارهای واسط",
         "unit": "3",
         "type": "theory_course"
     },
@@ -178,7 +178,7 @@ data = {
         "type": "practical_course"
     },
     "course36":{ 
-        "courseName": "آز شبکه",
+        "courseName": "آزمایشگاه شبکه های کامپیوتری",
         "unit": "1",
         "type": "practical_course"
     },
@@ -188,7 +188,7 @@ data = {
         "type": "theory_course"
     },
     "course38":{ 
-        "courseName": "سیستم نهفته بیدرنگ",
+        "courseName": "مبانی سیستم های نهفته و بیدرنگ",
         "unit": "3",
         "type": "theory_course"
     },
@@ -203,7 +203,7 @@ data = {
         "type": "theory_course"
     },
     "course41":{ 
-        "courseName": "طراحی کامپیوتری سیستمهای دیجیتال",
+        "courseName": "طراحی کامپیوتری سیستم های دیجیتال",
         "unit": "3",
         "type": "theory_course"
     },
