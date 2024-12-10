@@ -159,7 +159,12 @@ class CourseDeleteApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
             
 class AllCourseCreateApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAcademicAssistantOrAdmin]
+    @swagger_auto_schema(
+        operation_summary="Course Create",
+        operation_description="Endpoint to create a new course.",
+        request_body=AllCoursesSerializer
+    )
     def post(self, request):
         serializer = AllCoursesSerializer(data=request.data)
         if serializer.is_valid():
