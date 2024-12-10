@@ -43,7 +43,13 @@ class CourseCreateApi(APIView):
 
 
 class CourseListApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAcademicAssistantOrAdmin]
+    
+    @swagger_auto_schema(
+        operation_summary="Course List",
+        operation_description="Endpoint to list all courses."
+    )
+    
     def get(self, request, pk=None):
         try:
             if pk:
