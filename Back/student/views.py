@@ -43,30 +43,20 @@ class EducationalChartCreateApi(APIView):
         )
             
 class EducationalChartGetApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsStudent]
 
     @swagger_auto_schema(
         operation_summary="Educational Chart Get",
         operation_description="Endpoint to get a specific educational chart.",
-        manual_parameters=[
-            openapi.Parameter(
-                'year',
-                openapi.IN_QUERY,
-                description="Year of the educational chart",
-                type=openapi.TYPE_INTEGER
-            ),
-            openapi.Parameter(
-                'type',
-                openapi.IN_QUERY,
-                description="Type of the educational chart",
-                type=openapi.TYPE_STRING
-            )
-        ]
     )
     def get(self, request):
         try:
-            year = int(request.query_params.get('year'))
-            type = request.query_params.get('type')
+            student = request.user
+            year = int(student.entry_year)
+            if int(student.username[-1]) % 2 == 0:
+                type = 'even'
+            else:
+                type = 'odd'
             chart = EducationalChart.objects.get(year=year, type=type)
             serializer = EducationalChartSerializer(chart)
             data = {}
@@ -156,31 +146,20 @@ class AddCompletedCourseApi(APIView):
             
 
 class CoursesForPassedCoursesApi(APIView):
-    permission_classes = [AllowAny]
-    
+    permission_classes = [IsStudent]
     @swagger_auto_schema(
-        operation_summary="Courses For Passed Courses",
-        operation_description="Endpoint to get courses for passed courses.",
-        manual_parameters=[
-            openapi.Parameter(
-                'year',
-                openapi.IN_QUERY,
-                description="Year of the educational chart",
-                type=openapi.TYPE_INTEGER
-            ),
-            openapi.Parameter(
-                'type',
-                openapi.IN_QUERY,
-                description="Type of the educational chart",
-                type=openapi.TYPE_STRING
-            )
-        ]
+        operation_summary="Get Courses for Passed Courses",
+        operation_description="Endpoint to get courses for passed courses for a student.",
     )
-    
     def get(self, request):
         try:
-            year = int(request.query_params.get('year'))
-            type = request.query_params.get('type')
+            student = request.user
+            year = int(student.entry_year)
+            if int(student.username[-1]) % 2 == 0:
+                type = 'even'
+            else:
+                type = 'odd'
+                
             chart = EducationalChart.objects.get(year=year, type=type)
             serializer = EducationalChartSerializer(chart)
             data = {}
@@ -192,9 +171,10 @@ class CoursesForPassedCoursesApi(APIView):
                     continue            
                 try:
                     data[key] = {
-                        str(num): {
+                        num: {
                             "id": course.course_id if course else None,
                             "courseName": course_name,
+                            "passed": CompletedCourses.objects.filter(student=student, course = course).exists() if course else False,
                         }
                         for num, course_name in enumerate(value, start=1)
                         if (course := AllCourses.objects.filter(
@@ -206,7 +186,7 @@ class CoursesForPassedCoursesApi(APIView):
                     print(f"Error processing courses in key {key}: {e}")
                 
             data["elective_course"] = {
-                str(num):{
+                num:{
                     "id":  course.course_id,
                     "courseName": course.courseName,
                 } for num, course in enumerate(AllCourses.objects.filter(

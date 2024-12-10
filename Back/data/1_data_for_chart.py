@@ -3,7 +3,7 @@ from student.models import EducationalChart
 
 data = {
     "chart1":{
-        "year": "1400",
+        "year": "400",
         "type": "even",
         "units": ["16", "18", "17", "17", "18", "18", "17", "19"],
         "term1":["زبان خارجی", 
@@ -65,7 +65,7 @@ data = {
         "گروه معارف"]
     },
     "chart2":{
-        "year": "1400",
+        "year": "400",
         "type": "odd",
         "units": ["16", "18", "20", "18", "18", "16", "18", "16"],
         "term1":["زبان خارجی", 
