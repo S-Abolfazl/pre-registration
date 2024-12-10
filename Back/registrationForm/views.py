@@ -111,7 +111,12 @@ class RegistrationFormUpdateView(APIView):
 
 
 class RegistrationFormDeleteView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    
+    @swagger_auto_schema(
+        operation_summary="Delete Registration Form",
+        operation_description="Endpoint to delete a registration form.",
+    )
 
     def delete(self, request, form_id):
         form = get_object_or_404(RegistrationForm, form_id=form_id)
@@ -119,7 +124,8 @@ class RegistrationFormDeleteView(APIView):
         return Response(
             data={
                 'msg': 'ok',
-                'data': f'Registration form {form_id} deleted successfully'
+                'data': f'Registration form {form_id} deleted successfully',
+                "status": status.HTTP_200_OK
             },
-            status=status.HTTP_204_NO_CONTENT
+            status=status.HTTP_200_OK
         )
