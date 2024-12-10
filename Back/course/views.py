@@ -276,7 +276,12 @@ class AllCourseUpdateApi(APIView):
     
             
 class AllCourseDeleteApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAcademicAssistantOrAdmin]
+    
+    @swagger_auto_schema(
+        operation_summary="Course Delete",
+        operation_description="Endpoint to delete a course."
+    )
     def delete(self, request, pk):
         try:
             course = AllCourses.objects.get(course_id=pk)
