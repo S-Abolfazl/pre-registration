@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import Course, AllCourses
-from .serializers import CourseSerializer, AllCoursesSerializer
+from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer
 from user.permissions import IsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
@@ -54,10 +54,10 @@ class CourseListApi(APIView):
         try:
             if pk:
                 course = Course.objects.get(c_id=pk)
-                serializer = CourseSerializer(course)
+                serializer = CourseDetailSerializer(course)
             else:
                 courses = Course.objects.all()
-                serializer = CourseSerializer(courses, many=True)
+                serializer = CourseDetailSerializer(courses, many=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except Course.DoesNotExist:
             return Response(data={
