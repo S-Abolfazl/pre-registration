@@ -2,18 +2,25 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from .models import Course, AllCourses
 from .serializers import CourseSerializer, AllCoursesSerializer
-
+from user.permissions import IsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
 class CourseCreateApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAcademicAssistantOrAdmin]
+    @swagger_auto_schema(
+        operation_summary="Course Create",
+        operation_description="Endpoint to create a new course.",
+        request_body=CourseSerializer
+    )
     def post(self, request):
         
-        course_instance = get_object_or_404(AllCourses, courseName=request.data['courseName'])
+        course_instance = get_object_or_404(AllCourses, course_id=request.data['course'])
         
         request_data = request.data.copy()
         request_data['course'] = course_instance.course_id

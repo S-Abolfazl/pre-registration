@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAdminUser
 from .models import User
 
 class IsStudent(BasePermission):
@@ -36,3 +36,10 @@ class IsSupport(BasePermission):
             is_support = False
         
         return is_support
+    
+
+class IsAcademicAssistantOrAdmin(BasePermission):
+    def has_permission(self, request, view):
+        is_admin = IsAdminUser().has_permission(request, view)
+        is_academic_assistant = IsAcademicAssistant().has_permission(request, view)
+        return is_admin or is_academic_assistant
