@@ -18,4 +18,7 @@ class AllCoursesSerializer(serializers.ModelSerializer):
         fields = ['courseName', 'unit', 'type']
         
         
-       
+class AllCoursesDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AllCourses
+        fields = '__all__'       
