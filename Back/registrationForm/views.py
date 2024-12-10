@@ -1,34 +1,59 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 from .models import RegistrationForm
-from .serializers import RegistrationFormSerializer
+from .serializers import RegistrationFormSerializer, RegisterationFormDetailSerializer
+from user.permissions import IsStudentOrAdmin, IsStudent
 
 
 class RegistrationFormListView(APIView):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
+    @swagger_auto_schema(
+        operation_summary="Get Registration Forms",
+        operation_description="Endpoint to get all registration forms or a single registration form.",
+    )
+    
     def get(self, request, form_id=None):
         if form_id:
-            form = RegistrationForm.objects.get(form_id=form_id)
-            serializer = RegistrationFormSerializer(form)
+            try:
+                form = RegistrationForm.objects.get(form_id=form_id)
+                serializer = RegisterationFormDetailSerializer(form)
+            except:
+                return Response(
+                    data={
+                        'msg': 'error',
+                        'data': f'Registration form {form_id} not found',
+                        "status": status.HTTP_404_NOT_FOUND
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
         else:
             forms = RegistrationForm.objects.all()
-            serializer = RegistrationFormSerializer(forms, many=True)
+            serializer = RegisterationFormDetailSerializer(forms, many=True)
 
         return Response(
             data={
                 'msg': 'ok',
-                'data': serializer.data[0]
+                'data': serializer.data,
+                "status": status.HTTP_200_OK
             },
             status=status.HTTP_200_OK
         )
 
 
 class RegistrationFormCreateView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsStudent)
+    
+    @swagger_auto_schema(
+        operation_summary="Create Registration Form",
+        operation_description="Endpoint to create a new registration form.",
+    )
 
     def post(self, request):
         user_id = request.user.id
