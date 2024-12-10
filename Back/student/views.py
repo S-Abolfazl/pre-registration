@@ -75,22 +75,16 @@ class EducationalChartGetApi(APIView):
                     data[key] = value
                     continue            
                 try:
-                    data[key] = {
-                        course_name: (
-                            {
-                                "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)),
-                                "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)),
-                                "unit": course.unit,
-                                "kind": course.type
-                            } if (course := AllCourses.objects.filter(courseName=course_name).first()) else {
-                                "prereq": [],
-                                "coreq": [],
-                                "unit": 3,
-                                "kind": "elective_course"
-                            }
-                        )
+                    data[key] = [
+                        {
+                            "courseName": course_name,
+                            "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
+                            "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)) if course else [],
+                            "unit": course.unit if course else 3,
+                            "kind": course.type if course else "elective_course",
+                        }
                         for course_name in value
-                    }
+                    ]
                 except Exception as e:
                     print(f"Error processing courses in key {key}: {e}")
                     
@@ -104,7 +98,6 @@ class EducationalChartGetApi(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
-        
 
 class AddCompletedCourseApi(APIView):
     @swagger_auto_schema(
@@ -175,4 +168,75 @@ class AddCompletedCourseApi(APIView):
             },
             status=status.HTTP_200_OK,
         )
+            
+
+class CoursesForPassedCoursesApi(APIView):
+    permission_classes = [AllowAny]
     
+    @swagger_auto_schema(
+        operation_summary="Courses For Passed Courses",
+        operation_description="Endpoint to get courses for passed courses.",
+        manual_parameters=[
+            openapi.Parameter(
+                'year',
+                openapi.IN_QUERY,
+                description="Year of the educational chart",
+                type=openapi.TYPE_INTEGER
+            ),
+            openapi.Parameter(
+                'type',
+                openapi.IN_QUERY,
+                description="Type of the educational chart",
+                type=openapi.TYPE_STRING
+            )
+        ]
+    )
+    
+    def get(self, request):
+        try:
+            year = int(request.query_params.get('year'))
+            type = request.query_params.get('type')
+            chart = EducationalChart.objects.get(year=year, type=type)
+            serializer = EducationalChartSerializer(chart)
+            data = {}
+            for key, value in serializer.data.items():
+                if key == "year" or key == "type":
+                    data[key] = value
+                    continue
+                if key == "units" or key == "chart_id":
+                    continue            
+                try:
+                    data[key] = {
+                        str(num): {
+                            "id": course.course_id if course else None,
+                            "courseName": course_name,
+                        }
+                        for num, course_name in enumerate(value, start=1)
+                        if (course := AllCourses.objects.filter(
+                            courseName=course_name,
+                            type__in=['theory_course', 'elective_course', 'practical_course', 'basic_course', 'public_course']
+                        ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first())
+                    }  
+                except Exception as e:
+                    print(f"Error processing courses in key {key}: {e}")
+                
+            data["elective_course"] = {
+                str(num):{
+                    "id":  course.course_id,
+                    "courseName": course.courseName,
+                } for num, course in enumerate(AllCourses.objects.filter(
+                    type='elective_course'
+                ), start=1) 
+            }
+
+            return Response(data=data, status=status.HTTP_200_OK)
+        except EducationalChart.DoesNotExist:
+            return Response(
+                data={
+                    "msg": "error",
+                    "data": f"EducationalChart not found",
+                    "status":status.HTTP_404_NOT_FOUND
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
