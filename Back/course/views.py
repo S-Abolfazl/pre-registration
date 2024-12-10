@@ -210,11 +210,48 @@ class AllCourseListApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
             
 class AllCourseUpdateApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAcademicAssistantOrAdmin]
+    
+    @swagger_auto_schema(
+        operation_summary="Course Update",
+        operation_description="Endpoint to update a course.",
+        request_body=AllCoursesSerializer
+    )
     def put(self, request, pk):
         try:
             course = AllCourses.objects.get(course_id=pk)
             serializer = AllCoursesSerializer(course, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data={
+                    "msg":"ok",
+                    "data":f'course by id:{course.course_id} updated',
+                    "status":status.HTTP_200_OK
+                }, status=status.HTTP_200_OK)
+            return Response(
+                data={
+                    "msg":"error",
+                    "data": serializer.errors,
+                    "status":status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except AllCourses.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"course not found",
+                "status":status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+            
+    @swagger_auto_schema(
+        operation_summary="Course Update",
+        operation_description="Endpoint to update a course partialy.",
+        request_body=AllCoursesSerializer
+    )
+    def patch(self, request, pk):
+        try:
+            course = AllCourses.objects.get(course_id=pk)
+            serializer = AllCoursesSerializer(course, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
