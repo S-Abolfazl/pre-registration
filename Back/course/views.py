@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
@@ -12,7 +12,7 @@ from user.permissions import IsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
 class CourseCreateApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     @swagger_auto_schema(
         operation_summary="Course Create",
         operation_description="Endpoint to create a new course in term.",
@@ -43,7 +43,7 @@ class CourseCreateApi(APIView):
 
 
 class CourseListApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course List",
@@ -66,7 +66,7 @@ class CourseListApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
         
 class CourseUpdateApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course Update",
@@ -135,7 +135,7 @@ class CourseUpdateApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
         
 class CourseDeleteApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course Delete",
@@ -159,7 +159,7 @@ class CourseDeleteApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
             
 class AllCourseCreateApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     @swagger_auto_schema(
         operation_summary="Course Create",
         operation_description="Endpoint to create a new course.",
@@ -186,7 +186,7 @@ class AllCourseCreateApi(APIView):
 
 
 class AllCourseListApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course List",
@@ -210,7 +210,7 @@ class AllCourseListApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
             
 class AllCourseUpdateApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course Update",
@@ -276,7 +276,7 @@ class AllCourseUpdateApi(APIView):
     
             
 class AllCourseDeleteApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course Delete",
