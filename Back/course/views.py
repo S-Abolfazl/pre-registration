@@ -15,7 +15,7 @@ class CourseCreateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin]
     @swagger_auto_schema(
         operation_summary="Course Create",
-        operation_description="Endpoint to create a new course.",
+        operation_description="Endpoint to create a new course in term.",
         request_body=CourseSerializer
     )
     def post(self, request):
@@ -47,7 +47,7 @@ class CourseListApi(APIView):
     
     @swagger_auto_schema(
         operation_summary="Course List",
-        operation_description="Endpoint to list all courses."
+        operation_description="Endpoint to list all courses in term."
     )
     
     def get(self, request, pk=None):
@@ -70,7 +70,7 @@ class CourseUpdateApi(APIView):
     
     @swagger_auto_schema(
         operation_summary="Course Update",
-        operation_description="Endpoint to update a course.",
+        operation_description="Endpoint to update a course in term.",
         request_body=CourseSerializer
     )
     def put(self, request, pk):
@@ -103,7 +103,7 @@ class CourseUpdateApi(APIView):
     
     @swagger_auto_schema(
         operation_summary="Course Update",
-        operation_description="Endpoint to update a course partialy.",
+        operation_description="Endpoint to update a course in term partialy.",
         request_body=CourseSerializer
     )        
     def patch(self, request, pk):
@@ -135,7 +135,13 @@ class CourseUpdateApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
         
 class CourseDeleteApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAcademicAssistantOrAdmin]
+    
+    @swagger_auto_schema(
+        operation_summary="Course Delete",
+        operation_description="Endpoint to delete a course in term."
+    )
+        
     def delete(self, request, pk):
         try:
             course = Course.objects.get(c_id=pk)
