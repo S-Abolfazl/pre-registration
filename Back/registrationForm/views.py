@@ -81,8 +81,13 @@ class RegistrationFormCreateView(APIView):
 
 
 class RegistrationFormUpdateView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
+    @swagger_auto_schema(
+        operation_summary="Update Registration Form",
+        operation_description="Endpoint to update a registration form.",
+        request_body=RegistrationFormSerializer,
+    )
     def put(self, request, form_id):
         form = get_object_or_404(RegistrationForm, form_id=form_id)
         serializer = RegistrationFormSerializer(form, data=request.data)
@@ -98,7 +103,8 @@ class RegistrationFormUpdateView(APIView):
         return Response(
             data={
                 'msg': 'error',
-                'data': serializer.errors
+                'data': serializer.errors,
+                "status": status.HTTP_400_BAD_REQUEST
             },
             status=status.HTTP_400_BAD_REQUEST
         )
