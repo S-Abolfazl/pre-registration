@@ -3,7 +3,11 @@ from django.db import models
 from user.models import User
 from course.models import AllCourses, Course
 
+from django.db import models
+import uuid
+
 class CompletedCourses(models.Model):
+    complete_course_id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(AllCourses, on_delete=models.CASCADE)
     
@@ -14,9 +18,6 @@ class CompletedCourses(models.Model):
     def __str__(self) -> str:
         return f"{self.student.username} - {self.course.courseName}"
     
-
-from django.db import models
-import uuid
 
 class EducationalChart(models.Model):
     chart_id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)

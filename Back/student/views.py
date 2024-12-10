@@ -10,6 +10,7 @@ from user.models import User
 from .models import EducationalChart, CompletedCourses
 from .serializers import EducationalChartSerializer
 from course.models import AllCourses
+from user.permissions import IsStudent
 class EducationalChartCreateApi(APIView):
     permission_classes = [AllowAny]
     
@@ -100,24 +101,16 @@ class EducationalChartGetApi(APIView):
             )
 
 class AddCompletedCourseApi(APIView):
+    permission_classes = [IsStudent]
     @swagger_auto_schema(
         operation_summary="Add Completed Courses",
         operation_description="Endpoint to add a list of completed courses for a student.",
-        manual_parameters=[
-            openapi.Parameter(
-                'student_id',
-                openapi.IN_QUERY,
-                description="ID of the student",
-                type=openapi.TYPE_INTEGER,
-                required=True,
-            )
-        ],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 'course_ids': openapi.Schema(
                     type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_INTEGER),
+                    items=openapi.Items(type=openapi.TYPE_STRING),
                     description="List of course IDs to mark as completed",
                 ),
             },
@@ -125,17 +118,9 @@ class AddCompletedCourseApi(APIView):
         ),
     )
     def post(self, request):
-        student_id = request.query_params.get('student_id')
+        student = request.user
         course_ids = request.data.get('course_ids', [])
-        if not student_id:
-            return Response(
-                data={
-                    "msg": "error",
-                    "data": "Student ID is required",
-                    "status": status.HTTP_400_BAD_REQUEST
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        print(course_ids)
         if not course_ids:
             return Response(
                 data={
@@ -145,12 +130,11 @@ class AddCompletedCourseApi(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        student = request.user
         added_courses = []
         for course_id in course_ids:
             try:
-                course = AllCourses.objects.get(id=course_id)
-                # Create or get the CompletedCourse record
+                course = AllCourses.objects.get(course_id=course_id)
+                print(course.courseName)
                 completed_course, created = CompletedCourses.objects.get_or_create(
                     student=student, course=course
                 )
@@ -161,13 +145,14 @@ class AddCompletedCourseApi(APIView):
                     {"msg": f"Course with ID {course_id} does not exist."},
                     status=status.HTTP_404_NOT_FOUND,
                 )
-            return Response(
-            {
-                "msg": "Courses added successfully.",
-                "added_courses": added_courses,
-            },
-            status=status.HTTP_200_OK,
-        )
+        return Response(
+        {
+            "msg": "Courses added successfully.",
+            "added_courses": added_courses,
+            "status": status.HTTP_200_OK,
+        },
+        status=status.HTTP_200_OK,
+    )
             
 
 class CoursesForPassedCoursesApi(APIView):

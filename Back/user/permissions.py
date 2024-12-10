@@ -1,7 +1,7 @@
-from rest_framework import BasePermissions
+from rest_framework.permissions import BasePermission
 from .models import User
 
-class IsStudent(BasePermissions):
+class IsStudent(BasePermission):
     def has_permission(self, request, view):
         
         is_student = False
@@ -13,7 +13,7 @@ class IsStudent(BasePermissions):
         
         return is_student
     
-class IsAcademicAssistant(BasePermissions):
+class IsAcademicAssistant(BasePermission):
     def has_permission(self, request, view):
         
         is_academic_assistant = False
@@ -25,7 +25,7 @@ class IsAcademicAssistant(BasePermissions):
         
         return is_academic_assistant
     
-class IsSupport(BasePermissions):
+class IsSupport(BasePermission):
     def has_permission(self, request, view):
         
         is_support = False
