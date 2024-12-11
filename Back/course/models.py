@@ -25,6 +25,7 @@ class Course(models.Model):
     exam_end_time = models.TimeField(blank=True, null=True)
     capacity = models.IntegerField(default=0)
     registered = models.IntegerField(default=0)
+    description = models.TextField(blank=True, null=True)
     
     class Meta:
             db_table = "Course"
