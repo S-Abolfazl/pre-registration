@@ -7,6 +7,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import RegistrationForm
+from course.models import Course, AllCourses
+from student.models import CompletedCourses
 from .serializers import RegistrationFormSerializer, RegisterationFormDetailSerializer
 from user.permissions import IsStudentOrAdmin, IsStudent
 
@@ -129,3 +131,44 @@ class RegistrationFormDeleteView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+
+class RegistrationFormDataApi(APIView):
+    permission_classes = (IsAuthenticated, IsStudent)
+    
+    
+    
+    def get(self, request):
+        try:
+            student_id = request.user.id
+            courses = Course.objects.all()
+            completed_courses = CompletedCourses.objects.filter(student_id=student_id)
+            for com_course in completed_courses:
+                courses = courses.exclude(course_id=com_course.course_id)
+            courses = courses.values()
+            for c in courses:
+                course = AllCourses.objects.get(course_id=c['course_id'])
+                c.pop('course_id')
+                c['course'] = {
+                    'course_id': course.course_id,
+                    'courseName': course.courseName,
+                    'unit': course.unit,
+                    'type': course.type
+                }
+            return Response(
+                data={
+                    'msg': 'ok',
+                    'data': courses,
+                    "status": status.HTTP_200_OK
+                },
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                data={
+                    'msg': 'error',
+                    'data': 'Error in getting courses: ' + str(e),
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

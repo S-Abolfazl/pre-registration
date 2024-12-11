@@ -9,4 +9,6 @@ urlpatterns = [
          name='registration_form_update'),
     path('delete/<uuid:form_id>/', RegistrationFormDeleteView.as_view(),
          name='registration_form_delete'),
+
+     path('courses-data/', RegistrationFormDataApi.as_view(), name='registration_form_data'),
 ]
