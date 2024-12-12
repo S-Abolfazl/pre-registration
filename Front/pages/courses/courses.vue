@@ -1,6 +1,7 @@
 <template>
+  
   <v-form v-model="valid">
-    
+    <Navigationbar></Navigationbar>
     <v-col  class="my-4">
       
       <v-row class="align-center">
@@ -21,33 +22,55 @@
         </v-col>
       </v-row>
 
-      <v-row class="mt-4 justify-end">
-        <v-col cols="3" class="mr-auto">
+      <v-row class="mt-4 justify-end ">
+        <v-col cols="3" class="mr-auto searchbar">
           <SearchBar v-model:searchQuery="searchQuery"/>
         </v-col>
       </v-row>
 
-      <v-row class="mt-4">
-        <BaseTable :TableDate="ComponentTabeleData"/>
+      <v-row class="mt-4 table">
+        <Table :TableDate="ComponentTabeleData"/>
       </v-row>
     </v-col>
   </v-form>
 </template>
 
 <script>
-import BaseTable from '~/components/nextTerm_courses/Table.vue';
+import Table from '~/components/nextTerm_courses/Table.vue';
 import SearchBar from '~/components/nextTerm_courses/SearchBar.vue';
 // import { filter } from 'core-js/core/array';
+import Navigationbar from '~/layouts/navigationbar.vue';
 export default {
+  layouts:'Navigationbar',
 
   components: {
-    BaseTable,
+    Table,
     SearchBar,
   },
   data: () => ({
     title: 'پنل اصلی',
     searchQuery:'',
-    ComponentTabeleData:[],
+    ComponentTabeleData:[
+  {
+    "courseName": "آزمایشگاه شبکه های کامپیوتری",
+    "unit": 1,
+    "type": "عملی",
+    "capacity": 15,
+    "teacher": "دکتر وزین نژاد",
+    "schedule": "سه‌شنبه‌ها 19:00-17:00",
+    "description": "مدرس: دکتر وزین نژاد"
+  },
+  {
+    "courseName": "مدارهای منطقی",
+    "unit": 3,
+    "type": "نظری",
+    "capacity": 60,
+    "teacher": "مهندس حمیدرضا",
+    "schedule": "یک‌شنبه 09:00-12:00",
+    "description": "امتحان: 13/03/1403"
+  }
+]
+,
   }),
   watch:{
     searchQuery(newvalue){
@@ -65,7 +88,7 @@ export default {
   },
   beforeMount() {
     this.$store.dispatch('setPageTitle', this.title);
-    this.$store.dispatch('setTableData', this.TabeleData);
+    // this.$store.dispatch('setTableData', this.TabeleData);
   },
   methods: {},
 };
@@ -78,12 +101,19 @@ export default {
   max-width: 250px;
   height: auto;
   padding: 10px;
-  margin: 10px;
+  margin: 20px;
   position: relative;
   overflow: visible;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.table{
+  margin-left: 10px;
+}
+.searchbar{
+  margin-left: 40px;
 }
 
 .image-wrapper {
@@ -96,26 +126,12 @@ export default {
 .course-image {
   width: 100%;
 }
-.title {
-  margin: 0;
-  text-align: center;
-}
 
 .v-row {
   margin-bottom: 20px;
 }
 
-.search-bar {
-  width: 100%;
-}
 
-.search-bar > div {
-  justify-content: flex-start;
-}
-
-.ml-4 {
-  margin-left: 16px;
-}
 
 @media (max-width: 768px) {
   .year-card {
@@ -126,7 +142,5 @@ export default {
     top: -40%;
     width: 40%;
   }
-
-
 }
 </style>

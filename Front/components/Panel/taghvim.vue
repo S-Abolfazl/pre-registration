@@ -27,7 +27,7 @@
     export default {
       methods: {
         goToTaghvim() {
-          this.$router.push('/panel/Taghvim');
+          this.$router.push('/courses/courses');
         },
       },
     };
