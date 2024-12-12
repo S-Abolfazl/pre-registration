@@ -21,14 +21,14 @@
         </v-col>
       </v-row>
 
-      <v-row class="mt-4">
-        <v-col cols="12" class="d-flex justify-start">
-          <SearchBar />
+      <v-row class="mt-4 justify-end">
+        <v-col cols="3" class="mr-auto">
+          <SearchBar v-model:searchQuery="searchQuery"/>
         </v-col>
       </v-row>
 
       <v-row class="mt-4">
-        <BaseTable />
+        <BaseTable :TableDate="ComponentTabeleData"/>
       </v-row>
     </v-col>
   </v-form>
@@ -37,17 +37,35 @@
 <script>
 import BaseTable from '~/components/nextTerm_courses/Table.vue';
 import SearchBar from '~/components/nextTerm_courses/SearchBar.vue';
+// import { filter } from 'core-js/core/array';
 export default {
+
   components: {
     BaseTable,
     SearchBar,
   },
   data: () => ({
     title: 'پنل اصلی',
+    searchQuery:'',
+    ComponentTabeleData:[],
   }),
-  computed: {},
+  watch:{
+    searchQuery(newvalue){
+      const query = newvalue.toLowerCase();
+      this.ComponentTabeleData = this.tableItems.filter(
+      (item) =>
+        Object.values(item)
+            .join(' ')
+            .toLowerCase()
+            .includes(query)
+          )
+    }
+  },
+  computed: {
+  },
   beforeMount() {
     this.$store.dispatch('setPageTitle', this.title);
+    this.$store.dispatch('setTableData', this.TabeleData);
   },
   methods: {},
 };

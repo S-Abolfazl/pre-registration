@@ -29,10 +29,11 @@
 
 <script>
 export default {
-  data() {
-    return {
-      tableData: [] 
-    };
+  props: {
+    TableData: {
+      type: Object,
+      required: false,
+    },
   },
   mounted() {
     
