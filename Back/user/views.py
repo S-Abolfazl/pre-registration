@@ -7,6 +7,8 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from social_django.utils import load_strategy
+from social_core.backends.google import GoogleOAuth2
 
 from .models import User
 from .serializers import UserSerializer
@@ -248,3 +250,76 @@ class UserResetPasswordApi(APIView):
                 "data":"user not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+            
+            
+class GoogleLoginApi(APIView):
+    permission_classes = (AllowAny,)
+    
+    @swagger_auto_schema(
+        operation_summary="Google Login",
+        operation_description="Endpoint to login a user using a Google token.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['token'],
+            properties={
+                'token': openapi.Schema(type=openapi.TYPE_STRING, description='Google Token')
+            }
+        )
+    )
+    
+    def post(self, request):
+        token = request.data.get('token')
+        if not token:
+            return Response(data={
+                    "msg":"error",
+                    "data":"Token is required",
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status= status.HTTP_400_BAD_REQUEST          
+            )
+            
+        try:
+            strategy = load_strategy(request)
+            backend = GoogleOAuth2(strategy=strategy)
+            user_info = backend.user_data(token)
+            
+            email = user_info.get('email')
+            if not email:
+                return Response(data={
+                    "msg":"error",
+                    "data":"Email not found in token",
+                    "status": status.HTTP_400_BAD_REQUEST
+                }, status=status.HTTP_400_BAD_REQUEST)
+                
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response(data={
+                    "msg": "error", 
+                    "data": "User does not exist", 
+                    "status": status.HTTP_401_UNAUTHORIZED   
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+                
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+            
+            return Response({
+                "msg": "ok",
+                "data": {
+                    "user": {"id": user.id, "email": user.email, "username": user.username},
+                    "access_token": access_token,
+                    "refresh_token": refresh_token
+                },
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(data={
+                    "msg": "error", 
+                    "data": str(e), 
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
