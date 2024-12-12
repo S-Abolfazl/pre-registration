@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="taghvim-card white1" elevation="3" @click="goToTaghvim">
+    <v-card class="taghvim-card bg-white1" elevation="3" @click="goToTaghvim">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -39,7 +39,8 @@
   border-radius: 25px;
   border: 3px solid #7B5FF1;
   /* width: 25%;  */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */

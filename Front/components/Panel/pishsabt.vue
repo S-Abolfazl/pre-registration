@@ -2,7 +2,7 @@
   <div>
     <v-card class="signup-card blue2" @click="goToPishsabt">
       <v-row no-gutters align="center">
-        <!-- متن توضیحات -->
+        
         <v-col cols="6" >
           <div class="title" >
             <b class="font_43">پیش ثبت نام</b>
@@ -12,7 +12,6 @@
           </div>
         </v-col>
 
-        <!-- تصویر موشک و مرد -->
         <v-col cols="6" class="d-flex justify-center">
           <div class="image-wrapper">
             <img src="/image/panel/pishsabt.png" alt="Rocket Man" class="rocket-image" />
@@ -39,7 +38,8 @@
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   /* width: 33%;  */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */

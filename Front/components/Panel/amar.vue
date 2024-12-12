@@ -35,13 +35,15 @@ export default {
 
 
 <style scoped>
+
 .amar-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   border: 3px solid #FF8B37;
-  /* background-color: #ffD7C7; */
+  
   /* width: 13%; */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */

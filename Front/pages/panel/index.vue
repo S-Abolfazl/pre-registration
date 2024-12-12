@@ -25,7 +25,9 @@
       </v-col>
 
       <v-col cols="4" >
+       
         <taghvim />
+        
       </v-col>
 
       <v-col cols="5" >
@@ -58,8 +60,10 @@ import pishsabt from '~/components/Panel/pishsabt.vue';
 import professor from '~/components/Panel/professor.vue';
 import taghvim from '~/components/Panel/taghvim.vue';
 import term_course from '~/components/Panel/term_course.vue';
+import Navigationbar from '~/layouts/navigationbar.vue';
 
 export default {
+  layout: 'Navigationbar',
   components: {
     amar,
     chart,
