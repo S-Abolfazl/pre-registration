@@ -157,7 +157,7 @@ class CourseDeleteApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
-            
+                
 class AllCourseCreateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     @swagger_auto_schema(
