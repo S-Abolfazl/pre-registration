@@ -12,7 +12,7 @@ export default {
   data: () => ({
   }),
   mounted() {
-    // this.$router.push('/panel')
+    this.$router.push('/panel')
   },
 }
 </script>

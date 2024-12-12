@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <v-main v-if="show_body" class="ma-3 h-max w-max">
+    <!-- v-if="show_body"  -->
+    <v-main class="ma-3 h-max w-max">
       <nuxt />
     </v-main>
   </v-app>
@@ -13,7 +14,9 @@ export default {
     show_body: false,
   }),
   beforeMount() {
-    this.checkAuth();
+    document.getElementById('loading').style.display = 'none';
+    // should set
+    // this.checkAuth();
   },
   methods: {
     checkAuth() {
