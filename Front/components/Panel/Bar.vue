@@ -3,7 +3,7 @@
     <v-app-bar
       scroll-behavior="collapse"
       color="white1"
-      width="95%"
+      width="90%"
       rounded="pill"
     >
       <template v-slot:prepend>
@@ -39,7 +39,7 @@
   <span class="font_20 description"  style="position: relative;">پشتیبانی</span>
 </v-btn>
       <v-spacer></v-spacer>
-      <img :src="require('@/static/image/navbar/sbulogo.png')" alt="sbulogo"  width="4%" height="90%" style=" padding-left: 0.5%">
+      <img :src="require('~/static/image/panel/sbulogo.png')" alt="sbulogo"  width="4%" height="90%" style=" padding-left: 0.5%">
     </v-app-bar>
   </v-layout>
 </template>

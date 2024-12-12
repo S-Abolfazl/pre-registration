@@ -1,4 +1,6 @@
 <template>
+  <div>
+  <Navigationbar></Navigationbar>
   <v-container fluid class="pa-0">
 
     <v-row justify="center" class="my-4 mx-0 ml-7">
@@ -32,6 +34,7 @@
     </v-row>
 
   </v-container>
+</div>
 </template>
 
 <style scoped>
