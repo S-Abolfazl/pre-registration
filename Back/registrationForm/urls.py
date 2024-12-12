@@ -11,4 +11,5 @@ urlpatterns = [
          name='registration_form_delete'),
 
      path('courses-data/', RegistrationFormDataApi.as_view(), name='registration_form_data'),
+     path('confrim/', RegistrationFormConfirmApi.as_view(), name='registration_form_confirm'),
 ]

@@ -136,7 +136,10 @@ class RegistrationFormDeleteView(APIView):
 class RegistrationFormDataApi(APIView):
     permission_classes = (IsAuthenticated, IsStudent)
     
-    
+    @swagger_auto_schema(
+        operation_summary="Get Registration Form Data",
+        operation_description="Endpoint to get data for registration form.",
+    )
     
     def get(self, request):
         try:
@@ -171,6 +174,69 @@ class RegistrationFormDataApi(APIView):
                 data={
                     'msg': 'error',
                     'data': 'Error in getting courses: ' + str(e),
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+class RegistrationFormConfirmApi(APIView):
+    permission_classes = (IsAuthenticated, IsStudent)
+    
+    @swagger_auto_schema(
+        operation_summary="Confirm Registration Form",
+        operation_description="Endpoint to confirm registration form and add selected courses.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'course_ids': openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Items(type=openapi.TYPE_STRING),
+                    description="List of course IDs selected for registration",
+                ),
+            },
+            required=['course_ids'],
+        ),
+    )
+    
+    def post(self, request):
+        try:
+            student_id = request.user.id
+            course_ids = request.data.get('course_ids', [])
+            if not course_ids:
+                SelectedCourse.objects.filter(form__student_id=student_id).delete()
+                return Response(
+                    data={
+                        'msg': 'ok',
+                        'data': 'Courses removed successfully',
+                        "status": status.HTTP_200_OK
+                    }, 
+                    status=status.HTTP_200_OK
+                )
+            form = RegistrationForm.objects.get(student_id=student_id)
+            
+            before_selected_course = SelectedCourse.objects.filter(form=form).values_list('course', flat=True)
+            
+            for course_id in before_selected_course:
+                if course_id not in course_ids:
+                    SelectedCourse.objects.get(form=form, course_id=course_id).delete()
+            
+            for course_id in course_ids:
+                course = Course.objects.get(c_id=course_id)
+                SelectedCourse.objects.get_or_create(form=form, course=course)
+                
+            return Response(
+                data={
+                    'msg': 'ok',
+                    'data': 'Courses added successfully',
+                    "status": status.HTTP_201_CREATED
+                },
+                status=status.HTTP_201_CREATED
+            )
+        except Exception as e:
+            return Response(
+                data={
+                    'msg': 'error',
+                    'data': 'Error in adding courses: ' + str(e),
                     "status": status.HTTP_400_BAD_REQUEST
                 },
                 status=status.HTTP_400_BAD_REQUEST
