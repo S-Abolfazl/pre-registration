@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import RegistrationForm
+from .models import RegistrationForm, SelectedCourse
 from course.models import Course, AllCourses
 from student.models import CompletedCourses
 from .serializers import RegistrationFormSerializer, RegisterationFormDetailSerializer
@@ -143,6 +143,8 @@ class RegistrationFormDataApi(APIView):
             student_id = request.user.id
             courses = Course.objects.all()
             completed_courses = CompletedCourses.objects.filter(student_id=student_id)
+            selected_courses = SelectedCourse.objects.filter(form__student_id=student_id)
+            selected_courses = selected_courses.values_list('course_id', flat=True)
             for com_course in completed_courses:
                 courses = courses.exclude(course_id=com_course.course_id)
             courses = courses.values()
@@ -155,6 +157,7 @@ class RegistrationFormDataApi(APIView):
                     'unit': course.unit,
                     'type': course.type
                 }
+                c['selected'] = True if c['c_id'] in selected_courses else False
             return Response(
                 data={
                     'msg': 'ok',
