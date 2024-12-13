@@ -328,12 +328,12 @@ class CourseinTermApi(APIView):
             
             if course.class_start_time and course.class_end_time:
                 class_schedule += (
-                    f" {course.class_start_time} - {course.class_end_time}"
+                    f" {str(course.class_start_time)[:-3]} - {str(course.class_end_time)[:-3]}"
                 )
 
             exam_schedule = (
                 f"تاریخ: {course.exam_date} "
-                f"ساعت: {course.exam_start_time} - {course.exam_end_time}"
+                f"ساعت: {str(course.exam_start_time)[:-3]} - {str(course.exam_end_time)[:-3]}"
             ) if course.exam_date else ''
 
             combined_schedule = ""
