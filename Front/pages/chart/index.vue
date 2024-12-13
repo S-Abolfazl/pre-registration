@@ -3,11 +3,11 @@
       <Chart />
     </div>
   </template>
-  
+
   <script>
   import Chart from "~/components/Auth/Chart.vue";
   export default {
-    layout: 'site',
+    // layout: 'site',
     head() {
       return {
         title: 'چارت دروس',
@@ -16,4 +16,3 @@
     components: { Chart, }
   };
   </script>
-  

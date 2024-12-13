@@ -4,20 +4,32 @@
       scroll-behavior="collapse"
       color="white1"
       width="90%"
+      outlined
       rounded="pill"
+      class="bar mx-4"
     >
-      <template v-slot:prepend>
-        <v-list-item
-          lines="two"
-          :avatar="user.avatar"
-          :subtitle="user.role"
-          :title="user.username"
+      <v-avatar color="primary">
+        <img
+          v-if="user.avatar"
+          :src="user.avatar"
+          alt="user"
         >
-        </v-list-item>
-      </template>
+        <v-icon v-else dark class="font_35">
+          mdi-account
+        </v-icon>
+      </v-avatar>
+
+      <div class="mr-2">
+        <v-row no-gutters>
+          <b>{{ user.role }}</b>
+        </v-row>
+        <v-row no-gutters>
+          <span>{{ user.username }}</span>
+        </v-row>
+      </div>
       <v-spacer></v-spacer>
       <BaseButton
-        class="font_20 description" 
+        class="font_20 description"
         text="پيش ثبت نام"
         color="primary"
         width="10%"
@@ -72,4 +84,12 @@ export default {
 };
 </script>
 
-
+<style scoped>
+.bar {
+  box-shadow: none !important;
+}
+.theme--light.v-app-bar.v-toolbar.v-sheet {
+  border-color: #D9D9D9 !important;
+  margin-top: 12px !important;
+}
+</style>

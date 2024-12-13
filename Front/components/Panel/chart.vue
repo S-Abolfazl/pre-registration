@@ -26,7 +26,7 @@
       export default {
         methods: {
           goToChart() {
-            this.$router.push('/panel/Chart');
+            this.$router.push('/chart');
           },
         },
       };
