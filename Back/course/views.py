@@ -8,7 +8,7 @@ from drf_yasg import openapi
 
 from .models import Course, AllCourses
 from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer
-from user.permissions import IsAcademicAssistantOrAdmin
+from user.permissions import IsAcademicAssistantOrAdmin, IsStudentOrIsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
 class CourseCreateApi(APIView):
@@ -158,76 +158,6 @@ class CourseDeleteApi(APIView):
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
 
-  
-class CourseinTermApi(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @swagger_auto_schema(
-        operation_summary="Courses Offered",
-        operation_description="API to get the courses offered in a specific term.",
-        manual_parameters=[
-            openapi.Parameter(
-                'term_year',
-                openapi.IN_QUERY,
-                description="Year of the term (e.g., 1403)",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            ),
-            openapi.Parameter(
-                'term_type',
-                openapi.IN_QUERY,
-                description="Type of the term (odd/even)",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ]
-    )
-    def get(self, request):
-        term_year = request.query_params.get('term_year')
-        term_type = request.query_params.get('term_type')
-
-        # Filter courses based on term year and type
-        courses = Course.objects.filter(
-            course__educationalchart__year=term_year,
-            course__educationalchart__type=term_type
-        ).select_related('course')
-
-        # Prepare data
-        data = []
-        for course in courses:
-            # Combine class day and time
-            class_schedule = (
-                f"{course.class_time1 or '-'} {course.class_start_time or '-'} - {course.class_end_time or '-'}"
-            )
-            if course.class_time2 and course.class_time2 != course.class_time1:
-                class_schedule += (
-                    f" | {course.class_time2 or '-'} {course.class_start_time or '-'} - {course.class_end_time or '-'}"
-                )
-
-            # Combine exam schedule
-            exam_schedule = (
-                f"تاریخ: {course.exam_date or '-'} "
-                f"ساعت: {course.exam_start_time or '-'} - {course.exam_end_time or '-'}"
-            )
-
-            # Combine schedules into one field
-            combined_schedule = (
-                f"کلاس: {class_schedule} | امتحان: {exam_schedule}"
-            )
-
-            # Add course data to the list
-            course_data = {
-                "courseName": course.course.courseName,
-                "unit": course.course.unit,
-                "type": course.course.type,
-                "capacity": course.capacity,
-                "teacher": course.teacherName,
-                "schedule": combined_schedule,
-                "description": course.description or "ندارد",
-            }
-            data.append(course_data)
-
-        return Response({"courses": data}, status=200)
 
 class AllCourseCreateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
@@ -368,3 +298,61 @@ class AllCourseDeleteApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+            
+            
+class CourseinTermApi(APIView):
+    permission_classes = [IsAuthenticated, IsStudentOrIsAcademicAssistantOrAdmin]
+
+    @swagger_auto_schema(
+        operation_summary="Courses Offered",
+        operation_description="API to get the courses offered in a specific term.",
+    )
+    def get(self, request):
+
+        courses = Course.objects.all()
+
+        data = []
+        for course in courses:
+            class_schedule = (
+                f"{course.class_time1}"
+            ) if course.class_time1 else ''
+            
+            if course.class_time2 and course.class_time2 != course.class_time1:
+                class_schedule += (
+                    f"-{course.class_time2 or '-'}"
+                )
+            else:
+                class_schedule += (
+                    f" ها"
+                )
+            
+            if course.class_start_time and course.class_end_time:
+                class_schedule += (
+                    f" {course.class_start_time} - {course.class_end_time}"
+                )
+
+            exam_schedule = (
+                f"تاریخ: {course.exam_date} "
+                f"ساعت: {course.exam_start_time} - {course.exam_end_time}"
+            ) if course.exam_date else ''
+
+            combined_schedule = ""
+
+            if class_schedule:
+                combined_schedule += f"کلاس: {class_schedule}"
+            
+            if exam_schedule:
+                combined_schedule += f" | امتحان: {exam_schedule} "
+                
+            course_data = {
+                "courseName": course.course.courseName,
+                "unit": course.course.unit,
+                "type": course.course.type,
+                "capacity": course.capacity,
+                "teacher": course.teacherName,
+                "schedule": combined_schedule,
+                "description": course.description or "ندارد",
+            }
+            data.append(course_data)
+
+        return Response({"courses": data}, status=200)
