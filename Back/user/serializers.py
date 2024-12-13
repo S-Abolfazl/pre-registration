@@ -3,9 +3,34 @@ import re
 from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
+
+    default_error_messages = {
+        'username_required': 'نام کاربری نمی‌تواند خالی باشد.',
+        'password_required': 'رمز عبور نمی‌تواند خالی باشد.',
+        'email_invalid': 'ایمیل وارد شده معتبر نیست.',
+        'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد.',
+    }
     class Meta:
         model = User
         fields = ['username', 'password', 'email', 'type']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # تنظیم پیام‌های خطا برای هر فیلد
+        self.fields['username'].error_messages.update({
+            'required': self.default_error_messages['username_required'],
+            'blank': self.default_error_messages['username_required']
+        })
+        self.fields['password'].error_messages.update({
+            'required': self.default_error_messages['password_required'],
+            'blank': self.default_error_messages['password_required']
+        })
+        self.fields['email'].error_messages.update({
+            'invalid': self.default_error_messages['email_invalid']
+        })
+        self.fields['type'].error_messages.update({
+            'invalid_choice': self.default_error_messages['type_invalid']
+        })
         
     def create(self, validated_data):
         password = validated_data.pop('password', None)
