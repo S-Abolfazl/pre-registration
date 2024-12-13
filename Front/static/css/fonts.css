@@ -65,6 +65,10 @@ h2 {
   font-size: 35px !important;
 }
 
+.font_45 {
+  font-size: 45px !important;
+}
+
 .font_13 > .v-btn__content {
   font-size: 13px !important;
 }

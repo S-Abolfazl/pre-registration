@@ -243,3 +243,24 @@ tr {
   background: #19181F !important;
   color: #fff !important;
 }
+
+.v-calendar-daily_head-day-label {
+  display: none;
+}
+
+.v-calendar-daily__head {
+  margin: 0px !important;
+}
+
+.v-calendar-daily__scroll-area {
+  overflow-y: hidden !important;
+}
+
+.v-calendar-daily_head-weekday {
+  padding: 20px !important;
+}
+
+.v-calendar .v-event-timed-container{
+  margin-right: 0px !important;
+}
+
