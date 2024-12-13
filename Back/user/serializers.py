@@ -68,31 +68,32 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_username(self, value):
         if len(value) < 8:
-            raise serializers.ValidationError("Usernames must be more than 8 characters")
+            raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد.")
         
         if not value.isdigit():
-            raise serializers.ValidationError("Usernames must be integers")
-        
+            raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد.")
+    
         return value
+
     
     def validate_password(self, value):
         
         if len(value) < 8:
-            raise serializers.ValidationError("Password must be at least 8 characters long.")
-        
+            raise serializers.ValidationError("رمز عبور باید حداقل 8 کاراکتر باشد.")
+    
         if not re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("Password must include at least one uppercase letter.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
         
         if not re.search(r'[a-z]', value):
-            raise serializers.ValidationError("Password must include at least one lowercase letter.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف کوچک انگلیسی باشد.")
         
         if not re.search(r'[0-9]', value):
-            raise serializers.ValidationError("Password must include at least one digit.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک عدد باشد.")
         
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
-            raise serializers.ValidationError("Password must include at least one special character (!@#$%^&*(),.?\":{}|<>).")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک کاراکتر خاص (!@#$%^&*(),.?\":{}|<>) باشد.")
         
         if re.search(r'\s', value):
-            raise serializers.ValidationError("Password must not contain any spaces.")
+            raise serializers.ValidationError("رمز عبور نباید شامل فاصله باشد.")
         
         return value
