@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <Bar></Bar>
     <!-- v-if="show_body"  -->
     <v-main class="ma-3 h-max w-max">
       <nuxt />
@@ -8,8 +9,10 @@
 </template>
 
 <script>
+import Bar from '~/components/Layout/Bar.vue';
 export default {
   name: 'default',
+  components: { Bar },
   data: () => ({
     show_body: false,
   }),

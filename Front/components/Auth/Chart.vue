@@ -27,7 +27,7 @@
 </v-row>
 <v-row class="align-center no-gutters" :style="{  paddingTop: '1%', width: '100%' }">
   <!-- Header Section -->
-   
+
     <header>
       <h1 class="font_20" style="text-align: left;">دروس اختصاصی به صورت </h1>
     </header>
@@ -63,11 +63,11 @@
 
 </v-row>
 
-  
+
       <div>
       <hr style="border: 1px solid 'gray1'; margin: 20px 50px;" />
       </div>
-  
+
     <div style="padding-right: 22.5%;">
       <template >
         <div>
@@ -84,37 +84,36 @@
         </div>
       </template>
     </div>
-  
+
     <div>
       <hr style="border: 1px solid 'gray1'; margin: 20px 50px;" />
       </div>
-  
+
       <v-row  class="align-center " style="padding-top: '40px';">
-  
-  
+
+
         <v-col cols="2" class="d-flex justify-center" >
           <BaseButton text="ثبت دروس" />
         </v-col>
-        
-        
+
+
         <v-col cols="2" class="d-flex justify-center" >
           <BaseButton text="رد کردن" color="gray2" />
         </v-col>
       </v-row>
-  
+
         <div class="action-buttons">
-         
-          
+
+
         </div>
-          
-      
-        
+
+
+
       </div>
     </template>
-    
+
     <script>
-      import Navigationbar from '~/layouts/navigationbar.vue';
-    import BaseButton from '../Base/BaseButton.vue';
+      import BaseButton from '../Base/BaseButton.vue';
       import ChartSelect from '../PassedCourses/ChartSelect.vue';
       import Course from '../PassedCourses/Course.vue';
       import YearSelection from '../PassedCourses/YearSelection.vue';
@@ -230,8 +229,8 @@
         }
       }
     }
-  
-      
+
+
     </script>
 
 <style>
