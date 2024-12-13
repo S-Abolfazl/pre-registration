@@ -9,11 +9,10 @@ class UserSerializer(serializers.ModelSerializer):
         'password_required': 'رمز عبور نمی‌تواند خالی باشد.',
         'email_invalid': 'ایمیل وارد شده معتبر نیست.',
         'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد.',
-        'entry_year_invalid': 'سال ورود باید یک عدد معتبر باشد.',
     }
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'password', 'email', 'type']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,9 +31,6 @@ class UserSerializer(serializers.ModelSerializer):
         self.fields['type'].error_messages.update({
             'invalid_choice': self.default_error_messages['type_invalid']
         })
-        self.fields['entry_year'].error_messages.update({
-            'invalid': self.default_error_messages['entry_year_invalid']
-        })
         
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -47,8 +43,26 @@ class UserSerializer(serializers.ModelSerializer):
             
         if user_type == 'student':
             user.entry_year = int(username[:3])
+        elif user_type == 'admin':
+            user.is_staff = True
+            user.is_superuser = True
         
         user.is_active = True
+        user.save()
+        return user
+    
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        user_type = validated_data.get('type', None)
+        username = validated_data.get('username', None)
+        user = super().update(instance, validated_data)
+        
+        if password:
+            user.set_password(password)
+        
+        if user_type == 'student':
+            user.entry_year = int(username[:3])
+        
         user.save()
         return user
     

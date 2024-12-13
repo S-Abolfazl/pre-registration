@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', UserLogoutApi.as_view(), name='logout_user'),
     path('update/<pk>', UserUpdateApi.as_view(), name='update_user'),
     path('reset-password/', UserResetPasswordApi.as_view(), name='reset_password_user'),
+    path('login-google/', GoogleLoginApi.as_view(), name='login_google_user'),
 ]
 
