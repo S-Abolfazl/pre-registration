@@ -160,6 +160,10 @@ class RegistrationFormDataApi(APIView):
                     'unit': course.unit,
                     'type': course.type
                 }
+                c['class_start_time'] = str(c['class_start_time'])[:-3]
+                c['class_end_time'] = str(c['class_end_time'])[:-3]
+                c['exam_start_time'] = str(c['exam_start_time'])[:-3]
+                c['exam_end_time'] = str(c['exam_end_time'])[:-3]
                 c['selected'] = True if c['c_id'] in selected_courses else False
             return Response(
                 data={

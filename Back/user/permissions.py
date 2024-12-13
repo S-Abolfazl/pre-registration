@@ -50,3 +50,12 @@ class  IsStudentOrAdmin(BasePermission):
         is_admin = IsAdminUser().has_permission(request, view)
         is_student = IsStudent().has_permission(request, view)
         return is_admin or is_student
+    
+class IsStudentOrIsAcademicAssistantOrAdmin(BasePermission):
+    
+    def has_permission(self, request, view):
+        is_admin = IsAdminUser().has_permission(request, view)
+        is_student = IsStudent().has_permission(request, view)
+        is_academic_assistant = IsAcademicAssistant().has_permission(request, view)
+        return is_admin or is_student or is_academic_assistant
+    

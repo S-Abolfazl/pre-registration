@@ -1102,6 +1102,18 @@ def convert_persian_numbers_to_english(persian_number):
     }
     return ''.join(persian_to_english.get(ch, ch) for ch in persian_number)
 
+def convert_class_time_2(class_time,unit):
+    class_times = {
+        "شنبه":"دوشنبه",
+        "یک‌شنبه":"سه‌شنبه",
+        "دوشنبه":"چهارشنبه",
+        "پنج‌شنبه":"پنج‌شنبه"
+    }
+    
+    if unit == 3:
+        class_time = class_times[class_time]
+        
+    return class_time
 def convert_course_type_to_type(course_name,course_type , unit):
     # CourseType = {
     #   ('theory_course', 'theory course'), # theory
@@ -1134,7 +1146,7 @@ def map_to_course(course_data):
         try:
             course = AllCourses.objects.get_or_create(courseName=courseName, unit=unit, type=type)
             class_time1 = data["class_time1"].strip()
-            class_time2 = data["class_time2"].strip()
+            class_time2 = convert_class_time_2(data["class_time2"].strip(), unit)
             exam_time = convert_persian_numbers_to_english(data["exam_time"].strip())
 
             # Debugging: Log processed times
