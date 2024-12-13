@@ -7,19 +7,21 @@
       >
         <span :class="[ 'font_16', border ? 'blue2--text' : 'white1--text']" v-html="text"> </span>
         <v-chip
-          :color="border ?color :'white1' "
+          :color="border ? color : 'white1'"
           class="inner-circle"
           :outlined="border"
         >
-          <div :class="[ 'font_12']" :color="border ? 'white1' : color">  {{ number }}</div>
+          <div :class="['font_12', `${color}--text`, 'pa-n3']" :color="border ? 'white1' : color">
+            {{ number }}
+          </div>
         </v-chip>
         <span :class="[ 'font_16', border ? 'blue2--text' : 'white1--text']"> واحد </span>
       </v-chip>
     </div>
   </template>
-  
+
   <script>
-  
+
   export default {
     name: "Courses",
     props: {
@@ -44,8 +46,8 @@
     },
   };
   </script>
-  
-  <style >
+
+  <style scoped>
 .custom-chip {
     display: flex;
     justify-content: center;
@@ -57,14 +59,14 @@
     width: fit-content;
     height: 2.5vw !important;
     margin: 1vw;
-    border-color: blue1 ; 
-    border-style: solid; 
+    border-color: #ccc;
+    border-style: solid;
     border-width: 2px;
   }
 .text {
     color: white1;
   }
-  
+
 .inner-circle {
     display: flex;
     justify-content: center;
@@ -76,10 +78,11 @@
     text-align: center;
     box-sizing: border-box; /* Prevent padding/margin issues */
     margin-left: 0.2rem;
-    border-color: blue1 ; 
-    border-style: solid; 
-    border-width: 2px;
   }
-
+  .v-chip.v-chip--outlined.v-chip.v-chip{
+    border: 1px solid #7b5ff1 !important;
+  }
+  .v-chip .inner-circle{
+    padding: 0 !important;
+  }
   </style>
-  

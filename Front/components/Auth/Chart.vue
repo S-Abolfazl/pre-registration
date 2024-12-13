@@ -1,23 +1,14 @@
 <template>
-    <div>
-    <Navigationbar :style="{  padding: '2%', position: 'fixed', top: '0', width: '100%', zIndex: '1000' }" ></Navigationbar>
-    <v-row class="align-center no-gutters" :style="{  paddingTop: '10%', width: '100%'}">
-  <!-- Header Section -->
-  <v-col >
-    <header>
-      <h1 class="font_40" style="text-align: left; ">چارت درسی رشته مهندسی کامپیوتر</h1>
-    </header>
-  </v-col>
+  <div>
+    <v-row no-gutters class="align-center mx-2" :style="{  width: '100%'}">
+      <!-- Header Section -->
+      <h1 class="font_40 flex-end">چارت درسی رشته مهندسی کامپیوتر</h1>
 
-  <v-col >
-    <Year text="1400"></Year>
-  </v-col>
+      <Year text="1400" class="mr-2"></Year>
 
-  <!-- Chart Select -->
-  <v-col cols="3" :style="{ paddingLeft: '0' }">
-    <ChartSelect width="80%" height="40px" />
-  </v-col>
-</v-row>
+      <!-- Chart Select -->
+      <ChartSelect height="40px" class="mr-auto ml-9" />
+    </v-row>
 
 <v-row class="align-center no-gutters" :style="{  paddingTop: '5%', width: '100%' }">
   <!-- Header Section -->
@@ -43,7 +34,7 @@
     <header>
       <h1 class="font_20" style="text-align: left;">، دروس عمومی به صورت </h1>
     </header>
-    <Courses text=" دروس عمومي" number="22" :border=true color="blue2"></Courses>
+    <Courses text=" دروس عمومي" number="22" :border="true" color="blue2"></Courses>
     <header>
       <h1 class="font_20" style="text-align: left;">و دروس اختیاری به صورت  </h1>
     </header>
@@ -51,12 +42,7 @@
     <header>
       <h1 class="font_20" style="text-align: left;">نمایش داده شده اند. جمع تمامی واحد ها</h1>
     </header>
-    <v-chip
-          color="black1"
-          class="inner-circle"
-        >
-        <span class="[ 'font_12', 'white1--text']"  v-html="140">  </span>
-    </v-chip>
+      <span class="font_12 white1--text black1 mx-2 pa-2 rounded-circle">140</span>
     <header>
       <h1 class="font_20" style="text-align: left;">ميباشد.</h1>
     </header>

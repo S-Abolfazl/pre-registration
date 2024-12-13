@@ -8,7 +8,7 @@
       rounded="pill"
       class="bar mx-4"
     >
-      <v-avatar color="primary">
+      <v-avatar color="primary" class="pointer" @click="user_menu()">
         <img
           v-if="user.avatar"
           :src="user.avatar"
@@ -80,6 +80,9 @@ export default {
     navigateToSupport() {
       this.$router.push('/support');
     },
+    user_menu(){
+      console.log('user menu');
+    }
   },
 };
 </script>
