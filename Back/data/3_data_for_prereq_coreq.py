@@ -55,7 +55,7 @@ for key, value in coreq.items():
     for c in value:
         try:
             coreq_course = AllCourses.objects.get(courseName=c)
-            Coreq.objects.create(course=course, coreq_course=coreq_course)
+            Coreq.objects.get_or_create(course=course, coreq_course=coreq_course)
         except:
             print("c:",c)
         
@@ -67,6 +67,6 @@ for key, value in prereq.items():
     for c in value:
         try:
             prereq_course = AllCourses.objects.get(courseName=c)
-            Prereq.objects.create(course=course, prereq_course=prereq_course)
+            Prereq.objects.get_or_create(course=course, prereq_course=prereq_course)
         except:
             print("c:",c)
