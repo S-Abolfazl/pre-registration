@@ -20,6 +20,8 @@ services:
     container_name: my-django
     environment:
       DEBUG: '1'
+      SECRET_KEY: django-insecure-0+)c$i_v#a2s^c=1(qx-lmr5nx+&on1+mf3!d8vu^1bg+*b-ll
+      DATABASE_ENGINE: django.db.backends.postgresql
       DATABASE_NAME: mydatabase
       DATABASE_USER: admin
       DATABASE_PASSWORD: '0146'
