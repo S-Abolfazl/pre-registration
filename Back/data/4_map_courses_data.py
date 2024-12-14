@@ -1195,6 +1195,20 @@ data_out = map_to_course(course_data)
 # print(data_out)
 
 for c in data_out:
+    # print(c)
     print(c)
-    course = Course(**c)
-    course.save()
+    course, created = Course.objects.get_or_create(
+        course=c['course'],  # ForeignKey reference to 'AllCourses' model
+        teacherName=c['teacherName'],
+        isExperimental=c['isExperimental'],
+        class_time1=c.get('class_time1', None),
+        class_time2=c.get('class_time2', None),
+        class_start_time=c.get('class_start_time', None),
+        class_end_time=c.get('class_end_time', None),
+        exam_date=c.get('exam_date', None),
+        exam_start_time=c.get('exam_start_time', None),
+        exam_end_time=c.get('exam_end_time', None),
+        capacity=c.get('capacity', 0),
+        registered=c.get('registered', 0),
+        description=c.get('description', None)
+    )

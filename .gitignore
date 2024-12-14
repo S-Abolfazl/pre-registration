@@ -8,3 +8,5 @@ __pycache__/
 .venv
 .env
 **/migrations/*.py
+Back/static
+Back/staticfiles

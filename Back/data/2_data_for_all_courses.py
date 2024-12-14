@@ -246,4 +246,4 @@ data = {
 
 
 for key, value in data.items():
-    AllCourses.objects.create(courseName=value['courseName'], unit=value['unit'], type=value['type'])
+    AllCourses.objects.get_or_create(courseName=value['courseName'], unit=value['unit'], type=value['type'])
