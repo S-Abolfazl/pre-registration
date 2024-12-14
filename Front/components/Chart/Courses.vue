@@ -2,16 +2,15 @@
     <div>
       <v-chip
         :color="border ? 'white1' : color"
-        class="custom-chip"
+        :class="['custom-chip', text == 'دروس اختياري' ? 'gradient-chip' : '']"
         :outlined="border"
       >
         <span :class="[ 'font_16', border ? 'blue2--text' : 'white1--text']" v-html="text"> </span>
         <v-chip
           :color="border ? color : 'white1'"
           class="inner-circle"
-          :outlined="border"
         >
-          <div :class="['font_12', `${color}--text`, 'pa-n3']" :color="border ? 'white1' : color">
+          <div :class="['font_12', `${border ? 'white1' : color}--text`, 'pa-n3']" :color="border ? 'white1' : color">
             {{ number }}
           </div>
         </v-chip>
@@ -68,21 +67,25 @@
   }
 
 .inner-circle {
+    margin: 0px 6px 0 6px !important;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     width: 2.3vw; /* Ensure equal width and height */
     height: 1w;
-    margin-right: 1.5rem;
     text-align: center;
     box-sizing: border-box; /* Prevent padding/margin issues */
-    margin-left: 0.2rem;
   }
   .v-chip.v-chip--outlined.v-chip.v-chip{
     border: 1px solid #7b5ff1 !important;
   }
   .v-chip .inner-circle{
     padding: 0 !important;
+  }
+  .gradient-chip {
+    background: linear-gradient(0deg, #ff8b37 , #7b5ff1) !important;
+    color: white !important;
+    border: none;
   }
   </style>
