@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -68,12 +69,18 @@ class CourseListApi(APIView):
                 courses = Course.objects.all()
                 serializer = CourseDetailSerializer(courses, many=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
-        except Exception:
+        except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
         
 class CourseUpdateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
@@ -167,7 +174,12 @@ class CourseDeleteApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
-
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class AllCourseCreateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
