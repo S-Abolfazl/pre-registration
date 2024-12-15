@@ -149,3 +149,36 @@ class RegistrationFormUpdateViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         
         
+class RegistrationFormDeleteViewTest(APITestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_user(
+            username="adminuser",
+            password="Admin@1234",
+            email="admin@example.com",
+            is_staff=True
+        )
+        self.non_admin_user = User.objects.create_user(
+            username="regularuser",
+            password="User@1234",
+            email="user@example.com"
+        )
+        self.registration_form = RegistrationForm.objects.create(
+            student_id=self.non_admin_user
+        )
+        self.client.force_authenticate(user=self.admin_user)
+
+    def test_delete_registration_form_success(self):
+        response = self.client.delete(f"/registration-form/delete/{self.registration_form.form_id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertIn("deleted successfully", response.data["data"])
+        self.assertFalse(RegistrationForm.objects.filter(form_id=self.registration_form.form_id).exists())
+
+    def test_delete_registration_form_not_found(self):
+        response = self.client.delete("/registration-form/delete/invalid-form-id/")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_registration_form_unauthorized(self):
+        self.client.logout()
+        response = self.client.delete(f"/registration-form/delete/{self.registration_form.form_id}/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
