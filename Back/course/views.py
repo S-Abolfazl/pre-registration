@@ -395,4 +395,8 @@ class CourseinTermApi(APIView):
             }
             data.append(course_data)
 
-        return Response({"courses": data}, status=200)
+        return Response(data={
+                "msg": "ok",
+                "data": data,
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)

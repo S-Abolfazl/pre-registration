@@ -361,3 +361,75 @@ class AllCourseDeleteApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['msg'], "error")
         self.assertEqual(response.data['data'], "id validation error")
+        
+        
+class CourseinTermApiTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="400243068", 
+            password="Hosein@1382", 
+            email="h@example.com", 
+            type="academicassistant"
+        )
+        
+        self.client.force_authenticate(user=self.user)  
+        
+        self.course = AllCourses.objects.create(
+            courseName="Mathematics 101",
+            unit=3,
+            type="theory_course"
+        )
+        
+        self.course_interm = Course.objects.create(
+            course=self.course,
+            teacherName="Dr. Smith",
+            isExperimental=False,
+            class_time1="شنبه",
+            class_time2="دوشنبه",
+            class_start_time="10:30:00",
+            class_end_time="12:00:00",
+            exam_date="2024-12-20",
+            exam_start_time="08:00:00",
+            exam_end_time="10:00:00",
+            capacity=30,
+            description="Sample course"
+        )
+        
+    def test_get_courses_success(self):
+        response = self.client.get("/course/courses-in-term/data/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data['data'], list)
+        self.assertEqual(len(response.data['data']), 1)
+        
+        course_data = response.data.get('data', [])[0]
+        self.assertEqual(course_data['courseName'], "Mathematics 101")
+        self.assertEqual(course_data['unit'], 3)
+        self.assertEqual(course_data['type'], "theory_course")
+        self.assertEqual(course_data['capacity'], 30)
+        self.assertEqual(course_data['teacher'], "Dr. Smith")
+        self.assertIn("کلاس", course_data['schedule'])
+        self.assertIn("امتحان", course_data['schedule'])
+        self.assertEqual(course_data['description'], "Sample course")
+        
+    def test_no_courses_available(self):
+        Course.objects.all().delete()
+        response = self.client.get("/course/courses-in-term/data/")
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get('data'), [])
+    
+    def test_access_denied_without_permission(self):
+        self.user.type = "support"
+        self.user.save()
+        response = self.client.get("/course/courses-in-term/data/")
+        
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['detail'], "You do not have permission to perform this action.")
+    
+    def test_get_courses_unauthenticated(self):
+        self.client.logout()
+        response = self.client.get("/course/courses-in-term/data/")
+        
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['detail'], "Authentication credentials were not provided.")
+        
