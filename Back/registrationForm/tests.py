@@ -88,3 +88,64 @@ class RegistrationFormListViewTest(APITestCase):
         self.client.logout()
         response = self.client.get("/registration-form/list/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
+        
+class RegistrationFormUpdateViewTest(APITestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_user(
+            username="adminuser",
+            password="Admin@1234",
+            email="admin@example.com",
+            is_staff=True
+        )
+        self.non_admin_user = User.objects.create_user(
+            username="regularuser",
+            password="User@1234",
+            email="user@example.com"
+        )
+        self.registration_form = RegistrationForm.objects.create(
+            student_id=self.non_admin_user
+        )
+        self.client.force_authenticate(user=self.admin_user)
+
+    def test_update_registration_form_success(self):
+        updated_data = {
+            "student_id": self.non_admin_user.id
+        }
+        response = self.client.put(
+            f"/registration-form/update/{self.registration_form.form_id}/",
+            data=updated_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"]["student_id"], self.non_admin_user.id)
+
+    def test_update_registration_form_not_found(self):
+        updated_data = {
+            "student_id": self.non_admin_user.id
+        }
+        response = self.client.put("/registration-form/update/invalid-form-id/", data=updated_data)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_registration_form_invalid_data(self):
+        invalid_data = {
+            "student_id": "invalid-student-id"
+        }
+        response = self.client.put(
+            f"/registration-form/{self.registration_form.form_id}/",
+            data=invalid_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_registration_form_unauthorized(self):
+        self.client.logout()
+        updated_data = {
+            "student_id": self.non_admin_user.id
+        }
+        response = self.client.put(
+            f"/registration-form/update/{self.registration_form.form_id}/",
+            data=updated_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
+        
