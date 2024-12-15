@@ -258,3 +258,97 @@ class RegistrationFormDataApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertIn("detail", response.data)
         self.assertEqual(response.data["detail"], "Authentication credentials were not provided.")
+        
+
+class RegistrationFormConfirmApiTest(APITestCase):
+    def setUp(self):
+        self.student_user = User.objects.create_user(
+            username="student_user", password="Test@1234", email="h@e.com", type="student"
+        )
+        
+        self.form = RegistrationForm.objects.create(student_id=self.student_user)
+        
+        self.all_course_1 = AllCourses.objects.create(
+            courseName="Sample Course",
+            unit=3,
+            type="theory_course"
+        )
+        
+        self.all_course_2 = AllCourses.objects.create(
+            courseName="Sample Course 2",
+            unit=3,
+            type="theory_course"
+        )
+        
+        self.course1 = Course.objects.create(
+            course=self.all_course_1,
+            teacherName="Dr. Smith",
+            isExperimental=False,
+            class_time1="شنبه",
+            class_time2="دوشنبه",
+            class_start_time="10:30:00",
+            class_end_time="12:00:00",
+            exam_date="2024-12-23",
+            exam_start_time="08:00:00",
+            exam_end_time="10:00:00",
+            capacity=30,
+            description="Sample course"
+        )
+        
+        self.course2 = Course.objects.create(
+            course=self.all_course_2,
+            teacherName="Dr. Smith",
+            isExperimental=False,
+            class_time1="شنبه",
+            class_time2="دوشنبه",
+            class_start_time="09:00:00",
+            class_end_time="10:30:00",
+            exam_date="2024-12-20",
+            exam_start_time="08:00:00",
+            exam_end_time="10:00:00",
+            capacity=30,
+            description="Sample course 2"
+        )
+        
+        self.url = "/registration-form/confirm/"
+        
+        self.client.force_authenticate(user=self.student_user)
+
+    
+    def test_confirm_registration_add_courses(self):
+        data = {"course_ids": [self.course1.c_id, self.course2.c_id]}
+        response = self.client.post(self.url, data=data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], "Courses added successfully")
+        selected_courses = SelectedCourse.objects.filter(form=self.form)
+        self.assertEqual(selected_courses.count(), 2)
+    
+    def test_confirm_registration_remove_courses(self):
+        SelectedCourse.objects.create(form=self.form, course=self.course1)
+        data = {"course_ids": []}
+        response = self.client.post(self.url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], "Courses removed successfully")
+        selected_courses = SelectedCourse.objects.filter(form=self.form)
+        self.assertEqual(selected_courses.count(), 0)
+
+    def test_confirm_registration_with_invalid_course(self):
+        data = {"course_ids": ["INVALID_COURSE"]}
+        response = self.client.post(self.url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["msg"], "error")
+        self.assertIn("Error in adding courses", response.data["data"])
+        
+    def test_confirm_registration_no_data(self):
+        response = self.client.post(self.url, {}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], "Courses removed successfully")
+        selected_courses = SelectedCourse.objects.filter(form=self.form)
+        self.assertEqual(selected_courses.count(), 0)
+    
+        
+        
+        
