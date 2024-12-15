@@ -2,9 +2,10 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth import get_user_model
 
-from .models import RegistrationForm
+from .models import RegistrationForm, SelectedCourse
 from user.models import User
-
+from course.models import Course, AllCourses
+from student.models import CompletedCourses
 class RegistrationFormCreateViewTest(APITestCase):
     def setUp(self):
         self.student_user = User.objects.create_user(
@@ -182,3 +183,78 @@ class RegistrationFormDeleteViewTest(APITestCase):
         self.client.logout()
         response = self.client.delete(f"/registration-form/delete/{self.registration_form.form_id}/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
+class RegistrationFormDataApiTest(APITestCase):
+    def setUp(self):
+        self.student_user = User.objects.create_user(
+            username="student_user", password="Test@1234", email="h@example.com", type="student"
+        )
+        
+        self.all_course_1 = AllCourses.objects.create(
+            courseName="Sample Course",
+            unit=3,
+            type="theory_course"
+        )
+        
+        self.all_course_2 = AllCourses.objects.create(
+            courseName="Sample Course 2",
+            unit=3,
+            type="theory_course"
+        )
+        
+        
+        self.course1 = Course.objects.create(
+            course=self.all_course_1,
+            teacherName="Dr. Smith",
+            isExperimental=False,
+            class_time1="شنبه",
+            class_time2="دوشنبه",
+            class_start_time="10:30:00",
+            class_end_time="12:00:00",
+            exam_date="2024-12-20",
+            exam_start_time="08:00:00",
+            exam_end_time="10:00:00",
+            capacity=30,
+            description="Sample course"
+        )
+        
+        self.course2 = Course.objects.create(
+            course=self.all_course_2,
+            teacherName="Dr. Smith",
+            isExperimental=False,
+            class_time1="شنبه",
+            class_time2="دوشنبه",
+            class_start_time="09:00:00",
+            class_end_time="10:30:00",
+            exam_date="2024-12-20",
+            exam_start_time="08:00:00",
+            exam_end_time="10:00:00",
+            capacity=30,
+            description="Sample course 2"
+        )
+        
+        self.completed_course = CompletedCourses.objects.create(
+            student=self.student_user,
+            course=self.all_course_1
+        )
+        
+        self.selected_course = SelectedCourse.objects.create(form=RegistrationForm.objects.create(student_id=self.student_user), course=self.course2)
+        self.client.force_authenticate(user=self.student_user)
+        
+        
+    def test_get_registration_form_data_success(self):
+        response = self.client.get("/registration-form/courses-data/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["status"], status.HTTP_200_OK)
+        self.assertTrue(len(response.data["data"]) == 1)
+        self.assertIn("course", response.data["data"][0])
+        self.assertEqual(response.data["data"][0]['c_id'], self.course2.c_id)
+        self.assertEqual(response.data["data"][0]['selected'], True)
+
+    def test_get_registration_form_data_unauthorized(self):
+        self.client.logout()
+        response = self.client.get("/registration-form/courses-data/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertIn("detail", response.data)
+        self.assertEqual(response.data["detail"], "Authentication credentials were not provided.")

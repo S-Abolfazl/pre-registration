@@ -151,7 +151,7 @@ class RegistrationFormDataApi(APIView):
             selected_courses = SelectedCourse.objects.filter(form__student_id=student_id)
             selected_courses = selected_courses.values_list('course_id', flat=True)
             for com_course in completed_courses:
-                courses = courses.exclude(course_id=com_course.course_id)
+                courses = courses.exclude(course=com_course.course_id)
             courses = courses.values()
             for c in courses:
                 course = AllCourses.objects.get(course_id=c['course_id'])
