@@ -212,3 +212,52 @@ class AllCourseCreateApiTest(APITestCase):
         self.assertIn("data", response.data)
         
         self.assertEqual(AllCourses.objects.count(), 0)
+
+
+from rest_framework.test import APITestCase
+from rest_framework import status
+from user.models import User
+from .models import AllCourses
+
+class AllCourseListApiTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="400243068", 
+            password="Hosein@1382", 
+            email="h@example.com", 
+            type="academicassistant"
+        )
+        
+        self.client.force_authenticate(user=self.user)
+                
+        self.course1 = AllCourses.objects.create(
+            courseName="Mathematics 101",
+            unit=3,
+            type="theory_course"
+        )
+        
+        self.course2 = AllCourses.objects.create(
+            courseName="Physics 101",
+            unit=3,
+            type="theory_course"
+        )
+    
+    def test_list_all_courses(self):
+        response = self.client.get("/course/list/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]['courseName'], "Mathematics 101")
+        self.assertEqual(response.data[1]['courseName'], "Physics 101")
+    
+    def test_get_course_by_id(self):
+        response = self.client.get(f"/course/list/{self.course1.course_id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['courseName'], "Mathematics 101")
+        self.assertEqual(response.data['unit'], 3)
+    
+    def test_get_course_by_id_not_found(self):
+        invalid_course_id = "non-existent-course-id"
+        response = self.client.get(f"/course/list/{invalid_course_id}")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['msg'], "error")
+        self.assertEqual(response.data['data'], "id validation error")
