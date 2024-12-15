@@ -44,3 +44,47 @@ class RegistrationFormCreateViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
+class RegistrationFormListViewTest(APITestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_user(
+            username="adminuser",
+            password="Admin@1234",
+            email="admin@example.com",
+            type="admin",
+            is_staff=True,
+            is_superuser=True
+        )
+        self.non_admin_user = User.objects.create_user(
+            username="regularuser",
+            password="User@1234",
+            email="user@example.com",
+            type="student"
+        )
+        self.registration_form = RegistrationForm.objects.create(
+            student_id=self.non_admin_user
+        )
+        
+        self.client.force_authenticate(user=self.admin_user)
+
+    def test_get_all_registration_forms_success(self):
+        response = self.client.get("/registration-form/list/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertIn("data", response.data)
+        self.assertEqual(len(response.data["data"]), 1)
+
+    def test_get_single_registration_form_success(self):
+        response = self.client.get(f"/registration-form/list/{self.registration_form.form_id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertIn("data", response.data)
+        self.assertEqual(response.data["data"]["form_id"], str(self.registration_form.form_id))
+
+    def test_get_single_registration_form_not_found(self):
+        response = self.client.get("/registration-form/list/invalid-form-id/")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_registration_forms_unauthorized(self):
+        self.client.logout()
+        response = self.client.get("/registration-form/list/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
