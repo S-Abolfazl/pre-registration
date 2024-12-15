@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
@@ -12,7 +12,7 @@ from .serializers import EducationalChartSerializer
 from course.models import AllCourses
 from user.permissions import IsStudent
 class EducationalChartCreateApi(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     
     @swagger_auto_schema(
         operation_summary="Educational Chart Create",
@@ -91,7 +91,7 @@ class EducationalChartGetApi(APIView):
             )
 
 class AddCompletedCourseApi(APIView):
-    permission_classes = [IsStudent]
+    permission_classes = [IsStudent, IsAuthenticated]
     @swagger_auto_schema(
         operation_summary="Add Completed Courses",
         operation_description="Endpoint to add a list of completed courses for a student.",
@@ -110,7 +110,6 @@ class AddCompletedCourseApi(APIView):
     def post(self, request):
         student = request.user
         course_ids = request.data.get('course_ids', [])
-        print(course_ids)
         if not course_ids:
             return Response(
                 data={
@@ -124,13 +123,12 @@ class AddCompletedCourseApi(APIView):
         for course_id in course_ids:
             try:
                 course = AllCourses.objects.get(course_id=course_id)
-                print(course.courseName)
                 completed_course, created = CompletedCourses.objects.get_or_create(
                     student=student, course=course
                 )
                 if created:
                     added_courses.append(course.courseName)
-            except AllCourses.DoesNotExist:
+            except:
                 return Response(
                     {"msg": f"Course with ID {course_id} does not exist."},
                     status=status.HTTP_404_NOT_FOUND,
