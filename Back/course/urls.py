@@ -12,6 +12,6 @@ urlpatterns = [
     path('list/<pk>', AllCourseListApi.as_view(), name='all_course_details'),
     path('update/<pk>', AllCourseUpdateApi.as_view(), name='update_all_course'),
     path('delete/<pk>', AllCourseDeleteApi.as_view(), name='delete_all_course'),
-    path('courses-in-term/data', CourseinTermApi.as_view(), name='course_in_term_data'),
+    path('courses-in-term/data/', CourseinTermApi.as_view(), name='course_in_term_data'),
     #path('list/<pk>', UserListApi.as_view(), name='user_details'),
 ]

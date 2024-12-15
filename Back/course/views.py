@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -20,8 +21,15 @@ class CourseCreateApi(APIView):
     )
     def post(self, request):
         
-        course_instance = get_object_or_404(AllCourses, course_id=request.data['course'])
-        
+        try:
+            course_instance = get_object_or_404(AllCourses, course_id=request.data['course'])
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":"course not found: "+ str(e),
+                "status":status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+            
         request_data = request.data.copy()
         request_data['course'] = course_instance.course_id
         
@@ -30,13 +38,15 @@ class CourseCreateApi(APIView):
             course = serializer.save()
             return Response(data={
                 "msg":"ok",
-                "data":f'course by id:{course.c_id} created'
+                "data":f'course by id:{course.c_id} created',
+                "status":status.HTTP_201_CREATED
             }, status=status.HTTP_201_CREATED)
         
         return Response(
             data={
                 "msg":"error",
-                "data": serializer.errors
+                "data": serializer.errors,
+                "status":status.HTTP_400_BAD_REQUEST
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -62,8 +72,15 @@ class CourseListApi(APIView):
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"course not found"
+                "data":"course not found",
+                "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
         
 class CourseUpdateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
@@ -157,7 +174,12 @@ class CourseDeleteApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
-
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class AllCourseCreateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
@@ -209,6 +231,12 @@ class AllCourseListApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
             
 class AllCourseUpdateApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
@@ -243,6 +271,12 @@ class AllCourseUpdateApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
             
     @swagger_auto_schema(
         operation_summary="Course Update",
@@ -298,6 +332,12 @@ class AllCourseDeleteApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
             
             
 class CourseinTermApi(APIView):
@@ -355,4 +395,8 @@ class CourseinTermApi(APIView):
             }
             data.append(course_data)
 
-        return Response({"courses": data}, status=200)
+        return Response(data={
+                "msg": "ok",
+                "data": data,
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
