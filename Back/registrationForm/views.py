@@ -69,14 +69,16 @@ class RegistrationFormCreateView(APIView):
             return Response(
                 data={
                     'msg': 'ok',
-                    'data': serializer.data
+                    'data': serializer.data,
+                    "status": status.HTTP_201_CREATED
                 },
                 status=status.HTTP_201_CREATED
             )
         return Response(
             data={
                 'msg': 'error',
-                'data': serializer.errors
+                'data': serializer.errors,
+                "status": status.HTTP_400_BAD_REQUEST
             },
             status=status.HTTP_400_BAD_REQUEST
         )
