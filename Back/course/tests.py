@@ -169,3 +169,46 @@ class CourseDeleteApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['msg'], "error")
         self.assertEqual(response.data['data'], "id validation error")
+        
+
+class AllCourseCreateApiTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="400243068", 
+            password="Hosein@1382", 
+            email="h@example.com", 
+            type="academicassistant"
+        )
+        
+        self.client.force_authenticate(user=self.user)
+        
+        self.valid_payload = {
+            "courseName": "Mathematics 101",
+            "unit": 3,
+            "type": "theory_course"
+        }
+        self.invalid_payload = {
+            "courseName": "",
+            "unit": -2,
+            "type": "invalid_type"
+        }
+    
+    def test_create_course_success(self):
+        response = self.client.post("/course/create/", self.valid_payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['msg'], "ok")
+        self.assertIn("course by id:", response.data['data'])
+        
+        self.assertEqual(AllCourses.objects.count(), 1)
+        created_course = AllCourses.objects.first()
+        self.assertEqual(created_course.courseName, "Mathematics 101")
+        self.assertEqual(created_course.unit, 3)
+        self.assertEqual(created_course.type, "theory_course")
+    
+    def test_create_course_failure_invalid_data(self):
+        response = self.client.post("/course/create/", self.invalid_payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['msg'], "error")
+        self.assertIn("data", response.data)
+        
+        self.assertEqual(AllCourses.objects.count(), 0)
