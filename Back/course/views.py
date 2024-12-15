@@ -68,10 +68,11 @@ class CourseListApi(APIView):
                 courses = Course.objects.all()
                 serializer = CourseDetailSerializer(courses, many=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
-        except Course.DoesNotExist:
+        except Exception:
             return Response(data={
                 "msg":"error",
-                "data":"course not found"
+                "data":"course not found",
+                "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
         
 class CourseUpdateApi(APIView):

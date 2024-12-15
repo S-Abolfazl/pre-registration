@@ -57,3 +57,66 @@ class CourseCreateTest(APITestCase):
         
         self.assertEqual(Course.objects.count(), 0)
 
+
+
+class CourseListTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username="400243068", password="password", email="a@b.com:", type="academicassistant")
+        self.client.force_authenticate(user=self.user)
+        
+        self.all_course = AllCourses.objects.create(
+            courseName="Sample Course",
+            unit=3,
+            type="theory_course"
+        )
+        
+        self.course1 = Course.objects.create(
+            course=self.all_course,
+            teacherName="Dr. Smith",
+            isExperimental=False,
+            class_time1="شنبه",
+            class_time2="دوشنبه",
+            class_start_time="10:30:00",
+            class_end_time="12:00:00",
+            exam_date="2024-12-20",
+            exam_start_time="08:00:00",
+            exam_end_time="10:00:00",
+            capacity=30,
+            description="Sample course 1"
+        )
+        
+        self.course2 = Course.objects.create(
+            course=self.all_course,
+            teacherName="Dr. Johnson",
+            isExperimental=True,
+            class_time1="سه شنبه",
+            class_time2="چهارشنبه",
+            class_start_time="14:30:00",
+            class_end_time="16:00:00",
+            exam_date="2024-12-21",
+            exam_start_time="10:00:00",
+            exam_end_time="12:00:00",
+            capacity=40,
+            description="Sample course 2"
+        )
+        
+    def test_list_all_courses(self):
+        response = self.client.get("/course/list-courses-in-term/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data, list)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]['teacherName'], "Dr. Smith")
+        self.assertEqual(response.data[1]['teacherName'], "Dr. Johnson")
+    
+    def test_get_single_course(self):
+        response = self.client.get(f"/course/list-courses-in-term/{self.course1.c_id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsInstance(response.data, dict)
+        self.assertEqual(response.data['teacherName'], "Dr. Smith")
+        self.assertEqual(response.data['description'], "Sample course 1")
+        
+    def test_get_nonexistent_course(self):
+        response = self.client.get("/course/list-courses-in-term/invalid-id")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['msg'], "error")
+        self.assertEqual(response.data['data'], "course not found")
