@@ -23,8 +23,8 @@ class Course(models.Model):
     exam_date = models.DateField(blank=True, null=True)
     exam_start_time = models.TimeField(blank=True, null=True)
     exam_end_time = models.TimeField(blank=True, null=True)
-    capacity = models.IntegerField(default=0)
-    registered = models.IntegerField(default=0)
+    capacity = models.PositiveIntegerField(default=0)
+    registered = models.PositiveIntegerField(default=0)
     description = models.TextField(blank=True, null=True)
     
     class Meta:
@@ -44,7 +44,7 @@ class AllCourses(models.Model):
     
     course_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
     courseName = models.CharField(max_length=255, unique=True)
-    unit = models.IntegerField()
+    unit = models.PositiveIntegerField()
     type = models.CharField(max_length=30, choices=CourseType)
 
     class Meta:

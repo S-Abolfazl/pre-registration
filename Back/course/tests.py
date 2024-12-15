@@ -261,3 +261,65 @@ class AllCourseListApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['msg'], "error")
         self.assertEqual(response.data['data'], "id validation error")
+
+
+class AllCourseUpdateApiTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="400243068", 
+            password="Hosein@1382", 
+            email="h@example.com", 
+            type="academicassistant"
+        )
+        
+        self.client.force_authenticate(user=self.user)
+        
+        self.course = AllCourses.objects.create(
+            courseName="Mathematics 101",
+            unit=3,
+            type="theory_course"
+        )
+    
+    def test_update_course_success(self):
+        updated_data = {
+            "courseName": "Advanced Mathematics 101",
+            "unit": 4,
+            "type": "theory_course"
+        }
+        
+        response = self.client.put(f"/course/update/{self.course.course_id}", updated_data, format="json")
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['msg'], "ok")
+        self.assertEqual(response.data['data'], f'course by id:{self.course.course_id} updated')
+        
+        self.course.refresh_from_db()
+        self.assertEqual(self.course.courseName, "Advanced Mathematics 101")
+        self.assertEqual(self.course.unit, 4)
+    
+    def test_update_course_not_found(self):
+        invalid_course_id = "non-existent-course-id"
+        updated_data = {
+            "courseName": "Non-existent Course",
+            "unit": 4,
+            "type": "theory_course"
+        }
+        
+        response = self.client.put(f"/course/update/{invalid_course_id}", updated_data, format="json")
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['msg'], "error")
+        self.assertEqual(response.data['data'], "id validation error")
+    
+    def test_update_course_invalid_data(self):
+        invalid_data = {
+            "courseName": "Mathematics 101",
+            "unit": -3,
+            "type": "theory_course"
+        }
+        
+        response = self.client.put(f"/course/update/{self.course.course_id}", invalid_data, format="json")
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['msg'], "error")
+        self.assertIn("unit", response.data['data'])
