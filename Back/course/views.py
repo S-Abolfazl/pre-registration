@@ -332,6 +332,12 @@ class AllCourseDeleteApi(APIView):
                 "data":"course not found",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"id validation error",
+                "status":status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
             
             
 class CourseinTermApi(APIView):

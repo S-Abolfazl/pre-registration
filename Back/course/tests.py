@@ -323,3 +323,41 @@ class AllCourseUpdateApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['msg'], "error")
         self.assertIn("unit", response.data['data'])
+        
+        
+class AllCourseDeleteApiTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="400243068", 
+            password="Hosein@1382", 
+            email="h@example.com", 
+            type="academicassistant"
+        )
+        
+        self.client.force_authenticate(user=self.user)        
+        
+        
+        self.course = AllCourses.objects.create(
+            courseName="Mathematics 101",
+            unit=3,
+            type="theory_course"
+        )
+    
+    def test_delete_course_success(self):
+        response = self.client.delete(f"/course/delete/{self.course.course_id}")
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['msg'], "ok")
+        self.assertEqual(response.data['data'], f'course by id:{self.course.course_id} deleted')
+        
+        with self.assertRaises(AllCourses.DoesNotExist):
+            AllCourses.objects.get(course_id=self.course.course_id)
+    
+    def test_delete_course_not_found(self):
+        invalid_course_id = "non-existent-course-id"
+        
+        response = self.client.delete(f"/course/delete/{invalid_course_id}")
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['msg'], "error")
+        self.assertEqual(response.data['data'], "id validation error")
