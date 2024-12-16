@@ -44,3 +44,49 @@ class UserSignupApiTest(APITestCase):
         self.assertIn("username", response.data["data"])
         self.assertIn("password", response.data["data"])        
         self.assertFalse(User.objects.filter(email=self.invalid_user_data["email"]).exists())
+        
+
+class UserLoginApiTest(APITestCase):
+    def setUp(self):
+        self.login_url = "/user/login/"
+
+        self.test_user = User.objects.create_user(
+            username="400243068",
+            password="Hogo@1382",
+            email="testuser@example.com",
+            type="student",
+            entry_year=2022
+        )
+
+        self.valid_login_data = {
+            "username": "400243068",
+            "password": "Hogo@1382"
+        }
+
+        self.invalid_login_data = {
+            "username": "400243068",
+            "password": "wrongpassword"
+        }
+
+    def test_user_login_success(self):
+        response = self.client.post(self.login_url, data=self.valid_login_data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertIn("access_token", response.data["data"])
+        self.assertIn("refresh_token", response.data["data"])
+        self.assertEqual(response.data["data"]["user"]["username"], self.valid_login_data["username"])
+
+    def test_user_login_failure_invalid_password(self):
+        response = self.client.post(self.login_url, data=self.invalid_login_data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data["msg"], "error")
+        self.assertEqual(response.data["data"], "Invalid username or password")
+
+    def test_user_login_failure_missing_fields(self):
+        response = self.client.post(self.login_url, data={}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data["msg"], "error")
+        self.assertEqual(response.data["data"], "Invalid username or password")
