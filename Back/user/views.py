@@ -184,6 +184,12 @@ class UserDeleteApi(APIView):
                 "data":"user not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserUpdateApi(APIView):

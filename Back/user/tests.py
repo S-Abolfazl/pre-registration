@@ -135,3 +135,40 @@ class UserListApiTest(APITestCase):
         self.client.force_authenticate(user=self.student_user)
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        
+        
+class UserDeleteApiTest(APITestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_superuser(
+            username="admin",
+            password="adminpassword",
+            email="admin@example.com",
+            type="admin"
+        )
+        self.student_user = User.objects.create_user(
+            username="student",
+            password="studentpassword",
+            email="student@example.com",
+            type="student",
+            entry_year=400
+        )
+        self.delete_url = f"/user/delete/{self.student_user.id}"
+        self.client.force_authenticate(user=self.admin_user)
+
+    def test_admin_can_delete_user(self):
+        response = self.client.delete(self.delete_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], f"user by id:{self.student_user.id} deleted")
+        self.assertFalse(User.objects.filter(id=self.student_user.id).exists())
+
+    def test_user_not_found(self):
+        response = self.client.delete("/user/delete/invalid-id")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["msg"], "error")
+
+    def test_non_admin_cannot_delete_user(self):
+        self.client.logout()
+        self.client.force_authenticate(user=self.student_user)
+        response = self.client.delete(self.delete_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
