@@ -14,7 +14,8 @@
 
           <v-col cols="6" class="d-flex justify-center">
             <div class="image-wrapper">
-              <img src="/image/panel/chart.png" alt="chart" class="chart-image" />
+              <!-- {{ imgWidth() }} -->
+              <img src="/image/panel/chart.png" alt="chart" :width="imgWidth()" />
             </div>
           </v-col>
         </v-row>
@@ -28,6 +29,27 @@
           goToChart() {
             this.$router.push('/panel/Chart');
           },
+          imgWidth() {
+            if (this.$vuetify.breakpoint.mdOnly){
+            return '45%'
+          }
+          else if (this.$vuetify.breakpoint.lgOnly){
+            if (window.innerWidth > 1700)
+              return '34%'
+            else if (window.innerWidth > 1520)
+              return '38%'
+            else if (window.innerWidth > 1280)
+              return '43%'
+          }
+          else if (this.$vuetify.breakpoint.xlOnly) {
+            if (window.innerWidth > 2300)
+              return '30%'
+            else if (window.innerWidth > 2050)
+              return '34%'
+            else if (window.innerWidth > 1900)
+              return '33%'
+          }
+          }
         },
       };
   </script>
@@ -49,14 +71,10 @@
   .image-wrapper {
     position: absolute;
     top: 3%;
-    right: 5%;
+    right: 3%;
     width: 100%;
     display: flex;
     justify-content: flex-end;
-  }
-
-  .chart-image {
-    width: 52%; /* تنظیم سایز تصویر */
   }
   .title{
     margin: 16px 14px auto auto;

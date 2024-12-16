@@ -14,9 +14,9 @@
         </div>
         </v-row>
 
-
-        <v-row class="d-flex justify-center image-wrapper">
-          <img src="/image/panel/amar.png" alt="amar" class="amar-image" />
+        <v-row class="image-wrapper">
+          <!-- {{ imgWidth() }} -->
+          <img src="/image/panel/amar.png" alt="amar" :width="imgWidth()" />
         </v-row>
       </v-col>
     </v-card>
@@ -29,6 +29,33 @@ export default {
     goToAmar() {
       this.$router.push('/panel/Amar');
     },
+    imgWidth() {
+      // if (window.innerWidth > 2300)
+      //   return '30%'
+      // else if (window.innerWidth > 2050)
+      //   return '34%'
+      // else if (window.innerWidth > 1900)
+      //   return '38%'
+      if (this.$vuetify.breakpoint.mdOnly){
+        return '60%'
+      }
+      else if (this.$vuetify.breakpoint.lgOnly){
+        if (window.innerWidth > 1700)
+          return '56%'
+        else if (window.innerWidth > 1520)
+          return '65%'
+        else if (window.innerWidth > 1280)
+          return '70%'
+      }
+      else if (this.$vuetify.breakpoint.xlOnly) {
+        if (window.innerWidth > 2300)
+          return '30%'
+        else if (window.innerWidth > 2050)
+          return '34%'
+        else if (window.innerWidth > 1900)
+          return '55%'
+      }
+    }
   },
 };
 </script>
@@ -51,9 +78,12 @@ export default {
 
 .image-wrapper {
   position: absolute;
-  top: 53%; /* تصویر را از بالا بیرون بیاورید */
-  right: 5%; /* تصویر را از سمت راست کمی خارج کنید */
+  top: 40%; /* تصویر را از بالا بیرون بیاورید */
+  right: 3%; /* تصویر را از سمت راست کمی خارج کنید */
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: flex-end;
 }
 
 .amar-image {
