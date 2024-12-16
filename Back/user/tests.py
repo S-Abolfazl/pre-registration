@@ -55,7 +55,7 @@ class UserLoginApiTest(APITestCase):
             password="Hogo@1382",
             email="testuser@example.com",
             type="student",
-            entry_year=2022
+            entry_year=400
         )
 
         self.valid_login_data = {
@@ -90,3 +90,48 @@ class UserLoginApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data["msg"], "error")
         self.assertEqual(response.data["data"], "Invalid username or password")
+        
+
+class UserListApiTest(APITestCase):
+    def setUp(self):
+        self.admin_user = User.objects.create_superuser(
+            username="admin",
+            password="adminpassword",
+            email="admin@example.com",
+            type="admin",
+            is_staff=True
+        )
+        self.student_user = User.objects.create_user(
+            username="student",
+            password="studentpassword",
+            email="student@example.com",
+            type="student",
+            entry_year=400
+        )
+        self.list_url = "/user/list/"
+        self.detail_url = f"/user/list/{self.student_user.id}"
+        
+        self.client.force_authenticate(user=self.admin_user)
+
+    def test_admin_can_view_all_users(self):
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_admin_can_view_user_by_id(self):
+        response = self.client.get(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["id"], str(self.student_user.id))
+        self.assertEqual(response.data["username"], self.student_user.username)
+        self.assertEqual(response.data["email"], self.student_user.email)
+
+    def test_user_not_found(self):
+        response = self.client.get("/user/list/invalid-id")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["msg"], "error")
+
+    def test_non_admin_cannot_access(self):
+        self.client.logout()
+        self.client.force_authenticate(user=self.student_user)
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
