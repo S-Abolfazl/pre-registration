@@ -56,7 +56,7 @@ jobs:
 
     - name: Run Django Tests
       run: |
-        docker compose exec my-django sh -c "python manage.py test"
+        docker exec my-django sh -c "python manage.py test"
 
     - name: Tear Down Services
       if: always()
