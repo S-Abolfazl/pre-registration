@@ -97,3 +97,8 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("رمز عبور نباید شامل فاصله باشد.")
         
         return value
+    
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
