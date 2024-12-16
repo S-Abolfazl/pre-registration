@@ -11,7 +11,7 @@ from social_django.utils import load_strategy
 from social_core.backends.google import GoogleOAuth2
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -58,17 +58,23 @@ class UserListApi(APIView):
         try:
             if pk:
                 user = User.objects.get(id=pk)
-                serializer = UserSerializer(user)
+                serializer = UserDetailSerializer(user)
             else:
                 users = User.objects.all()
-                serializer = UserSerializer(users, many=True)
+                serializer = UserDetailSerializer(users, many=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
+        except User.DoesNotExist as e:
             return Response(data={
                 "msg":"error",
                 "data":"user not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginApi(APIView):
     permission_classes = [AllowAny]
@@ -178,6 +184,12 @@ class UserDeleteApi(APIView):
                 "data":"user not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserUpdateApi(APIView):
@@ -223,6 +235,44 @@ class UserUpdateApi(APIView):
                 "data":"user not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, pk):
+        try:
+            user = User.objects.get(id=pk)
+            serializer = UserSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data={
+                    "msg":"ok",
+                    "data":f'user by id:{user.id} updated',
+                    "status": status.HTTP_200_OK
+                }, status=status.HTTP_200_OK)
+            return Response(
+                data={
+                    "msg":"error",
+                    "data": serializer.errors,
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except User.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"user not found",
+                "status": status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
             
             
 class UserResetPasswordApi(APIView):
