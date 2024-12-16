@@ -129,7 +129,7 @@ data = {
 }
 
 for chart_name, chart_data in data.items():
-    EducationalChart.objects.create(
+    EducationalChart.objects.get_or_create(
         year=chart_data["year"],
         type=chart_data["type"],
         units=chart_data.get("units", []),
