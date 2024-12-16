@@ -29,22 +29,38 @@
 
 <script>
 export default {
+  data: ()=>({
+      Data:[],
+  }),
+  // data() {
+  //   return {
+  //     tableData: [], // داده‌ی محلی برای جدول
+  //   };
+  // },
   props: {
     TableData: {
-      type: Object,
+      type: Array,
       required: false,
     },
   },
-  mounted() {
+  // mounted() {
     
-    fetch("/path/to/data.json")
-      .then((response) => response.json())
-      .then((data) => {
-        this.tableData = data; 
-      })
-      .catch((error) => {
-        console.error("Error loading JSON:", error);
-      });
+  //   fetch("/path/to/data.json")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       this.tableData = data; 
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error loading JSON:", error);
+  //     });
+  // },
+  watch: {
+    TableData: {
+      immediate: true,
+      handler(newData) {
+        this.Data = newData;
+      },
+    },
   },
 };
 </script>
