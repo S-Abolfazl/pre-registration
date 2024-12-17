@@ -82,7 +82,6 @@ export default {
 
 <style scoped>
 .menu-container {
-  width: 50px;
   height: 600px;
   display: flex;
   flex-direction: column; 
