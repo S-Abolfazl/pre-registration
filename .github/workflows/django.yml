@@ -57,7 +57,6 @@ jobs:
 
     - name: Run Django Tests
       run: |
-        docker exec my-django sh -c "python manage.py flush --no-input"
         docker exec my-django sh -c "python manage.py migrate --no-input"
         docker exec my-django sh -c "python manage.py test"
 
