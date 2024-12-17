@@ -56,6 +56,8 @@ jobs:
 
     - name: Run Django Tests
       run: |
+        docker exec my-django sh -c "python manage.py makemigrations"
+        docker exec my-django sh -c "python manage.py migrate"
         docker exec my-django sh -c "python manage.py test"
 
     - name: Tear Down Services
