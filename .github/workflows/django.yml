@@ -59,7 +59,7 @@ jobs:
       run: |
         docker exec my-django sh -c "python manage.py makemigrations"
         docker exec my-django sh -c "python manage.py flush --no-input"
-        docker exec my-django sh -c "python manage.py migrate"
+        docker exec my-django sh -c "python manage.py migrate --no-input"
         docker exec my-django sh -c "python manage.py test"
 
     - name: Tear Down Services
