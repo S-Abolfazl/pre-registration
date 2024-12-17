@@ -28,7 +28,7 @@
     export default {
       methods: {
         goToTermcourse() {
-          this.$router.push('/panel/termcourse');
+          this.$router.push('/TermCourses/TermCourses');
         },
         imgWidth() {
           // if (window.innerWidth > 2300)

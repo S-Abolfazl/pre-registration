@@ -28,7 +28,7 @@
     export default {
       methods: {
         goToTaghvim() {
-          this.$router.push('/courses/courses');
+          this.$router.push('');
         },
         imgWidth() {
           // if (window.innerWidth > 2300)

@@ -24,31 +24,29 @@
 
       <v-row class="mt-4 justify-end ">
         <v-col cols="3" class="mr-auto searchbar">
-          <SearchBar v-model:searchQuery="searchQuery"/>
+          <SearchBar @search-updated="handleSearchUpdate" />
         </v-col>
       </v-row>
 
       <v-row class="mt-4 table">
-        <Table :TableDate="ComponentTabeleData"/>
+        <Tabledata :TableData="ComponentTabeleData"/>
       </v-row>
     </v-col>
   </v-form>
 </template>
 
 <script>
-import Table from '~/components/nextTerm_courses/Table.vue';
+import Tabledata from '~/components/nextTerm_courses/Table.vue';
 import SearchBar from '~/components/nextTerm_courses/SearchBar.vue';
 // import { filter } from 'core-js/core/array';
-import Navigationbar from '~/layouts/navigationbar.vue';
 export default {
   layouts:'Navigationbar',
 
   components: {
-    Table,
+    Tabledata,
     SearchBar,
   },
   data: () => ({
-    title: 'پنل اصلی',
     searchQuery:'',
     ComponentTabeleData:[
   {
@@ -69,13 +67,13 @@ export default {
     "schedule": "یک‌شنبه 09:00-12:00",
     "description": "امتحان: 13/03/1403"
   }
-]
-,
-  }),
+],
+  DataSearch:[],
+}),
   watch:{
     searchQuery(newvalue){
       const query = newvalue.toLowerCase();
-      this.ComponentTabeleData = this.tableItems.filter(
+      this.ComponentTabeleData = this.ComponentTabeleData.filter(
       (item) =>
         Object.values(item)
             .join(' ')
@@ -84,13 +82,22 @@ export default {
           )
     }
   },
+  head(){
+    return {
+      title: '  '
+    }
+  },
   computed: {
   },
   beforeMount() {
-    this.$store.dispatch('setPageTitle', this.title);
+    //this.$store.dispatch('setPageTitle', this.title);
     // this.$store.dispatch('setTableData', this.TabeleData);
   },
-  methods: {},
+  methods: {
+    handleSearchUpdate(newSearch) {
+      this.searchQuery = newSearch;   
+    },
+  },
 };
 </script>
 

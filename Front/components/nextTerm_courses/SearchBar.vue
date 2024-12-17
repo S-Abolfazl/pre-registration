@@ -30,14 +30,14 @@
       },
     },
     data: () => ({
-    searchQuery: "", // نگهداری مقدار جستجو
+    searchQuery: "", 
   }),
   methods: {
     updateSearch() {
-      this.$emit("update:searchQuery", this.searchQuery); // ارسال مقدار جستجو به والد
+      this.$emit("search-updated", this.searchQuery); // ارسال مقدار جستجو به والد
     },
   },
-  };
+};
   </script>
   
   <style scoped>

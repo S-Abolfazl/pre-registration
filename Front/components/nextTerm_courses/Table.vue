@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, index) in tableData" :key="index" :class="{ 'alt-row': index % 2 === 0 }">
+        <tr v-for="(row, index) in TableData" :key="index" :class="{ 'alt-row': index % 2 === 0 }">
           <td>{{ row.courseName }}</td>
           <td>{{ row.unit }}</td>
           <td>{{ row.type }}</td>
@@ -30,19 +30,31 @@
 <script>
 export default {
   data: ()=>({
-      Data:[],
+    //   Data:[
+    //   // {
+    //   //   courseName: "آزمایشگاه شبکه های کامپیوتری",
+    //   //   unit: 1,
+    //   //   type: "عملی",
+    //   //   capacity: 15,
+    //   //   teacher: "دکتر وزین نژاد",
+    //   //   schedule: "سه‌شنبه‌ها 19:00-17:00",
+    //   //   description: "مدرس: دکتر وزین نژاد"
+    //   // }
+    // ],
   }),
-  // data() {
-  //   return {
-  //     tableData: [], // داده‌ی محلی برای جدول
-  //   };
-  // },
   props: {
     TableData: {
       type: Array,
       required: false,
     },
   },
+  computed: {
+      finalData() {
+        //this.Data = TableData;
+        return this.TableData; 
+    },
+  },
+
   // mounted() {
     
   //   fetch("/path/to/data.json")
@@ -54,14 +66,14 @@ export default {
   //       console.error("Error loading JSON:", error);
   //     });
   // },
-  watch: {
-    TableData: {
-      immediate: true,
-      handler(newData) {
-        this.Data = newData;
-      },
-    },
-  },
+  // watch: {
+  //   TableData: {
+  //     immediate: true,
+  //     handler(newData) {
+  //       this.Data = newData;
+  //     },
+  //   },
+  // },
 };
 </script>
 
