@@ -51,6 +51,7 @@ jobs:
 
     - name: Build and Start Services
       run: |
+        docker compose down --volumes --remove-orphans
         docker compose up -d
         docker ps
 
