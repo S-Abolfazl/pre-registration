@@ -1,7 +1,5 @@
 <template>
-  
   <v-form v-model="valid">
-    <Navigationbar></Navigationbar>
     <v-col  class="my-4">
       
       <v-row class="align-center">

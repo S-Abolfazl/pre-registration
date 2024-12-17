@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="menu-container"
+    class="menu-container" :width="width"
   >
     <list dense class="menu-list">
       <!-- profile item-->
@@ -51,7 +51,13 @@
 
 <script>
 export default {
-  data() {
+  props:{
+      width: {
+      type: String,
+      default: '100%',
+    },
+    },
+    data() {
     return {
       darkMode: false,
       currentLanguage: 'فارسی',
@@ -76,13 +82,13 @@ export default {
 
 <style scoped>
 .menu-container {
-  width: 22%;
+  width: 50px;
   height: 600px;
   display: flex;
-  flex-direction: column; /* آیتم‌ها را عمودی بچین */
+  flex-direction: column; 
   border-radius: 30px;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.271); /* پس‌زمینه شفاف */
+  background-color: rgba(0, 0, 0, 0.61);
 }
 
 .menu-list {
@@ -105,11 +111,11 @@ export default {
 }
 
 .v-list-item-custom:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* افکت هاور */
+  background-color: rgba(255, 255, 255, 0.1);  
 }
 
 .menu-icon {
-  width: 32px; /* اندازه آیکون */
+  width: 15%; /* اندازه آیکون */
   height: 32px;
   margin-right: 16px; /* فاصله بین آیکون و متن */
   object-fit: contain; /* حفظ نسبت ابعاد تصویر */
