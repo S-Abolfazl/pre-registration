@@ -81,7 +81,10 @@ export default {
           black3: '#000000',
 
           white1: '#FFFFFF',
+<<<<<<< HEAD
 
+=======
+>>>>>>> panel-comp
           blue1: '#E3E3FF',
           blue2: '#7B5FF1',
         }

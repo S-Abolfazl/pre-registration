@@ -1,22 +1,18 @@
 <template>
     <div>
-    <Navigationbar :style="{  padding: '2%', position: 'fixed', top: '0', width: '100%', zIndex: '1000' }" ></Navigationbar>
+    <Navigationbar :style="{  margin: '2%', position: 'fixed', top: '0', width: '100%', zIndex: '1000' }" ></Navigationbar>
     <v-row class="align-center no-gutters" :style="{  paddingTop: '10%', width: '100%'}">
   <!-- Header Section -->
-  <v-col >
+  
     <header>
       <h1 class="font_40" style="text-align: left; ">چارت درسی رشته مهندسی کامپیوتر</h1>
     </header>
-  </v-col>
-
-  <v-col >
+  
     <Year text="1400"></Year>
-  </v-col>
+  
 
   <!-- Chart Select -->
-  <v-col cols="3" :style="{ paddingLeft: '0' }">
     <ChartSelect width="80%" height="40px" />
-  </v-col>
 </v-row>
 
 <v-row class="align-center no-gutters" :style="{  paddingTop: '5%', width: '100%' }">

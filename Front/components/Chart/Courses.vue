@@ -65,21 +65,5 @@
     color: white1;
   }
   
-.inner-circle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    width: 2.3vw; /* Ensure equal width and height */
-    height: 1w;
-    margin-right: 1.5rem;
-    text-align: center;
-    box-sizing: border-box; /* Prevent padding/margin issues */
-    margin-left: 0.2rem;
-    border-color: blue1 ; 
-    border-style: solid; 
-    border-width: 2px;
-  }
-
   </style>
   

@@ -1,19 +1,19 @@
 <template>
     <div class="w-max">
-      <PassedCourses />
+      <Chart />
     </div>
   </template>
   
   <script>
-  import PassedCourses from "~/components/Auth/PassedCoursesForm.vue";
+  import Chart from "~/components/Courses/ChartForm.vue";
   export default {
     layout: 'site',
     head() {
       return {
-        title: 'واحد هاي پيشين',
+        title: 'چارت دروس',
       }
     },
-    components: { PassedCourses, }
+    components: { Chart, }
   };
   </script>
   

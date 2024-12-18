@@ -5,8 +5,8 @@
         class="custom-chip "
       >
       <span class="font_30" >{{ text }}</span>
-      </v-chip>
-      <img :src="require('~/static/image/chart/books.png')" alt="books"  class="books-picture" >
+    </v-chip>
+    <img :src="require('~/static/image/chart/books.png')" alt="books"  class="books-picture" >
     </div>
   </template>
   
@@ -33,7 +33,7 @@
 }
   .books-picture {
     width: 13%; 
-    transform: translateX(140%) translateY(-30%);
+    transform: translateX(-140%) translateY(-190%);
 }
   </style>
   
