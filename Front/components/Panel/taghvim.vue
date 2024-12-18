@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="taghvim-card white1" elevation="3" @click="goToTaghvim">
+    <v-card class="taghvim-card bg-white1" elevation="3" @click="goToTaghvim">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -15,7 +15,8 @@
         <!-- تصویر موشک و مرد -->
         <v-col cols="6" class="d-flex justify-center">
           <div class="image-wrapper">
-            <img src="/image/panel/tagvim.png" alt="tagvim" class="taghvim-image" />
+            <!-- {{ imgWidth() }} -->
+            <img src="/image/panel/tagvim.png" alt="tagvim" :width=" imgWidth() " />
           </div>
         </v-col>
       </v-row>
@@ -27,8 +28,40 @@
     export default {
       methods: {
         goToTaghvim() {
-          this.$router.push('/panel/Taghvim');
+          this.$router.push('');
         },
+        imgWidth() {
+          // if (window.innerWidth > 2300)
+          //   return '30%'
+          // else if (window.innerWidth > 2050)
+          //   return '34%'
+          // else if (window.innerWidth > 1900)
+          //   return '38%'
+
+          if (this.$vuetify.breakpoint.mdOnly){
+            if (window.innerWidth > 1080){
+            return '55%'
+            }
+
+          }
+          else if (this.$vuetify.breakpoint.lgOnly){
+            if (window.innerWidth > 1700)
+              return '55%'
+            else if (window.innerWidth > 1520)
+              return '63%'
+            else if (window.innerWidth > 1280)
+              return '68%'
+          }
+          else if (this.$vuetify.breakpoint.xlOnly) {
+            if (window.innerWidth > 2300)
+              return '30%'
+            else if (window.innerWidth > 2050)
+              return '34%'
+            else if (window.innerWidth > 1900)
+              return '55%'
+          }
+
+        }
       },
     };
 </script>
@@ -39,7 +72,8 @@
   border-radius: 25px;
   border: 3px solid #7B5FF1;
   /* width: 25%;  */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -49,16 +83,14 @@
 
 .image-wrapper {
   position: absolute;
-  top: 30%;
-  right: 5%;
+  top: 27%;
+  right: 4%;
   width: 100%;
   display: flex;
   justify-content: flex-end;
 }
 
-.taghvim-image {
-  width: 65%; /* تنظیم سایز تصویر */
-}
+
 .title{
   margin: 16px 14px auto auto;
   width: 150%;

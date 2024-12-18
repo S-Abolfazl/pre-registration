@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="term-course-card white1" elevation="3" @click="goToTermcourse">
+    <v-card class="term-course-card bg-white1" elevation="3" @click="goToTermcourse">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -15,7 +15,8 @@
         <!-- تصویر موشک و مرد -->
         <v-col cols="6" class="d-flex justify-center">
           <div class="image-wrapper">
-            <img src="/image/panel/term_courses.png" alt="course" class="course-image" />
+            <!-- {{ imgWidth() }} -->
+            <img src="/image/panel/term_courses.png" alt="course" :width="imgWidth()" />
           </div>
         </v-col>
       </v-row>
@@ -27,8 +28,40 @@
     export default {
       methods: {
         goToTermcourse() {
-          this.$router.push('/panel/termcourse');
+          this.$router.push('/TermCourses/TermCourses');
         },
+        imgWidth() {
+          // if (window.innerWidth > 2300)
+          //   return '30%'
+          // else if (window.innerWidth > 2050)
+          //   return '34%'
+          // else if (window.innerWidth > 1900)
+          //   return '38%'
+
+          if (this.$vuetify.breakpoint.mdOnly){
+            if (window.innerWidth > 1080){
+            return '55%'
+            }
+
+          }
+          else if (this.$vuetify.breakpoint.lgOnly){
+            if (window.innerWidth > 1700)
+              return '62%'
+            else if (window.innerWidth > 1520)
+              return '66%'
+            else if (window.innerWidth > 1280)
+              return '60%'
+          }
+          else if (this.$vuetify.breakpoint.xlOnly) {
+            if (window.innerWidth > 2300)
+              return '30%'
+            else if (window.innerWidth > 2050)
+              return '34%'
+            else if (window.innerWidth > 1900)
+              return '57%'
+          }
+
+        }
       },
     };
 </script>
@@ -39,7 +72,8 @@
   border-radius: 25px;
   border: 3px solid #7B5FF1;
   /* width: 25%;  */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -49,8 +83,8 @@
 
 .image-wrapper {
   position: absolute;
-  top: 36%;
-  right: -5%;
+  top: 23%;
+  right: -2%;
   width: 100%;
   display: flex;
   justify-content: flex-end;

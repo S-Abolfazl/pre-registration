@@ -8,12 +8,17 @@
         class="search-input"
         type="text"
         placeholder="دنبال چی هستی دوست عزیز؟"
+        v-model="searchQuery"
+        @input="updateSearch"
       />
     </div>
   </template>
   
   <script>
+
+
   export default {
+    
     props: {
       bgColor: {
         type: String,
@@ -24,7 +29,15 @@
         default: "100%", 
       },
     },
-  };
+    data: () => ({
+    searchQuery: "", 
+  }),
+  methods: {
+    updateSearch() {
+      this.$emit("search-updated", this.searchQuery); // ارسال مقدار جستجو به والد
+    },
+  },
+};
   </script>
   
   <style scoped>

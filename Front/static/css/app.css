@@ -243,3 +243,7 @@ tr {
   background: #19181F !important;
   color: #fff !important;
 }
+
+.v-application .white1 {
+  border-color: inherit !important;
+}
