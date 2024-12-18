@@ -13,6 +13,9 @@
       offset-y
       transition="slide-y-transition"
       content-class="menu-wrapper"
+      top
+      max-height="60%"
+      max-width="25%"
       >
       <template v-slot:activator="{ on }">
       <v-avatar color="primary" class="pointer" @click="toggleMenu()">
@@ -31,10 +34,10 @@
 
       <div class="mr-2">
         <v-row no-gutters>
-          <b>{{ user.role }}</b>
+          <b class="font_20">{{ user.username }}</b>
         </v-row>
         <v-row no-gutters>
-          <span>{{ user.username }}</span>
+          <span class="font_20">{{ user.role }}</span>
         </v-row>
       </div>
       <v-spacer></v-spacer>

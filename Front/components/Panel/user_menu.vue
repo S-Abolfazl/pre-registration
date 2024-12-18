@@ -4,7 +4,7 @@
   >
     <list dense class="menu-list">
       <!-- profile item-->
-      <v-list-item @click="goToProfile" class="v-list-item-custom">
+      <v-list-item @click="goToProfile" class="v-list-item-custom" dense>
         <img src="image/panel/profile.png" class="menu-icon" alt="profile" />
         <span class="menu-text font_24">حساب کاربری</span>
       </v-list-item>
@@ -85,7 +85,7 @@ export default {
   width: 50px;
   height: 600px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   border-radius: 30px;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.61);
@@ -102,16 +102,16 @@ export default {
 .v-list-item-custom {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 2px 16px;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.29);
   flex-grow: 1; /* برای پر کردن فضا */
-  min-height: 60px; /* حداقل ارتفاع */
+
   justify-content: space-between; /* فضای بین متن و آیکون را توزیع کن */
 }
 
 .v-list-item-custom:hover {
-  background-color: rgba(255, 255, 255, 0.1);  
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menu-icon {
