@@ -55,26 +55,26 @@
       </header>
     </v-row>
     <div v-for="(term, index) in courses" :key="term.term">
-  <header>
-    <h1 class="font_24" style="text-align: right; padding: 2%;">
-      ترم {{ term.term }} 
-      <span style="color: gray;" >{{ sumCourseNumbers(term.courses) }} واحد</span>
-    </h1>
-  </header>
-  <v-chip-group column multiple>
-    <Course
-      v-for="course in term.courses"
-      :key="course.id"
-      :text="course.name"
-      :number="course.number"
-      :kind="course.kind"
+    <header>
+      <h1 class="font_24" style="text-align: right; padding: 2%;">
+        ترم {{ getPersianTermLabel(term.term) }}
+        <span style="color: gray;">{{ sumCourseNumbers(term.courses) }} واحد</span>
+      </h1>
+    </header>
+    <v-chip-group column multiple>
+      <Course
+        v-for="course in term.courses"
+        :key="course.id"
+        :text="course.name"
+        :number="course.number"
+        :kind="course.kind"
+      />
+    </v-chip-group>
+    <hr
+      v-if="index + 1 !== courses.length"
+      style="border: 1px solid gray; margin: 20px 50px;"
     />
-  </v-chip-group>
-  <hr
-    v-if="index + 1 !== courses.length"
-    style="border: 1px solid gray; margin: 20px 50px;"
-  />
-</div>
+  </div>
 
 
   </div>
@@ -95,6 +95,19 @@ export default {
     Course,
   },
   methods: {
+    getPersianTermLabel(termNumber) {
+      const persianTerms = [
+        "اول",
+        "دوم",
+        "سوم",
+        "چهارم",
+        "پنجم",
+        "ششم",
+        "هفتم",
+        "هشتم",
+      ];
+      return persianTerms[termNumber - 1] || termNumber;
+    },
     sumCourseNumbers(courses) {
       return courses.reduce((sum, course) => sum + (course.number || 0), 0);
     }
