@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-main class="h-max w-max">
-      <img src="image/profile/header.png" height="32%" width="100%" alt="img" class="pos">
+      <img
+        :src="this.$vuetify.theme.dark ? 'image/profile/header-dark.png' : 'image/profile/header.png'"
+        height="21%" width="100%" alt="img" class="pos">
       <nuxt />
     </v-main>
   </v-app>
@@ -15,8 +17,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.pos {
-  /* position: fixed !important; */
-}
-</style>
