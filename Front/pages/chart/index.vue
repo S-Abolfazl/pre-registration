@@ -5,7 +5,7 @@
   </template>
 
   <script>
-  import Chart from "~/components/Auth/Chart.vue";
+  import Chart from "~/components/Courses/ChartForm.vue";
   export default {
     // layout: 'site',
     head() {

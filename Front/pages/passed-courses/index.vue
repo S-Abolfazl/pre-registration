@@ -5,7 +5,7 @@
   </template>
   
   <script>
-  import PassedCourses from "~/components/Auth/PassedCoursesForm.vue";
+  import PassedCourses from "~/components/Courses/PassedCoursesForm.vue";
   export default {
     layout: 'site',
     head() {
