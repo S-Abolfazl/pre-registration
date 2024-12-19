@@ -62,6 +62,8 @@ export default {
           black2: '#FFFFAA',
 
           white1: '#19181F',
+
+          red1: '#FF1100',
         },
         light: {
           info: '#00ABE1',
