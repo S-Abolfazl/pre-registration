@@ -37,6 +37,9 @@
       :autocomplete="type == 'password' ? 'new-password' : ''"
       :class="[cClass, isFloat || isNumber ? 'ltr-item' : '', (disabled || readonly) && activeOpacity ? 'opacity_input' : '']"
     >
+      <BaseButton
+        text="ثبت"
+      />
     </v-text-field>
   </div>
 </template>

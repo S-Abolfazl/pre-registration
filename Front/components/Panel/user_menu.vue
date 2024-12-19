@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     goToProfile() {
-      console.log('Navigate to profile');
+      this.$router.push("/profile")
     },
     goToLessons() {
       console.log('Navigate to lessons');

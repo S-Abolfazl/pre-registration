@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main class="h-max w-max">
-      <img src="image/profile/header.png" height="20%" width="100%" alt="img">
+      <img src="image/profile/header.png" height="32%" width="100%" alt="img" class="pos">
       <nuxt />
     </v-main>
   </v-app>
@@ -15,3 +15,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.pos {
+  /* position: fixed !important; */
+}
+</style>
