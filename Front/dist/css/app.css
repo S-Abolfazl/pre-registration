@@ -228,3 +228,7 @@ tr {
 .theme--light.v-text-field--outlined:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot fieldset {
   color: #CBCAD7 !important;
 }
+
+.v-text-field .v-input__prepend-inner .v-text-field .v-input__append-inner {
+  margin: 0 0 0 -7px !important;
+}

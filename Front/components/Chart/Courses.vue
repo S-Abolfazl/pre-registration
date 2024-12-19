@@ -66,7 +66,6 @@
     color: white1;
   }
 
-
 .inner-circle {
     margin: 0px 6px 0 6px !important;
     display: flex;

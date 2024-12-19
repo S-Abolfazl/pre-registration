@@ -7,6 +7,7 @@
         mandatory
         :width="width"
         :style="{ height: height }"
+        passed_courses
         color="orange1"
       >
         <v-btn
