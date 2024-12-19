@@ -37,6 +37,16 @@
       :autocomplete="type == 'password' ? 'new-password' : ''"
       :class="[cClass, isFloat || isNumber ? 'ltr-item' : '', (disabled || readonly) && activeOpacity ? 'opacity_input' : '']"
     >
+      <template #append>
+        <BaseButton
+          text="ثبت"
+          elevation="2"
+          class="rounded-pill spec_margin"
+          color="primary"
+          width="20%"
+          :disabled="inp_value == ''"
+        />
+      </template>
     </v-text-field>
   </div>
 </template>
@@ -258,3 +268,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.spec_margin {
+  margin: -4px 0px 5px -7px !important;
+}
+</style>

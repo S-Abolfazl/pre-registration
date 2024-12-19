@@ -109,7 +109,7 @@ export default {
 .bar {
   box-shadow: none !important;
 }
-.theme--light.v-app-bar.v-toolbar.v-sheet {
+.v-app-bar.v-toolbar.v-sheet {
   border-color: #D9D9D9 !important;
   margin-top: 12px !important;
 }

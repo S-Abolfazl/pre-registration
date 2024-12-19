@@ -63,9 +63,14 @@ export default {
       currentLanguage: 'فارسی',
     };
   },
+  watch: {
+    darkMode(newVal) {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+  },
   methods: {
     goToProfile() {
-      console.log('Navigate to profile');
+      this.$router.push("/profile")
     },
     goToLessons() {
       console.log('Navigate to lessons');
