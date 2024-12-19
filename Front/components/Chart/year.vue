@@ -1,15 +1,17 @@
 <template>
-    <div>
-      <v-chip
-        color="blue2"
-        class="custom-chip "
-      >
-      <span class="font_30" >{{ text }}</span>
-      </v-chip>
-      <img :src="require('~/static/image/chart/books.png')" alt="books"  class="books-picture" >
+    <div class="d-flex align-center">
+      <div class="d-flex flex-column align-end">
+        <img :src="require('~/static/image/chart/books.png')" alt="books"  class="books-picture mb-n1">
+        <v-chip
+          color="blue2"
+          class="custom-chip ma-0 pa-2"
+        >
+          <span class="font_30" >{{ text }}</span>
+        </v-chip>
+      </div>
     </div>
   </template>
-  
+
   <script>
   export default {
     name: "Year",
@@ -22,18 +24,16 @@
     },
   };
   </script>
-  
+
   <style scoped>
   .custom-chip {
-  width: 12vw; /* Set width as a percentage of the container */
   height:3vw; /* Allow height to adjust automatically */
   justify-content: center;
   align-items: center;
   border-radius: 50px;
 }
-  .books-picture {
-    width: 13%; 
-    transform: translateX(140%) translateY(-30%);
+.books-picture {
+  width: 52%;
+  z-index: 1;
 }
-  </style>
-  
+</style>

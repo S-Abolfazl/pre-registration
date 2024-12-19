@@ -15,7 +15,8 @@
         <!-- تصویر موشک و مرد -->
         <v-col cols="6" class="d-flex justify-center">
           <div class="image-wrapper">
-            <img src="/image/panel/teachers.png" alt="teachers" class="teacher-image" />
+            <!-- {{ imgWidth() }} -->
+            <img src="/image/panel/teachers.png" alt="teachers" :width="imgWidth()" />
           </div>
         </v-col>
       </v-row>
@@ -29,7 +30,37 @@
       goToProfessor() {
         this.$router.push('/panel/Professor');
       },
+      imgWidth() {
+          // if (window.innerWidth > 2300)
+          //   return '30%'
+          // else if (window.innerWidth > 2050)
+          //   return '34%'
+          // else if (window.innerWidth > 1900)
+          //   return '38%'
+
+          if (this.$vuetify.breakpoint.mdOnly){
+            return '50%'
+          }
+          else if (this.$vuetify.breakpoint.lgOnly){
+            if (window.innerWidth > 1700)
+              return '45%'
+            else if (window.innerWidth > 1520)
+              return '50%'
+            else if (window.innerWidth > 1280)
+              return '57%'
+          }
+          else if (this.$vuetify.breakpoint.xlOnly) {
+            if (window.innerWidth > 2300)
+              return '30%'
+            else if (window.innerWidth > 2050)
+              return '34%'
+            else if (window.innerWidth > 1900)
+              return '45%'
+          }
+
+        }
     },
+
   };
 </script>
 
@@ -40,7 +71,8 @@
   /* background-color: var(blue1); */
   border: 3px solid #7B5FF1 !important;
   /* width: 33%;  */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -48,16 +80,14 @@
 
 .image-wrapper {
   position: absolute;
-  top: -1%; /* تصویر را از بالا بیرون بیاورید */
+  top: 0%; /* تصویر را از بالا بیرون بیاورید */
   right: -3%; /* تصویر را از سمت راست کمی خارج کنید */
   width: 100%;
   display: flex;
   justify-content: flex-end;
 }
 
-.teacher-image {
-  width: 53%; /* تنظیم سایز تصویر */
-}
+
 .title{
   margin: 16px 14px auto auto;
 

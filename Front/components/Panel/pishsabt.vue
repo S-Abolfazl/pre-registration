@@ -15,7 +15,8 @@
         <!-- تصویر موشک و مرد -->
         <v-col cols="6" class="d-flex justify-center">
           <div class="image-wrapper">
-            <img src="/image/panel/pishsabt.png" alt="Rocket Man" class="rocket-image" />
+            <!-- {{ imgWidth() }} -->
+            <img src="/image/panel/pishsabt.png" alt="Rocket Man" :width="imgWidth()" />
           </div>
         </v-col>
       </v-row>
@@ -30,6 +31,35 @@
         goToPishsabt() {
           this.$router.push('/panel/pishsabt');
         },
+        imgWidth() {
+          // if (window.innerWidth > 2300)
+          //   return '30%'
+          // else if (window.innerWidth > 2050)
+          //   return '34%'
+          // else if (window.innerWidth > 1900)
+          //   return '38%'
+
+          if (this.$vuetify.breakpoint.mdOnly){
+            return '51%'
+          }
+          else if (this.$vuetify.breakpoint.lgOnly){
+            if (window.innerWidth > 1700)
+              return '42%'
+            else if (window.innerWidth > 1520)
+              return '47%'
+            else if (window.innerWidth > 1280)
+              return '50%'
+          }
+          else if (this.$vuetify.breakpoint.xlOnly) {
+            if (window.innerWidth > 2300)
+              return '30%'
+            else if (window.innerWidth > 2050)
+              return '34%'
+            else if (window.innerWidth > 1900)
+              return '38%'
+          }
+
+        }
       },
     };
 </script>
@@ -39,7 +69,8 @@
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   /* width: 33%;  */
-  height: 280px;
+  height: auto;
+  min-height: 280px;
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
@@ -54,9 +85,7 @@
   justify-content: flex-end;
 }
 
-.rocket-image {
-  width: 57%; /* تنظیم سایز تصویر */
-}
+
 .title{
   margin: 16px 14px auto auto;
 

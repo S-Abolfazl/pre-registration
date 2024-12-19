@@ -8,7 +8,14 @@
       rounded="pill"
       class="bar mx-4"
     >
-      <v-avatar color="primary">
+      <v-menu
+      v-model="menuVisible"
+      offset-y
+      transition="slide-y-transition"
+      content-class="menu-wrapper"
+      >
+      <template v-slot:activator="{ on }">
+      <v-avatar color="primary" class="pointer" @click="toggleMenu()">
         <img
           v-if="user.avatar"
           :src="user.avatar"
@@ -18,6 +25,9 @@
           mdi-account
         </v-icon>
       </v-avatar>
+    </template>
+    <user_menu :width="'400px'"/>
+  </v-menu>
 
       <div class="mr-2">
         <v-row no-gutters>
@@ -58,9 +68,14 @@
 
 <script lang="ts">
 import BaseButton from '../Base/BaseButton.vue';
+import user_menu from '../Panel/user_menu.vue';
 
 export default {
+  components: {
+    user_menu,
+  },
   data: () => ({
+    menuVisible: false,
     user: {
       username: 'حسين گرزين',
       avatar: '', // Add a valid avatar URL or leave empty for the fallback image
@@ -80,6 +95,9 @@ export default {
     navigateToSupport() {
       this.$router.push('/support');
     },
+    toggleMenu() {
+      this.menuVisible = !this.menuVisible;
+    },
   },
 };
 </script>
@@ -91,5 +109,8 @@ export default {
 .theme--light.v-app-bar.v-toolbar.v-sheet {
   border-color: #D9D9D9 !important;
   margin-top: 12px !important;
+}
+.menu-wrapper {
+  border-radius: 30px;
 }
 </style>
