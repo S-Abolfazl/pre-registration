@@ -26,6 +26,8 @@
         placeholder="نام و نام خانوادگی خود را وارد کنید"
         width="65%"
         borderRadius="99px"
+        isPro
+        @sabt="sabt($event)"
       />
 
       <BaseInput
@@ -35,6 +37,7 @@
         borderRadius="99px"
         cClass="ltr-item"
         rules="phone"
+        isPro
       />
 
       <BaseInput
@@ -44,6 +47,7 @@
         borderRadius="99px"
         cClass="ltr-item"
         rules="email"
+        isPro
       />
 
       <BaseInput
@@ -52,6 +56,7 @@
         width="65%"
         borderRadius="99px"
         cClass="ltr-item"
+        isPro
       />
 
       <BaseButton
@@ -89,7 +94,12 @@ export default {
       role: "دانشجو"
     }
   }),
-  methods: {},
+  methods: {
+    sabt(data){
+      console.log("data is ", data);
+
+    }
+  },
 }
 </script>
 <style scoped>
