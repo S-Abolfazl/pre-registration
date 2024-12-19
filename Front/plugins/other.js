@@ -13,7 +13,6 @@ import BaseButton from '~/components/Base/BaseButton.vue'
 import BaseTextarea from '~/components/Base/BaseTextarea.vue'
 import BaseDatePicker from '~/components/Base/BaseDatePicker.vue';
 import BaseAutocomplete from '~/components/Base/BaseAutocomplete.vue'
-import Bar from '~/components/Panel/Bar.vue'
 
 Vue.component('persian-date-picker', VuePersianDatetimePicker)
 
@@ -28,4 +27,3 @@ Vue.component('BaseButton', BaseButton)
 Vue.component('BaseTextarea', BaseTextarea)
 Vue.component('BaseDatePicker', BaseDatePicker)
 Vue.component('BaseAutocomplete', BaseAutocomplete)
-Vue.component('Navigationbar', Bar)

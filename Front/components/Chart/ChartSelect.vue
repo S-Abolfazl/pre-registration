@@ -7,7 +7,8 @@
         mandatory
         :width="width"
         :style="{ height: height }"
-        color="orange2"
+        passed_courses
+        color="orange1"
       >
         <v-btn
           v-for="(option, index) in options"
@@ -17,7 +18,7 @@
           :class="{ 'selected-btn': selected === option.value }"
           :text="selected !== option.value"
           :style="{ height: height }"
-          color="orange2"
+          color="orange1"
         >
           {{ option.text }}
         </v-btn>
