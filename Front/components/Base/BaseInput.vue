@@ -37,7 +37,7 @@
       :autocomplete="type == 'password' ? 'new-password' : ''"
       :class="[cClass, isFloat || isNumber ? 'ltr-item' : '', (disabled || readonly) && activeOpacity ? 'opacity_input' : '']"
     >
-      <template #append>
+      <template #append v-if="isPro">
         <BaseButton
           text="ثبت"
           elevation="2"
@@ -45,6 +45,7 @@
           color="primary"
           width="20%"
           :disabled="inp_value == ''"
+          @click="sabt()"
         />
       </template>
     </v-text-field>
@@ -54,6 +55,10 @@
 <script>
 export default {
   props: {
+    isPro: {
+      type: Boolean,
+      default: false,
+    },
     width: {
       type: String,
       default: '100px'
@@ -264,6 +269,9 @@ export default {
       if (this.activeInputClick) {
         this.$emit('click:append', $event)
       }
+    },
+    sabt() {
+      this.$emit('sabt', this.inp_value)
     },
   },
 }
