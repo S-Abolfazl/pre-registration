@@ -44,7 +44,7 @@
     </v-row>
 
     <v-row no-gutters class="pl-10">
-      <TimeTable />
+      <!-- <TimeTable /> -->
     </v-row>
 
     <v-dialog

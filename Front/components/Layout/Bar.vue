@@ -87,7 +87,7 @@ export default {
   }),
   methods: {
     navigateToPreRegistration() {
-      this.$router.push('/pre-registration'); // Adjust the route path as needed
+      this.$router.push('/pre-registration-form'); // Adjust the route path as needed
     },
     navigateToFeedback() {
       this.$router.push('/feedback');
