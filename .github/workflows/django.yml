@@ -57,8 +57,8 @@ jobs:
 
     - name: Run Django Tests
       run: |
-        sleep 25
-        docker exec my-django sh -c "python manage.py test"
+        sleep 10
+        docker exec my-django sh -c "python manage.py test --keepdb"
 
     - name: Tear Down Services
       if: always()
