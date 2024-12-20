@@ -1,6 +1,6 @@
 export const state = () => ({
   page_title: 'سامانه پیش ثبت نام',
-  server_url: 'http://192.168.213.26:8000/',
+  server_url: 'http://192.168.168.26:8000/',
   // TODO
   // file_url: 'https://file.ir/',
 })
