@@ -2,7 +2,7 @@
   <div class="w-max">
 
     <!-- First row bar -->
-    <v-row no-gutters class="px-5">
+    <v-row no-gutters class="px-5 mt-12 mb-6">
       <BaseButton
         text="ثبت کنم برات؟"
         width="16%"
@@ -44,7 +44,7 @@
     </v-row>
 
     <v-row no-gutters class="pl-10">
-      <!-- <TimeTable /> -->
+      <TimeTable />
     </v-row>
 
     <v-dialog
@@ -64,7 +64,7 @@ import TimeTable from "~/components/PreRegistrationForm/TimeTable.vue";
 export default {
   head() {
     return {
-      title: 'فرم پیش ثبت نام',
+      title: 'پیش ثبت نام',
     }
   },
   components: { TimeTable },

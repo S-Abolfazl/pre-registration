@@ -11,38 +11,20 @@
     <v-calendar
       ref="calendar"
       type="week"
-      start="2024-12-3T10:00:00"
-      :weekdays="[6, 0, 1, 2, 3]"
-      :events="filterDates(courses[0])"
-      event-color="getEventColor"
+      start="1403-01-01"
+      :events="events"
+      :categories="categories"
+      :event-color="getEventColor"
       locale="fa"
       :first-interval="6"
       :interval-count="14"
       :interval-minutes="60"
-      interval-height="50"
+      interval-height="45"
       show-interval-label
       color="primary"
       :interval-format="formatInterval"
-    >
-      <template #event="{ event }">
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <div v-bind="attrs" v-on="on" class="custom-event">
-              {{ event.course.courseName }}
-              <br>
-              <div class="d-flex justify-end ml-2">
-                {{ event.class_start_time.substr(event.class_start_time.length - 5, event.class_start_time.length) }}
-                -
-                {{ event.class_end_time.substr(event.class_end_time.length - 5, event.class_end_time.length) }}
-              </div>
-            </div>
-          </template>
-          <div>
-            {{ event.course.courseName }}
-          </div>
-        </v-tooltip>
-      </template>
-    </v-calendar>
+      category-show-all
+    ></v-calendar>
   </v-container>
 </template>
 
@@ -75,6 +57,27 @@ export default {
           "selected": false
         },
       ],
+      events: [
+      {
+        name: "یادگیری ماشین",
+        start: "1403-01-05 07:30",
+        end: "1403-01-05 09:00",
+        selected: true,
+      },
+      {
+        name: "Workout",
+        start: "2024-12-21 18:00",
+        end: "2024-12-21 19:00",
+        selected: false,
+      },
+      ],
+      categories: [
+        { name: "saturday", text: "شنبه" },
+        { name: "sunday", text: "یک‌شنبه" },
+        { name: "monday", text: "دو‌شنبه" },
+        { name: "tuesday", text: "سه‌شنبه" },
+        { name: "wednesday", text: "چهار‌شنبه" },
+      ],
     };
   },
   methods: {
@@ -85,34 +88,6 @@ export default {
     },
     getEventColor(event) {
       return event.color || "primary";
-    },
-    filterDates(data) {
-      switch (data.class_time1) {
-        case "شنبه":
-          data.class_start_time = `2024-11-30T${data.class_start_time}`;
-          data.class_end_time = `2024-11-30T${data.class_end_time}`;
-          break;
-        case "یک‌شنبه":
-          data.class_start_time = `2024-12-01T${data.class_start_time}`;
-          data.class_end_time = `2024-12-01T${data.class_end_time}`;
-          break;
-        case "دوشنبه":
-          data.class_start_time = `2024-12-02T${data.class_start_time}`;
-          data.class_end_time = `2024-12-02T${data.class_end_time}`;
-          break;
-        case "سه‌شنبه":
-          data.class_start_time = `2024-12-03T${data.class_start_time}`;
-          data.class_end_time = `2024-12-03T${data.class_end_time}`;
-          break;
-        case "چهارشنبه":
-          data.class_start_time = `2024-12-04T${data.class_start_time}`;
-          data.class_end_time = `2024-12-04T${data.class_end_time}`;
-          break;
-        default:
-          break;
-      }
-      console.log(data);
-      return data
     },
   },
 };
