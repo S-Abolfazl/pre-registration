@@ -72,6 +72,10 @@ export default {
     dialog: false,
     search_data: '',
   }),
+  mounted() {
+    // API call for get courses
+
+  },
   methods: {
     register() {
       console.log('رجیستر');

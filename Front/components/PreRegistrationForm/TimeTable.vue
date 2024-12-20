@@ -11,9 +11,9 @@
     <v-calendar
       ref="calendar"
       type="week"
-      start="1403-01-01"
+      start="2024-12-3"
       :events="events"
-      :categories="categories"
+      :weekdays="[6, 0, 1, 2, 3]"
       :event-color="getEventColor"
       locale="fa"
       :first-interval="6"
@@ -21,10 +21,38 @@
       :interval-minutes="60"
       interval-height="45"
       show-interval-label
-      color="primary"
+      :color="getEventColor"
       :interval-format="formatInterval"
       category-show-all
-    ></v-calendar>
+    >
+      <template #event="{ event }">
+        <v-tooltip bottom color="orange1">
+          <template #activator="{ on, attrs }">
+            <div v-bind="attrs" v-on="on" class="custom-event">
+              {{ event.name }}
+              <br>
+              <div class="d-flex justify-end ml-2">
+                {{ event.end.slice(event.end.length  - 5, event.end.length) }}
+                  -
+                {{ event.start.slice(event.start.length - 5, event.start.length) }}
+              </div>
+            </div>
+          </template>
+          <div>
+            تاریخ امتحان :
+            <span dir="ltr">
+              {{ event.exam_date ? `  ${event.exam_start_time} - ${event.exam_end_time} , ${event.exam_date}` : "" }}
+            </span>
+            <br>
+            <span>
+              نام استاد :
+              {{ event.teacherName }}
+            </span>
+          </div>
+        </v-tooltip>
+      </template>
+
+    </v-calendar>
   </v-container>
 </template>
 
@@ -33,36 +61,16 @@
 export default {
   data() {
     return {
-      courses: [
-        {
-          "c_id": "accb296d-13d4-4689-9f6c-488e5360c063",
-          "teacherName": "احمدزاده راجی مهرداد",
-          "isExperimental": false,
-          "class_time1": "چهارشنبه",
-          "class_time2": "چهارشنبه",
-          "class_start_time": "15:00",
-          "class_end_time": "17:00",
-          "exam_date": null,
-          "exam_start_time": null,
-          "exam_end_time": null,
-          "capacity": 48,
-          "registered": 0,
-          "description": null,
-          "course": {
-            "course_id": "ab7390cd-28cd-49c1-92e3-08b831efd251",
-            "courseName": "آزمایشگاه سیستم های عامل",
-            "unit": 1,
-            "type": "practical_course"
-          },
-          "selected": false
-        },
-      ],
       events: [
       {
         name: "یادگیری ماشین",
-        start: "1403-01-05 07:30",
-        end: "1403-01-05 09:00",
-        selected: true,
+        start: "2024-12-3 07:30",
+        end: "2024-12-3 09:00",
+        exam_date: "1403-10-24",
+        exam_start_time: "09:00",
+        exam_end_time: "12:00",
+        teacherName: "حامد ملک",
+        selected: false,
       },
       {
         name: "Workout",
@@ -70,13 +78,6 @@ export default {
         end: "2024-12-21 19:00",
         selected: false,
       },
-      ],
-      categories: [
-        { name: "saturday", text: "شنبه" },
-        { name: "sunday", text: "یک‌شنبه" },
-        { name: "monday", text: "دو‌شنبه" },
-        { name: "tuesday", text: "سه‌شنبه" },
-        { name: "wednesday", text: "چهار‌شنبه" },
       ],
     };
   },
@@ -94,6 +95,6 @@ export default {
 </script>
 <style scoped>
 .custom-event{
-  padding: 4px 8px 0 0 !important;
+  padding: 9px 14px 0px 9px !important;
 }
 </style>
