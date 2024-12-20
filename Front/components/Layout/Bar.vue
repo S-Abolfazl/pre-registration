@@ -64,7 +64,15 @@
   <span class="font_20 description"  style="position: relative;">پشتیبانی</span>
 </v-btn>
       <v-spacer></v-spacer>
-      <img :src="require('~/static/image/panel/sbulogo.png')" alt="sbulogo"  width="4%" height="90%" style=" padding-left: 0.5%">
+      <img
+        :src="require('~/static/image/panel/sbulogo.png')"
+        alt="sbulogo"
+        width="4%"
+        height="90%"
+        style=" padding-left: 0.5%"
+        class="pointer"
+        @click="goToPanel()"
+        >
     </v-app-bar>
   </v-layout>
 </template>
@@ -100,6 +108,9 @@ export default {
     },
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
+    },
+    goToPanel() {
+      this.$router.push('/panel');
     },
   },
 };
