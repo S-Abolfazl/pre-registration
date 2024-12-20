@@ -241,7 +241,67 @@ data = {
         "courseName": "اختیاری",
         "unit": "3",
         "type": "elective_course"
-    }
+    },
+    "course49":{
+        "courseName": "اصول مدیریت و برنامه ریزی راهبردی فناوری اطلاعات",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course50":{ 
+        "courseName": "سیستم های اطلاعات مدیریت",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course51":{ 
+        "courseName": "کارگاه برنامه نویسی مت لب",
+        "unit": "1",
+        "type": "elective_course"
+    },
+    "course52":{ 
+        "courseName": "مهندسی اینترنت",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course53":{ 
+        "courseName": "هم طراحی سخت افزار- نرم افزار",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course54":{ 
+        "courseName": "طراحی بازی های رایانه ای",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course55":{ 
+        "courseName": "مبانی رمزنگاری",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course56":{ 
+        "courseName": "مبانی بینائی کامپیوتر",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course57":{ 
+        "courseName": "آزمایشگاه پایگاه داده",
+        "unit": "1",
+        "type": "elective_course"
+    },
+    "course58":{ 
+        "courseName": "مبانی اینترنت اشیا",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course59":{ 
+        "courseName": "مبانی داده کاوی",
+        "unit": "3",
+        "type": "elective_course"
+    },
+    "course60":{ 
+        "courseName": "تظریه و الگوریتم های گراف",
+        "unit": "3",
+        "type": "elective_course"
+    },
 }
 
 

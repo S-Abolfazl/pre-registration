@@ -527,7 +527,7 @@ course_data = [
         "class_time2": "شنبه     ",
         "exam_time": "۱۴۰۳/۱۱/۰۲ ساعت : ۱۳:۰۰-۱۶:۰۰",
         "availability": "امکان دارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۰۶۱_۰۱",
@@ -544,7 +544,7 @@ course_data = [
         "class_time2": "شنبه     ",
         "exam_time": "۱۴۰۳/۱۰/۲۴ ساعت : ۱۳:۰۰-۱۶:۰۰",
         "availability": "امکان دارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۰۶۵_۰۱",
@@ -578,7 +578,7 @@ course_data = [
         "class_time2": "یک‌شنبه  ",
         "exam_time": "۱۴۰۳/۱۰/۲۹ ساعت : ۱۳:۰۰-۱۶:۰۰",
         "availability": "امکان دارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۰۸۵_۰۱",
@@ -629,7 +629,7 @@ course_data = [
         "class_time2": "یک‌شنبه  ",
         "exam_time": "۱۴۰۳/۱۱/۰۲ ساعت : ۰۹:۰۰-۱۱:۰۰",
         "availability": "امکان دارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۱۰۷_۰۱",
@@ -646,7 +646,7 @@ course_data = [
         "class_time2": "سه‌شنبه  ",
         "exam_time": "",
         "availability": "امکان ندارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۱۱۲_۰۱",
@@ -663,7 +663,7 @@ course_data = [
         "class_time2": "پنج‌شنبه ",
         "exam_time": "۱۴۰۳/۱۱/۰۲ ساعت : ۰۸:۰۰-۰۹:۰۰",
         "availability": "امکان ندارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۱۱۳_۰۱",
@@ -765,7 +765,7 @@ course_data = [
         "class_time2": "شنبه ",
         "exam_time": "۱۴۰۳/۱۱/۰۳ ساعت : ۰۹:۰۰-۱۲:۰۰",
         "availability": "امکان ندارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۱۱۷_۰۱",
@@ -952,7 +952,7 @@ course_data = [
         "class_time2": "یک‌شنبه ",
         "exam_time": "۱۴۰۳/۱۱/۰۶ ساعت : ۰۹:۰۰-۱۲:۰۰",
         "availability": "امکان دارد",
-        "course_type": "اختصاصی"
+        "course_type": "اختیاری"
     },
     {
         "course_code": "۴۳۰۱۱۸۵_۰۱",
@@ -1132,6 +1132,9 @@ def convert_course_type_to_type(course_name,course_type , unit):
             return "practical_course"
         else:
             return "theory_course"
+    elif course_type == "اختیاری":
+        return "elective_course"
+    
     return None
 def filter_course_name(course_name):
     return course_name.replace("ي", "ی").replace("ك", "ک")
@@ -1159,7 +1162,7 @@ def map_to_course(course_data):
                 location_time = convert_persian_numbers_to_english(data["class_location"])
                 start_time, end_time, _ = location_time.split("-")
 
-            if type == "practical_course":
+            if type == "practical_course" or courseName == "کارگاه برنامه نویسی مت لب":
                 exam_date = None
                 exam_start_end = [None, None]
             else:
@@ -1188,6 +1191,8 @@ def map_to_course(course_data):
             print(f"Course with name {courseName} not found")
         except ValueError as e:
             print(f"Error parsing times for course {courseName}: {e}")
+        except Exception as e:
+            print(f"Error parsing course {courseName}: {e}")
     return mapped_data
 
 
@@ -1196,7 +1201,7 @@ data_out = map_to_course(course_data)
 
 for c in data_out:
     # print(c)
-    print(c)
+    # print(c)
     course, created = Course.objects.get_or_create(
         course=c['course'],  # ForeignKey reference to 'AllCourses' model
         teacherName=c['teacherName'],
