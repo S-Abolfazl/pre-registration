@@ -65,7 +65,8 @@ export default {
   },
   watch: {
     darkMode(newVal) {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      this.$vuetify.theme.dark = newVal;
+      localStorage.setItem('isDark', newVal);
     },
   },
   methods: {
@@ -116,7 +117,7 @@ export default {
 }
 
 .v-list-item-custom:hover {
-  background-color: rgba(255, 255, 255, 0.1);  
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menu-icon {
