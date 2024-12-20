@@ -242,6 +242,21 @@ class UserUpdateApi(APIView):
                 "status": status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
     
+    @swagger_auto_schema(
+        operation_summary="User Patch",
+        operation_description="Endpoint to partially update a user by id.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type')
+            }
+        )
+    )
+    
     def patch(self, request, pk):
         try:
             user = User.objects.get(id=pk)
