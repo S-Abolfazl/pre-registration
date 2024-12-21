@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 import uuid
 
 class Course(models.Model):
@@ -51,7 +52,7 @@ class AllCourses(models.Model):
         db_table = "AllCourses"
         
     def __str__(self) :
-        return str(self.course_id)
+        return str(self.courseName)
     
 class Prereq(models.Model):
     course = models.ForeignKey(AllCourses, on_delete=models.CASCADE, related_name="prereqs_for")
@@ -60,6 +61,10 @@ class Prereq(models.Model):
     class Meta:
       db_table = "Prereq"
       unique_together = (('course', 'prereq_course'),)
+      
+    def clean(self):
+        if self.course == self.prereq_course:
+            raise ValidationError("درس و درس پیشنیاز نمی‌توانند یکسان باشند")
 
     def __str__(self) :
       return f"{self.course.course_id} - {self.prereq_course.course_id}"
@@ -71,6 +76,10 @@ class Coreq(models.Model):
     class Meta:
       db_table = "Coreq"
       unique_together = (('course', 'coreq_course'),)
+      
+    def clean(self):
+        if self.course == self.coreq_course:
+            raise ValidationError("درس و درس هم‌نیاز نمی‌توانند یکسان باشند")
 
     def __str__(self) :
       return f"{self.course.course_id} - {self.coreq_course.course_id}"
