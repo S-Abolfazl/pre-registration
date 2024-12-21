@@ -32,7 +32,7 @@ class Course(models.Model):
             db_table = "Course"
 
     def __str__(self) :
-        return self.course.courseName
+        return f"{self.c_id}"
 
 class AllCourses(models.Model):
     CourseType = {

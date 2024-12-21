@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import Course, AllCourses, Prereq, Coreq
+from .models import Course, AllCourses, Prereq, Coreq, CourseRule
 from django import forms
+from django.urls import reverse
+from django.utils.html import format_html
+
 
 @admin.register(AllCourses)
 class AllCoursesAdmin(admin.ModelAdmin):
@@ -43,3 +46,15 @@ class PrereqAdmin(admin.ModelAdmin):
 class CoreqAdmin(admin.ModelAdmin):
     list_display = ('course', 'coreq_course')
     search_fields = ('course__courseName', 'coreq_course__courseName')
+    
+@admin.register(CourseRule)
+class CourseRuleAdmin(admin.ModelAdmin):
+    list_display = ('rule_id', 'linked_course', 'type', 'values')
+    search_fields = ('type',)
+    list_filter = ('type',)
+    
+    def linked_course(self , obj):
+        link = reverse('admin:course_course_change', args=[obj.course.c_id])
+        return format_html('<a href="{}">{}</a>', link, obj.course.course.courseName)
+    
+    linked_course.short_description = 'Course'
