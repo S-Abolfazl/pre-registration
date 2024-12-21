@@ -31,7 +31,7 @@ class Course(models.Model):
             db_table = "Course"
 
     def __str__(self) :
-        return self.course
+        return self.course.courseName
 
 class AllCourses(models.Model):
     CourseType = {
