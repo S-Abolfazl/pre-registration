@@ -54,6 +54,7 @@
         <h1 class="font_20" style="text-align: left;">ميباشد.</h1>
       </header>
     </v-row>
+
     <div v-for="(term, index) in courses" :key="term.term">
     <header>
       <h1 class="font_24" style="text-align: right; padding: 2%;">
@@ -94,6 +95,51 @@ export default {
     ChartSelect,
     Course,
   },
+  data() {
+    return {
+      courses: [
+    {
+      term: 1,
+      courses: [
+        { id: 1, name: "فیزیک 1", kind: "پايه", number: 3 },
+        { id: 2, name: "ریاضی 1", kind: "پايه", number: 3 },
+        { id: 3, name: "مبانی کامپوتر و برنامه سازی", kind: "اختصاصي", number: 3 },
+        { id: 4, name: "مهارت های کاربردی کامپیوتر", kind: "اختصاصي", number: 1 },
+        { id: 5, name: "زبان خارجی", kind: "عمومي", number: 2 },
+        { id: 6, name: "فارسی", kind: "عمومي", number: 2 },
+      ],
+    },
+    {
+      term: 2,
+      courses: [
+        { id: 7, name: "برنامه نویسی پیشرفته", kind: "اختصاصي", number: 3 },
+        { id: 8, name: "ریاضی گسسته", kind: "اختصاصي", number: 3 },
+        { id: 9, name: "مدار منطقی", kind: "اختصاصي", number: 3 },
+        { id: 10, name: "معادلات دیفرانسیل", kind: "پايه", number: 3 },
+        { id: 11, name: "فیزیک 2", kind: "پايه", number: 3 },
+        { id: 12, name: "آز فیزیک 2", kind: "پايه", number: 1 },
+      ],
+    },
+    {
+      term: 3,
+      courses: [
+        { id: 13, name: "زبان تخصصی", kind: "اختصاصي", number: 2 },
+        { id: 14, name: "ساختمان داده", kind: "اختصاصي", number: 3 },
+        { id: 15, name: "نظریه زبان ها و ماشین ها", kind: "اختصاصي", number: 3 },
+        { id: 16, name: "معماری کامپیوتر", kind: "اختصاصي", number: 3 },
+        { id: 17, name: "مدارهای الکتریکی و الکترونیکی", kind: "اختصاصي", number: 3 },
+        { id: 18, name: "آز منطقی معماری", kind: "اختياري", number: 1 },
+        { id: 19, name: "ریاضی 2", kind: "پايه", number: 3 },
+      ],
+    }
+      ],
+
+      the_data: [],
+    }
+  },
+  mounted() {
+    this.getData();
+  },
   methods: {
     getPersianTermLabel(termNumber) {
       const persianTerms = [
@@ -110,49 +156,18 @@ export default {
     },
     sumCourseNumbers(courses) {
       return courses.reduce((sum, course) => sum + (course.number || 0), 0);
-    }
+    },
+    getData() {
+      this.$reqApi("student/chart/get/", {}, {}, true, 'get')
+      .then((response) => {
+        console.log("the response: ", response);
+        this.the_data = response;
+      })
+      .catch((error) => {
+        this.$toast.error(error);
+      })
+    },
   },
-  data() {
-      return {
-        courses: [
-      {
-        term: 1,
-        courses: [
-          { id: 1, name: "فیزیک 1", kind: "پايه", number: 3 },
-          { id: 2, name: "ریاضی 1", kind: "پايه", number: 3 },
-          { id: 3, name: "مبانی کامپوتر و برنامه سازی", kind: "اختصاصي", number: 3 },
-          { id: 4, name: "مهارت های کاربردی کامپیوتر", kind: "اختصاصي", number: 1 },
-          { id: 5, name: "زبان خارجی", kind: "عمومي", number: 2 },
-          { id: 6, name: "فارسی", kind: "عمومي", number: 2 },
-        ],
-      },
-      {
-        term: 2,
-        courses: [
-          { id: 7, name: "برنامه نویسی پیشرفته", kind: "اختصاصي", number: 3 },
-          { id: 8, name: "ریاضی گسسته", kind: "اختصاصي", number: 3 },
-          { id: 9, name: "مدار منطقی", kind: "اختصاصي", number: 3 },
-          { id: 10, name: "معادلات دیفرانسیل", kind: "پايه", number: 3 },
-          { id: 11, name: "فیزیک 2", kind: "پايه", number: 3 },
-          { id: 12, name: "آز فیزیک 2", kind: "پايه", number: 1 },
-        ],
-      },
-      {
-        term: 3,
-        courses: [
-          { id: 13, name: "زبان تخصصی", kind: "اختصاصي", number: 2 },
-          { id: 14, name: "ساختمان داده", kind: "اختصاصي", number: 3 },
-          { id: 15, name: "نظریه زبان ها و ماشین ها", kind: "اختصاصي", number: 3 },
-          { id: 16, name: "معماری کامپیوتر", kind: "اختصاصي", number: 3 },
-          { id: 17, name: "مدارهای الکتریکی و الکترونیکی", kind: "اختصاصي", number: 3 },
-          { id: 18, name: "آز منطقی معماری", kind: "اختياري", number: 1 },
-          { id: 19, name: "ریاضی 2", kind: "پايه", number: 3 },
-        ],
-      }
-    ],
-  }
-}
-
 }
 </script>
 
