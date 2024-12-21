@@ -83,31 +83,21 @@ class Coreq(models.Model):
 
     def __str__(self) :
       return f"{self.course.course_id} - {self.coreq_course.course_id}"
-
-class Rule(models.Model):
-    type = {
+      
+class CourseRule(models.Model):
+    typeChoice = {
       ('entry_rule', 'entry_rule'),
     }
     rule_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
-    type = models.CharField(max_length=30, choices=type)
-    values = models.CharField(max_length=255)
-    
-    class Meta:
-        db_table = "Rule"
-
-    def __str__(self) :
-        return self.rule_id
-      
-class CourseRule(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    type = models.CharField(max_length=30, choices=typeChoice)
+    values = models.JSONField(default=list, blank=True)
 
     class Meta:
         db_table = "CourseRule"
-        unique_together = (('course', 'rule'),)
 
     def __str__(self) :
-        return f"{self.course.c_id} - {self.rule.rule_id}"
+        return f"{self.course.c_id}"
 
 
 
