@@ -17,6 +17,9 @@ class User(AbstractUser):
     email = models.EmailField()
     type = models.CharField(max_length=30, choices=USER_TYPE)
     entry_year = models.IntegerField(null=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    mobile_number = models.CharField(max_length=12, null = True)
     
     class Meta:
         db_table = "User"
