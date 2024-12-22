@@ -102,11 +102,10 @@ export default {
     login() {
       this.$reqApi('user/login/', this.form)
         .then((response) => {
-          console.log('the response : ', response);
-
           this.$store.dispatch('auth/login', response).then((data) => {
             this.$toast.success("با موفقیت وارد شدید")
             this.$router.push('/')
+            localStorage.setItem('isDark', false);
           })
         })
         .catch((error) => {
