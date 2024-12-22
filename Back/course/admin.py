@@ -11,30 +11,29 @@ class AllCoursesAdmin(admin.ModelAdmin):
     search_fields = ('courseName',)
     list_filter = ('type',)
 
-
-# class CourseAdminForm(forms.ModelForm):
-#     class Meta:
-#         model = Course
-#         fields = '__all__'
-    
-#     course = forms.ModelChoiceField(
-#         queryset=AllCourses.objects.all(),
-#         to_field_name='courseName',
-#         label='Course Name'
-#     )
-    
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.fields['course'].label_from_instance = self.get_course_label
-
-#     def get_course_label(self, obj):
-#         return obj.courseName
-
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('c_id', 'course', 'teacherName', 'isExperimental', 'capacity', 'registered')
+    list_display = ('c_id', 'course', 'teacherName', 'display_class_time1', 'display_class_time2', 
+                    'display_class_start_time', 'display_class_end_time', 'isExperimental', 'capacity', 'registered')
+    
     search_fields = ('course__courseName', 'teacherName')
     list_filter = ('isExperimental', 'class_time1', 'class_time2')
+    
+    def display_class_time1(self, obj):
+        return obj.class_time1
+    display_class_time1.short_description = 'Class Time 1'
+    
+    def display_class_time2(self, obj):
+        return obj.class_time2
+    display_class_time2.short_description = 'Class Time 2'
+    
+    def display_class_start_time(self, obj):
+        return obj.class_start_time
+    display_class_start_time.short_description = 'Class Start Time'
+    
+    def display_class_end_time(self, obj):
+        return obj.class_end_time
+    display_class_end_time.short_description = 'Class End Time'
 
 
 @admin.register(Prereq)
