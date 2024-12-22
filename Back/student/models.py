@@ -8,7 +8,7 @@ import uuid
 
 class CompletedCourses(models.Model):
     complete_course_id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'type': 'student'})
     course = models.ForeignKey(AllCourses, on_delete=models.CASCADE)
     
     class Meta:
