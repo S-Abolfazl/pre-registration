@@ -28,6 +28,7 @@ export default {
   plugins: [
     '~/plugins/axios',
     '~/plugins/helper',
+    '~/plugins/apexcharts.js',
     { src: '~/plugins/other.js', ssr: false },
     { src: '~/plugins/vue-persian-datetime-picker', ssr: false },
   ],
@@ -115,6 +116,7 @@ export default {
     extend(config, ctx) {
       config.resolve.alias['vue'] = 'vue/dist/vue.common';
     },
+    transpile: ['vue-apexcharts', 'apexcharts'],
   },
   css: [
     '@mdi/font/css/materialdesignicons.css'
