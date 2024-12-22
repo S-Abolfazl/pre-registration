@@ -1,11 +1,12 @@
 <template>
-  <v-container>
+  <div class="mx-0 mb-5 w-max2">
     <!--
-    6 : شنبه
-    0 : یکشنبه
-    1 : دوشنبه
-    2 : سه شنبه
-    3 : چهارشنبه
+      6 : شنبه
+      0 : یکشنبه
+      1 : دوشنبه
+      2 : سه شنبه
+      3 : چهارشنبه
+      4 : پنج‌شنبه
     -->
 
     <v-calendar
@@ -13,22 +14,25 @@
       type="week"
       start="2024-12-3"
       :events="events"
-      :weekdays="[6, 0, 1, 2, 3]"
+      :weekdays="[6, 0, 1, 2, 3, 4]"
       :event-color="getEventColor"
       locale="fa"
-      :first-interval="6"
+      :first-interval="7"
       :interval-count="14"
       :interval-minutes="60"
-      interval-height="45"
+      interval-height="60"
       show-interval-label
-      :color="getEventColor"
       :interval-format="formatInterval"
-      category-show-all
+      @click:event="select"
     >
       <template #event="{ event }">
-        <v-tooltip bottom color="orange1">
+        <v-tooltip bottom>
           <template #activator="{ on, attrs }">
-            <div v-bind="attrs" v-on="on" class="custom-event">
+            <div
+              v-bind="attrs"
+              v-on="on"
+              :class="['custom-event', event.selected ? '' : 'primary--text']"
+            >
               {{ event.name }}
               <br>
               <div class="d-flex justify-end ml-2">
@@ -38,7 +42,7 @@
               </div>
             </div>
           </template>
-          <div>
+          <div >
             تاریخ امتحان :
             <span dir="ltr">
               {{ event.exam_date ? `  ${event.exam_start_time} - ${event.exam_end_time} , ${event.exam_date}` : "" }}
@@ -53,33 +57,36 @@
       </template>
 
     </v-calendar>
-  </v-container>
+  </div>
 </template>
 
 <script>
 
 export default {
+  props: {
+    Datas: {
+      type: Array,
+      default: () => [],
+      required: true,
+    }
+  },
   data() {
     return {
-      events: [
-      {
-        name: "یادگیری ماشین",
-        start: "2024-12-3 07:30",
-        end: "2024-12-3 09:00",
-        exam_date: "1403-10-24",
-        exam_start_time: "09:00",
-        exam_end_time: "12:00",
-        teacherName: "حامد ملک",
-        selected: false,
-      },
-      {
-        name: "Workout",
-        start: "2024-12-21 18:00",
-        end: "2024-12-21 19:00",
-        selected: false,
-      },
-      ],
+      events: [],
     };
+  },
+  watch: {
+    'Datas': {
+      deep: true,
+      handler(newValue) {
+        if (newValue.length > 0){
+          this.events = this.Datas.slice(0, 50);
+          // console.log(this.events);
+
+          // this.events = [this.Datas[9]];
+        }
+      },
+    },
   },
   methods: {
     formatInterval(interval) {
@@ -88,13 +95,28 @@ export default {
       return `${hours}:${minutes}`;
     },
     getEventColor(event) {
-      return event.color || "primary";
+      if (event.selected)
+        return "primary";
+      return "white1";
+    },
+    select(data) {
+      console.log(data.event);
+
+      data.event.selected = !data.event.selected;
     },
   },
 };
 </script>
 <style scoped>
 .custom-event{
+  border-radius: 4px;
   padding: 9px 14px 0px 9px !important;
+  height: 100%;
+  border: 2px solid #7B5FF1 !important;
+  overflow: hidden;
+}
+.w-max2 {
+  width: 100%;
+  overflow-x: scroll;
 }
 </style>

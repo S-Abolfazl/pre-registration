@@ -1,6 +1,5 @@
 <template>
-  <div class="w-max">
-
+  <div>
     <!-- First row bar -->
     <v-row no-gutters class="px-5 mt-12 mb-6">
       <BaseButton
@@ -36,26 +35,16 @@
       />
 
       <!-- notif icon -->
-      <div class="ml-7 mr-11">
+      <!-- <div class="ml-7 mr-11">
         <v-icon class="font_45" @click="notif()" title="اطلاعات">
           mdi-alert-circle-outline
         </v-icon>
-      </div>
+      </div> -->
     </v-row>
 
-    <v-row no-gutters class="pl-10">
-      <TimeTable />
+    <v-row no-gutters class="w-max">
+      <TimeTable :Datas="main_data" />
     </v-row>
-
-    <v-dialog
-      v-model="dialog"
-      width="70%"
-    >
-      <v-card width="100%" height="100%">
-        داده الکی
-      </v-card>
-  </v-dialog>
-
   </div>
 </template>
 
@@ -69,23 +58,60 @@ export default {
   },
   components: { TimeTable },
   data: () => ({
-    dialog: false,
     search_data: '',
+    main_data: [],
   }),
-  mounted() {
-    // API call for get courses
-
+  beforeMount() {
+    this.getDatas();
   },
   methods: {
-    register() {
-      console.log('رجیستر');
+    register() {},
+    filter() {},
+    getDatas() {
+      this.$reqApi('/registration-form/courses-data/', {}, {}, true, 'get')
+      .then((response) => {
+          response.forEach(course => {
+            this.main_data.push({
+              ...course,
+              name: course.course.courseName,
+              start: `${this.getDate(course.class_time1)} ${String(course.class_start_time)}`,
+              end: `${this.getDate(course.class_time1)} ${String(course.class_end_time)}`,
+              selected: false,
+            });
+
+            if (course.class_time1 != course.class_time2) {
+              this.main_data.push({
+              ...course,
+              name: course.course.courseName,
+              start: `${this.getDate(course.class_time2)} ${String(course.class_start_time)}`,
+              end: `${this.getDate(course.class_time2)} ${String(course.class_end_time)}`,
+              selected: false,
+            });
+            }
+          });
+        })
+      .catch((error) => {
+        this.$toast.error(error);
+      });
     },
-    filter() {
-      console.log('filter');
-    },
-    notif() {
-      this.dialog = true;
-    },
+    getDate(data) {
+      switch (data) {
+        case 'شنبه':
+          return '2024-11-30';
+        case 'یک‌شنبه':
+          return '2024-12-1';
+        case 'دوشنبه':
+          return '2024-12-2';
+        case 'سه‌شنبه':
+          return '2024-12-3';
+        case 'چهارشنبه':
+          return '2024-12-4';
+        case 'پنج‌شنبه':
+          return '2024-12-5';
+      }
+    }
   }
 };
 </script>
+<style scoped>
+</style>
