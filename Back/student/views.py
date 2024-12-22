@@ -43,7 +43,7 @@ class EducationalChartCreateApi(APIView):
         )
             
 class EducationalChartGetApi(APIView):
-    permission_classes = [IsStudent]
+    permission_classes = [IsStudent, IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="Educational Chart Get",
@@ -57,16 +57,28 @@ class EducationalChartGetApi(APIView):
                 type = 'even'
             else:
                 type = 'odd'
-            chart = EducationalChart.objects.get(year=year, type=type)
+            try:
+                chart = EducationalChart.objects.get(year=year, type=type)
+            except:
+                return Response(
+                    data={
+                        "msg": "error",
+                        "data": f"چارت درسی مورد نظر یافت نشد",
+                        "status":status.HTTP_404_NOT_FOUND
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
             serializer = EducationalChartSerializer(chart)
             data = {}
+            data['terms'] = {}
+            term = 1
             course_name = None
             for key, value in serializer.data.items():
                 if key == "units" or key == "year" or key == "type" or key == "chart_id":
                     data[key] = value
                     continue            
                 try:
-                    data[key] = [
+                    data['terms'][term] = [
                         {
                             "courseName": course_name,
                             "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
@@ -76,6 +88,8 @@ class EducationalChartGetApi(APIView):
                         }
                         for course_name in value
                     ]
+                    
+                    term += 1
                 except Exception as e:
                     print(f"Error processing courses in key {key}: {e}")
                     
