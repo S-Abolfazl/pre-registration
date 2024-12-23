@@ -11,7 +11,7 @@ from social_django.utils import load_strategy
 from social_core.backends.google import GoogleOAuth2
 
 from .models import User
-from .serializers import UserSerializer, UserDetailSerializer
+from .serializers import UserSerializer, UserDetailSerializer, UserUpdateSerializer
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -201,11 +201,14 @@ class UserUpdateApi(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
+               # 'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
                 'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
                 'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
-                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type')
+                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='first_name'),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='last_name'),
+                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='mobile_number')
             }
         )
     )
@@ -213,7 +216,7 @@ class UserUpdateApi(APIView):
     def put(self, request, pk):
         try:
             user = User.objects.get(id=pk)
-            serializer = UserSerializer(user, data=request.data)
+            serializer = UserUpdateSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
@@ -248,11 +251,14 @@ class UserUpdateApi(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
+              #  'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
                 'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
                 'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
-                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type')
+                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='first_name'),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='last_name'),
+                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='mobile_number')
             }
         )
     )
@@ -260,7 +266,7 @@ class UserUpdateApi(APIView):
     def patch(self, request, pk):
         try:
             user = User.objects.get(id=pk)
-            serializer = UserSerializer(user, data=request.data, partial=True)
+            serializer = UserUpdateSerializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={

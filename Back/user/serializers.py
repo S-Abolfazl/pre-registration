@@ -106,7 +106,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 
 
-class UserSerializert(serializers.ModelSerializer):
+class UserUpdateSerializer(serializers.ModelSerializer):
 
     default_error_messages = {
         'username_required': 'نام کاربری نمی‌تواند خالی باشد.',
@@ -165,6 +165,8 @@ class UserSerializert(serializers.ModelSerializer):
         first_name = validated_data.get('first_naame', None)
         last_name = validated_data.get('last_name', None)
         mobile_number = validated_data.get('mobile_number', None)
+        avatar_upload = validated_data.pop('avatar_upload', None)
+
         user = super().create(validated_data)
         
         if password:
@@ -193,6 +195,7 @@ class UserSerializert(serializers.ModelSerializer):
         first_name = validated_data.get('first_name', None)
         last_name = validated_data.get('last_name', None)
         mobile_number = validated_data.get('mobile_number', None)
+        avatar_upload = validated_data.pop('avatar_upload', None)
         user = super().update(instance, validated_data)
         
         if password:
