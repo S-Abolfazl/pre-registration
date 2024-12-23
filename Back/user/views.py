@@ -52,27 +52,33 @@ class UserSignupApi(APIView):
 
 class UserListApi(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
-    def get(self, request, pk=None):
-        try:
-            if pk:
-                user = User.objects.get(id=pk)
-                serializer = UserDetailSerializer(user)
-            else:
-                users = User.objects.all()
-                serializer = UserDetailSerializer(users, many=True)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
-        except User.DoesNotExist as e:
-            return Response(data={
-                "msg":"error",
-                "data":"user not found",
-                "status": status.HTTP_404_NOT_FOUND
-            }, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response(data={
-                "msg":"error",
-                "data":str(e),
-                "status": status.HTTP_400_BAD_REQUEST
-            }, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(
+        operation_summary="User List",
+        operation_description="Endpoint to retrieve all users.",
+    )
+    
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserDetailSerializer(users, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+    
+class UserDetailApi(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+    
+    @swagger_auto_schema(
+        operation_summary="User Detail",
+        operation_description="Endpoint to retrieve a user by id.",
+    )
+    
+    def get(self, request):
+        user = request.user
+        serializer = UserDetailSerializer(user)
+        return Response(data={
+                "msg": "ok",
+                "data": serializer.data,
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
 
 class UserLoginApi(APIView):
     permission_classes = [AllowAny]
@@ -214,9 +220,9 @@ class UserUpdateApi(APIView):
             },
         )
     )
-    def patch(self, request, pk):
+    def patch(self, request):
         try:
-            user = User.objects.get(id=pk)
+            user = request.user
             serializer = UserUpdateSerializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
