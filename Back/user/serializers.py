@@ -1,3 +1,4 @@
+import base64
 from rest_framework import serializers
 import re
 from .models import User
@@ -119,7 +120,7 @@ class UserSerializert(serializers.ModelSerializer):
     }
     class Meta:
         model = User
-        fields = ['username', 'password', 'email', 'type', 'first_name', 'last_name',',mobile_number']
+        fields = ['username', 'password', 'email', 'type', 'first_name', 'last_name',',mobile_number','avatar','avatar_upload']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -147,7 +148,16 @@ class UserSerializert(serializers.ModelSerializer):
         self.fields['mobile-number'].error_messages.update({
             'invalid': self.default_error_messages['mobile_number_required']
         })
-        
+    def get_avatar(self, obj):
+        # نمایش آواتار به صورت Base64
+        if obj.avatar:
+            return base64.b64encode(obj.avatar).decode('utf-8')
+        return None
+
+    def validate_avatar_upload(self, value):
+        if value.size > 5 * 1024 * 1024:  # محدودیت حجم به 5MB
+            raise serializers.ValidationError("حجم فایل نباید بیشتر از ۵ مگابایت باشد.")
+        return value
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         user_type = validated_data.get('type', None)
@@ -165,6 +175,12 @@ class UserSerializert(serializers.ModelSerializer):
         elif user_type == 'admin':
             user.is_staff = True
             user.is_superuser = True
+        if avatar_upload:
+            user.avatar = avatar_upload.read()
+
+        user.first_name = first_name
+        user.last_name = last_name
+        user.mobile_number = mobile_number
         
         user.is_active = True
         user.save()
@@ -174,6 +190,9 @@ class UserSerializert(serializers.ModelSerializer):
         password = validated_data.pop('password', None)
         user_type = validated_data.get('type', None)
         username = validated_data.get('username', None)
+        first_name = validated_data.get('first_name', None)
+        last_name = validated_data.get('last_name', None)
+        mobile_number = validated_data.get('mobile_number', None)
         user = super().update(instance, validated_data)
         
         if password:
@@ -181,6 +200,17 @@ class UserSerializert(serializers.ModelSerializer):
         
         if user_type == 'student':
             user.entry_year = int(username[:3])
+
+        if avatar_upload:
+            user.avatar = avatar_upload.read()
+        if first_name:
+            user.first_name = first_name
+
+        if last_name:
+            user.last_name = last_name
+
+        if mobile_number:
+            user.mobile_number = mobile_number
         
         user.save()
         return user
@@ -238,7 +268,7 @@ class UserSerializert(serializers.ModelSerializer):
         
         return value
     
-class UserDetailSerializer(serializers.ModelSerializer):
+class UserDetailSerializert(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'

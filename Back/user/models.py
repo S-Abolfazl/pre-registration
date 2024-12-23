@@ -20,6 +20,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     mobile_number = models.CharField(max_length=12, null = True)
+    avatar = models.BinaryField(null = True, blank = True)
     
     class Meta:
         db_table = "User"
