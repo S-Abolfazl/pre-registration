@@ -175,6 +175,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             user.entry_year = int(username[:3])
 
         if avatar_upload:
+            if user.avatar:
+                old_avatar_path = user.avatar.path
+                if os.path.exists(old_avatar_path):
+                    os.remove(old_avatar_path)
+                    
             ext = os.path.splitext(avatar_upload.name)[1]
             new_filename = f"{user.id}{ext}"
             user.avatar.save(new_filename, ContentFile(avatar_upload.read()), save=False)

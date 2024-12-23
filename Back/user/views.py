@@ -12,9 +12,7 @@ from social_core.backends.google import GoogleOAuth2
 
 from .models import User
 from .serializers import UserSerializer, UserDetailSerializer, UserUpdateSerializer
-
-from django.views.decorators.csrf import csrf_exempt
-
+from user.permissions import IsStudent
 class UserSignupApi(APIView):
     permission_classes = [AllowAny]
     
@@ -193,7 +191,7 @@ class UserDeleteApi(APIView):
 
 
 class UserUpdateApi(APIView):
-    permission_classes = [IsAdminUser, IsAuthenticated]
+    permission_classes = [IsStudent, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="User Patch",
