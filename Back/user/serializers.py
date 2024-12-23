@@ -1,7 +1,8 @@
-import base64
 from rest_framework import serializers
 import re
 from .models import User
+import os
+from django.core.files.base import ContentFile
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -174,8 +175,10 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             user.entry_year = int(username[:3])
 
         if avatar_upload:
-            user.avatar = avatar_upload
-
+            ext = os.path.splitext(avatar_upload.name)[1]
+            new_filename = f"{user.id}{ext}"
+            user.avatar.save(new_filename, ContentFile(avatar_upload.read()), save=False)
+                
         if first_name:
             user.first_name = first_name
 
