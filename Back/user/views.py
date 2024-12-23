@@ -193,76 +193,29 @@ class UserDeleteApi(APIView):
 
 
 class UserUpdateApi(APIView):
-    permission_classes = [AllowAny, IsAdminUser]
-    
-    @swagger_auto_schema(
-        operation_summary="User Update",
-        operation_description="Endpoint to update a user by id.",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-               # 'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
-                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
-                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
-                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
-                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='first_name'),
-                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='last_name'),
-                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='mobile_number')
-            }
-        )
-    )
-    
-    def put(self, request, pk):
-        try:
-            user = User.objects.get(id=pk)
-            serializer = UserUpdateSerializer(user, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(data={
-                    "msg":"ok",
-                    "data":f'user by id:{user.id} updated',
-                    "status": status.HTTP_200_OK
-                }, status=status.HTTP_200_OK)
-            return Response(
-                data={
-                    "msg":"error",
-                    "data": serializer.errors,
-                    "status": status.HTTP_400_BAD_REQUEST
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        except User.DoesNotExist:
-            return Response(data={
-                "msg":"error",
-                "data":"user not found",
-                "status": status.HTTP_404_NOT_FOUND
-            }, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response(data={
-                "msg":"error",
-                "data":str(e),
-                "status": status.HTTP_400_BAD_REQUEST
-            }, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [IsAdminUser, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="User Patch",
-        operation_description="Endpoint to partially update a user by id.",
+        operation_description="Endpoint to partially update a user by id, including uploading an avatar.",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-              #  'id': openapi.Schema(type=openapi.TYPE_STRING, description='User ID'),
                 'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
                 'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
                 'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
                 'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
-                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='first_name'),
-                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='last_name'),
-                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='mobile_number')
-            }
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='First name'),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Last name'),
+                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='Mobile number'),
+                'avatar': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format="binary",
+                    description="Upload an avatar image"
+                )
+            },
         )
     )
-    
     def patch(self, request, pk):
         try:
             user = User.objects.get(id=pk)
@@ -270,13 +223,13 @@ class UserUpdateApi(APIView):
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
-                    "msg":"ok",
-                    "data":f'user by id:{user.id} updated',
+                    "msg": "ok",
+                    "data": f'user by id:{user.id} updated',
                     "status": status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
                 data={
-                    "msg":"error",
+                    "msg": "error",
                     "data": serializer.errors,
                     "status": status.HTTP_400_BAD_REQUEST
                 },
@@ -284,16 +237,17 @@ class UserUpdateApi(APIView):
             )
         except User.DoesNotExist:
             return Response(data={
-                "msg":"error",
-                "data":"user not found",
+                "msg": "error",
+                "data": "user not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response(data={
-                "msg":"error",
-                "data":str(e),
+                "msg": "error",
+                "data": str(e),
                 "status": status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
+
             
             
 class UserResetPasswordApi(APIView):

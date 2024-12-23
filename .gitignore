@@ -10,3 +10,4 @@ __pycache__/
 **/migrations/*.py
 Back/static
 Back/staticfiles
+Back/media

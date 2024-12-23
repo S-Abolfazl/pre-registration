@@ -17,10 +17,10 @@ class User(AbstractUser):
     email = models.EmailField()
     type = models.CharField(max_length=30, choices=USER_TYPE)
     entry_year = models.IntegerField(null=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, null=True)
+    last_name = models.CharField(max_length=255, null=True)
     mobile_number = models.CharField(max_length=12, null = True)
-    avatar = models.BinaryField(null = True, blank = True)
+    avatar = models.ImageField(upload_to='avatars/', null=True)
     
     class Meta:
         db_table = "User"
