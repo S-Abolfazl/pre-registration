@@ -6,7 +6,8 @@ from course.models import Course
 
 class RegistrationForm(models.Model):
     form_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-    student_id = models.OneToOneField(User, related_name='registration_form_student', on_delete=models.SET_NULL,
+    student_id = models.OneToOneField(User, related_name='registration_form_student', limit_choices_to={'type': 'student'} 
+                                      , on_delete=models.SET_NULL,
                                       null=True,
                                       unique=True)
     creationDateTime = models.DateTimeField(auto_now_add=True)

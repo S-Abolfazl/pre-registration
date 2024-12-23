@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 import uuid
 
 class Course(models.Model):
@@ -31,7 +32,7 @@ class Course(models.Model):
             db_table = "Course"
 
     def __str__(self) :
-        return self.course
+        return f"{self.c_id}"
 
 class AllCourses(models.Model):
     CourseType = {
@@ -51,7 +52,7 @@ class AllCourses(models.Model):
         db_table = "AllCourses"
         
     def __str__(self) :
-        return str(self.course_id)
+        return str(self.courseName)
     
 class Prereq(models.Model):
     course = models.ForeignKey(AllCourses, on_delete=models.CASCADE, related_name="prereqs_for")
@@ -60,6 +61,10 @@ class Prereq(models.Model):
     class Meta:
       db_table = "Prereq"
       unique_together = (('course', 'prereq_course'),)
+      
+    def clean(self):
+        if self.course == self.prereq_course:
+            raise ValidationError("درس و درس پیشنیاز نمی‌توانند یکسان باشند")
 
     def __str__(self) :
       return f"{self.course.course_id} - {self.prereq_course.course_id}"
@@ -71,34 +76,28 @@ class Coreq(models.Model):
     class Meta:
       db_table = "Coreq"
       unique_together = (('course', 'coreq_course'),)
+      
+    def clean(self):
+        if self.course == self.coreq_course:
+            raise ValidationError("درس و درس هم‌نیاز نمی‌توانند یکسان باشند")
 
     def __str__(self) :
       return f"{self.course.course_id} - {self.coreq_course.course_id}"
-
-class Rule(models.Model):
-    type = {
+      
+class CourseRule(models.Model):
+    typeChoice = {
       ('entry_rule', 'entry_rule'),
     }
     rule_id = models.UUIDField(default=uuid.uuid4, primary_key=True,unique=True)
-    type = models.CharField(max_length=30, choices=type)
-    values = models.CharField(max_length=255)
-    
-    class Meta:
-        db_table = "Rule"
-
-    def __str__(self) :
-        return self.rule_id
-      
-class CourseRule(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    rule = models.ForeignKey(Rule, on_delete=models.CASCADE)
+    type = models.CharField(max_length=30, choices=typeChoice)
+    values = models.JSONField(default=list, blank=True)
 
     class Meta:
         db_table = "CourseRule"
-        unique_together = (('course', 'rule'),)
 
     def __str__(self) :
-        return f"{self.course.c_id} - {self.rule.rule_id}"
+        return f"{self.course.c_id}"
 
 
 
