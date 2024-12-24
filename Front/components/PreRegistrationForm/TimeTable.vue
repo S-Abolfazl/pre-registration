@@ -1,81 +1,92 @@
 <template>
-  <v-container>
+  <div class="mx-0 mb-5 w-max2">
     <!--
-    6 : شنبه
-    0 : یکشنبه
-    1 : دوشنبه
-    2 : سه شنبه
-    3 : چهارشنبه
+      6 : شنبه
+      0 : یکشنبه
+      1 : دوشنبه
+      2 : سه شنبه
+      3 : چهارشنبه
+      4 : پنج‌شنبه
     -->
 
     <v-calendar
       ref="calendar"
       type="week"
-      start="2024-12-3T10:00:00"
-      :weekdays="[6, 0, 1, 2, 3]"
-      :events="filterDates(courses[0])"
-      event-color="getEventColor"
+      start="2024-12-3"
+      :events="events"
+      :weekdays="[6, 0, 1, 2, 3, 4]"
+      :event-color="getEventColor"
       locale="fa"
-      :first-interval="6"
+      :first-interval="7"
       :interval-count="14"
       :interval-minutes="60"
-      interval-height="50"
+      interval-height="60"
       show-interval-label
-      color="primary"
       :interval-format="formatInterval"
+      @click:event="select"
     >
       <template #event="{ event }">
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
-            <div v-bind="attrs" v-on="on" class="custom-event">
-              {{ event.course.courseName }}
+            <div
+              v-bind="attrs"
+              v-on="on"
+              :class="['custom-event', event.selected ? '' : 'primary--text']"
+            >
+              {{ event.name }}
               <br>
               <div class="d-flex justify-end ml-2">
-                {{ event.class_start_time.substr(event.class_start_time.length - 5, event.class_start_time.length) }}
-                -
-                {{ event.class_end_time.substr(event.class_end_time.length - 5, event.class_end_time.length) }}
+                {{ event.end.slice(event.end.length  - 5, event.end.length) }}
+                  -
+                {{ event.start.slice(event.start.length - 5, event.start.length) }}
               </div>
             </div>
           </template>
-          <div>
-            {{ event.course.courseName }}
+          <div >
+            تاریخ امتحان :
+            <span dir="ltr">
+              {{ event.exam_date ? `  ${event.exam_start_time} - ${event.exam_end_time} , ${event.exam_date}` : "" }}
+            </span>
+            <br>
+            <span>
+              نام استاد :
+              {{ event.teacherName }}
+            </span>
           </div>
         </v-tooltip>
       </template>
+
     </v-calendar>
-  </v-container>
+  </div>
 </template>
 
 <script>
 
 export default {
+  props: {
+    Datas: {
+      type: Array,
+      default: () => [],
+      required: true,
+    }
+  },
   data() {
     return {
-      courses: [
-        {
-          "c_id": "accb296d-13d4-4689-9f6c-488e5360c063",
-          "teacherName": "احمدزاده راجی مهرداد",
-          "isExperimental": false,
-          "class_time1": "چهارشنبه",
-          "class_time2": "چهارشنبه",
-          "class_start_time": "15:00",
-          "class_end_time": "17:00",
-          "exam_date": null,
-          "exam_start_time": null,
-          "exam_end_time": null,
-          "capacity": 48,
-          "registered": 0,
-          "description": null,
-          "course": {
-            "course_id": "ab7390cd-28cd-49c1-92e3-08b831efd251",
-            "courseName": "آزمایشگاه سیستم های عامل",
-            "unit": 1,
-            "type": "practical_course"
-          },
-          "selected": false
-        },
-      ],
+      events: [],
     };
+  },
+  watch: {
+    'Datas': {
+      deep: true,
+      handler(newValue) {
+        if (newValue.length > 0){
+          this.events = this.Datas.slice(0, 50);
+          // console.log(this.events);
+
+          // this.events = [this.Datas[9]];
+        }
+      },
+    },
   },
   methods: {
     formatInterval(interval) {
@@ -84,41 +95,28 @@ export default {
       return `${hours}:${minutes}`;
     },
     getEventColor(event) {
-      return event.color || "primary";
+      if (event.selected)
+        return "primary";
+      return "white1";
     },
-    filterDates(data) {
-      switch (data.class_time1) {
-        case "شنبه":
-          data.class_start_time = `2024-11-30T${data.class_start_time}`;
-          data.class_end_time = `2024-11-30T${data.class_end_time}`;
-          break;
-        case "یک‌شنبه":
-          data.class_start_time = `2024-12-01T${data.class_start_time}`;
-          data.class_end_time = `2024-12-01T${data.class_end_time}`;
-          break;
-        case "دوشنبه":
-          data.class_start_time = `2024-12-02T${data.class_start_time}`;
-          data.class_end_time = `2024-12-02T${data.class_end_time}`;
-          break;
-        case "سه‌شنبه":
-          data.class_start_time = `2024-12-03T${data.class_start_time}`;
-          data.class_end_time = `2024-12-03T${data.class_end_time}`;
-          break;
-        case "چهارشنبه":
-          data.class_start_time = `2024-12-04T${data.class_start_time}`;
-          data.class_end_time = `2024-12-04T${data.class_end_time}`;
-          break;
-        default:
-          break;
-      }
-      console.log(data);
-      return data
+    select(data) {
+      console.log(data.event);
+
+      data.event.selected = !data.event.selected;
     },
   },
 };
 </script>
 <style scoped>
 .custom-event{
-  padding: 4px 8px 0 0 !important;
+  border-radius: 4px;
+  padding: 9px 14px 0px 9px !important;
+  height: 100%;
+  border: 2px solid #7B5FF1 !important;
+  overflow: hidden;
+}
+.w-max2 {
+  width: 100%;
+  overflow-x: scroll;
 }
 </style>

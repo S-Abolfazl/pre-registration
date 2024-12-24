@@ -3,8 +3,8 @@ const error_message = 'پاسخی از سمت سرور دریافت نشد'
 export default async ({ $axios, $toast, store }, inject) => {
   $axios.defaults.baseURL = store.state.server_url
   $axios.onRequest((config) => {
-    if (store.state.auth.token) {
-        config.headers.common['Authorization'] = 'Bearer ' + store.state.auth.token
+    if (Boolean(localStorage.getItem('token'))) {
+        config.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
     }
   })
 

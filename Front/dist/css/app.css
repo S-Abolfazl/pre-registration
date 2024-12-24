@@ -232,3 +232,7 @@ tr {
 .v-text-field .v-input__prepend-inner .v-text-field .v-input__append-inner {
   margin: 0 0 0 -7px !important;
 }
+
+.v-calendar-daily {
+  width: 210% !important;
+}

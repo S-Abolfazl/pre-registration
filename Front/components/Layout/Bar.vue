@@ -20,8 +20,8 @@
       <template v-slot:activator="{ on }">
       <v-avatar color="primary" class="pointer" @click="toggleMenu()">
         <img
-          v-if="user?.avatar"
-          :src="user?.avatar"
+          v-if="user.avatar"
+          :src="user.avatar"
           alt="user"
         >
         <v-icon v-else dark class="font_35">
@@ -34,7 +34,7 @@
 
       <div class="mr-2">
         <v-row no-gutters>
-          <b class="font_20">{{ user?.name ? user.name : "-" }}</b>
+          <b class="font_20">{{ user.first_name }} {{ user.last_name }}</b>
         </v-row>
         <v-row no-gutters>
           <span class="font_20">{{ getRole(user.type) }}</span>
@@ -87,14 +87,22 @@ export default {
   },
   data: () => ({
     menuVisible: false,
-    user: {},
+    user: {
+      first_name: "",
+      last_name: "",
+      avatar: "",
+      name: "",
+      type: "",
+    },
   }),
   mounted(){
-    this.user = this.$store.state.auth.user;
+    if (Boolean(localStorage.getItem('user'))){
+      this.user = JSON.parse(localStorage.getItem('user'));
+    }
   },
   methods: {
     navigateToPreRegistration() {
-      this.$router.push('/pre-registration'); // Adjust the route path as needed
+      this.$router.push('/pre-registration-form'); // Adjust the route path as needed
     },
     navigateToFeedback() {
       this.$router.push('/feedback');
