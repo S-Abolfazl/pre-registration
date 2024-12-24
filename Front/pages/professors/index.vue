@@ -7,7 +7,7 @@
   <script>
   import ProfessorsForm from "~/components/Professors/ProfessorsForm.vue";
   export default {
-    layout: 'site',
+    layout: 'default',
     head() {
       return {
         title: 'اساتيد بهشتي',

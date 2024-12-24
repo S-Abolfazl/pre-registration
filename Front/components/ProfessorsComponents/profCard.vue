@@ -13,50 +13,74 @@
       </div>
 
       <div class="footer">
-      <div>
-        <v-row >
-            <v-col cols="4">
+        <div>
+    <v-row>
+        <v-col cols="2">
             <v-icon color="white" style="-webkit-text-stroke: 2px black;" size="x-large">
                 mdi-star
             </v-icon>
         </v-col>
-        <v-col cols="8">
-            <p class="font-15 " style="font-weight: bold; ">نمره استاد</p>
+        <v-col cols="8" class="mx-3">
+            <p class="font-15" style="font-weight: bold;">نمره استاد</p>
         </v-col>
-        </v-row>
-        <v-row class="mx-2">
+    </v-row>
+    <!-- Adjust spacing between rows -->
+    <v-row class="mx-2" style="margin-top: -8px;"> <!-- Adjust -8px as needed -->
         <v-icon
-              v-for="n in 5"
-              :key="n"
-              :style="n <= rating ?  filledStyle: unfilledStyle"
-              size="medium"
-            >
-              mdi-star
-            </v-icon> 
-        </v-row> 
-        </div>
+            v-for="n in 5"
+            :key="n"
+            :style="n <= rating ?  filledStyle : unfilledStyle"
+            size="medium"
+        >
+            mdi-star
+        </v-icon>
+    </v-row>
+</div>
+
       <div>
         <v-row  >
-            <v-col cols="4">
+            <v-col cols="2">
             <v-icon color="white" style="-webkit-text-stroke: 2px black;" size="x-large">
                 mdi-school
             </v-icon>
         </v-col>
-        <v-col cols="8">
+        <v-col cols="8" style="margin-right: -30px;">
             <p class="font-15 " style="font-weight: bold;">تحصيلات</p>
         </v-col>
         </v-row>
-        <v-row>
-        <p class="font-10"> {{ degree }}, {{ degreeDiscreption }}</p>
+        <v-row >
+          <v-col cols="8" class="mx-2 grey--text" style="margin-top: -30px;">
+            <p class="font-10"> {{ degree }}: {{ degreeDiscreption }}</p>
+          </v-col>
     </v-row>
       </div>
       
       
-        <div class="contact">
-          <p>تماس:</p>
-          <p>{{ phone }}</p>
-          <p>{{ email }}</p>
-        </div>
+      <div>
+        <v-row  >
+            <v-col cols="2">
+            <v-icon color="white" style="-webkit-text-stroke: 2px black;" size="x-large">
+                mdi-phone
+            </v-icon>
+        </v-col>
+        <v-col cols="8" style="margin-right: -30px;">
+            <p class="font-15 " style="font-weight: bold;">تماس</p>
+        </v-col>
+        </v-row>
+        <v-row >
+          <v-col cols="12" class="mx-2 grey--text" style="margin-top: -30px;">
+            <v-row>
+              <p class="font-10">شماره تماس</p>
+              <p class="font-10"> {{ phone }}</p>
+            </v-row>
+            <v-row  style="margin-top: -15px;">
+              <p class="font-10">رايانامه </p>
+              <p class="font-10">{{ email }} </p>
+
+            </v-row>
+          </v-col>
+    </v-row>
+      </div>
         
       </div>
     </div>
