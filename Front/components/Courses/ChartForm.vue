@@ -13,7 +13,7 @@
 
   <!-- Chart Select -->
   <v-col  cols="3" class="align-left">
-    <ChartSelect width="80%" height="40px" />
+    <ChartSelect width="80%" height="40px" @select="getData" />
   </v-col>
 </v-row>
 
@@ -157,15 +157,20 @@ export default {
     sumCourseNumbers(courses) {
       return courses.reduce((sum, course) => sum + (course.number || 0), 0);
     },
-    getData() {
-      this.$reqApi("student/chart/get/", {}, {}, true, 'get')
-      .then((response) => {
-        console.log("the response: ", response);
-        this.the_data = response;
-      })
-      .catch((error) => {
-        this.$toast.error(error);
-      })
+    getData(data) {
+      if (data == "odd") {
+        console.log(data);
+      }
+      else{
+        this.$reqApi("student/chart/", {}, {}, true, 'get')
+        .then((response) => {
+          console.log("the response: ", response);
+          this.the_data = response;
+        })
+        .catch((error) => {
+          this.$toast.error(error);
+        })
+      }
     },
   },
 }
@@ -183,4 +188,5 @@ export default {
     text-align: center;
     box-sizing: border-box; /* Prevent padding/margin issues */
     margin-left: 0.2rem;
-  }</style>
+  }
+</style>
