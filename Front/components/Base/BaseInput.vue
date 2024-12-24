@@ -44,7 +44,7 @@
           class="rounded-pill spec_margin"
           color="primary"
           width="20%"
-          :disabled="inp_value == ''"
+          :disabled="inp_value == '' || inp_value == null"
           @click="sabt()"
         />
       </template>
