@@ -57,3 +57,54 @@ class MasterCreateView(APIView):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+    
+   # class MasterListApi(APIView):
+    #    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+     #   @swagger_auto_schema(
+      #      operation_summary="Masters List",
+       #     operation_description="Endpoint to list all masters"
+        #)
+        #def get(self, request, pk = None):
+         #   try:
+          #      if pk:
+           #         master = master.objects.get(c_id = pk)
+            #        serializer = MasterSerializer(master)
+             #   else:
+              #      master = master.objects.all()
+               #     serializer = MasterSerializer(master,many = True)
+             #   return Response(data = serializer.data, status = status.HTTP_200_ok)
+            #except Master
+class MasteeDeleteApi(APIView):
+    permission_classes = [AllowAny, IsAdminUser]
+    @swagger_auto_schema(
+        operation_summary = "Master Delete",
+        operation_description = "Endpoint to delete a master by id.",
+        request_body = openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['id'],
+            properties={
+                'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Master ID')
+            }
+        )
+    )
+    def delete(self, request, pk):
+        try:
+            Master = Master.objects.get(id=pk)
+            Master.delete()
+            return Response(data={
+                "msg":"ok",
+                "data":f'master by id:{pk} deleted',
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
+        except Master.DoesNotExist:
+            return Response(data={
+                "msg":"error",
+                "data":"master not found",
+                "status": status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
