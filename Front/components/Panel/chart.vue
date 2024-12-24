@@ -27,7 +27,7 @@
       export default {
         methods: {
           goToChart() {
-            this.$router.push('/panel/Chart');
+            this.$router.push('/chart/chart');
           },
           imgWidth() {
             if (this.$vuetify.breakpoint.mdOnly){
