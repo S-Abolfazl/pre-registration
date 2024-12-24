@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import RegistrationForm, SelectedCourse
-from course.models import Course, AllCourses
+from course.models import Course, AllCourses, Prereq, Coreq
 from student.models import CompletedCourses
 from .serializers import RegistrationFormSerializer, RegisterationFormDetailSerializer
 from user.permissions import IsStudentOrAdmin, IsStudent
@@ -209,6 +209,11 @@ class RegistrationFormConfirmApi(APIView):
             student_id = request.user.id
             course_ids = request.data.get('course_ids', [])
             if not course_ids:
+                selected_courses = SelectedCourse.objects.filter(form__student_id=student_id).values_list('course', flat=True)
+                for c_id in selected_courses:
+                    course = Course.objects.get(c_id=c_id)
+                    course.registered -= 1
+                    course.save()
                 SelectedCourse.objects.filter(form__student_id=student_id).delete()
                 return Response(
                     data={
@@ -223,12 +228,33 @@ class RegistrationFormConfirmApi(APIView):
             before_selected_course = SelectedCourse.objects.filter(form=form).values_list('course', flat=True)
             
             for course_id in before_selected_course:
-                if course_id not in course_ids:
+                if str(course_id) not in course_ids:
                     SelectedCourse.objects.get(form=form, course_id=course_id).delete()
+                    course = Course.objects.get(c_id=course_id)
+                    course.registered -= 1
+                    course.save()
             
             for course_id in course_ids:
                 course = Course.objects.get(c_id=course_id)
-                SelectedCourse.objects.get_or_create(form=form, course=course)
+                base_course = course.course
+                prerequisites = Prereq.objects.filter(course=base_course)
+                prerequisites = prerequisites.values_list('prereq_course', flat=True)
+                completed_courses = CompletedCourses.objects.filter(student=student_id).values_list('course', flat=True)
+                if not all(prereq in completed_courses for prereq in prerequisites):
+                    return Response(
+                        data={
+                            'msg': 'error',
+                            'data': f"شما تمام پیشنیازهای درس {course.course.courseName} نگذرانده‌اید",
+                            "status": status.HTTP_400_BAD_REQUEST
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+               
+                if not SelectedCourse.objects.filter(form=form, course=course).exists(): 
+                    SelectedCourse.objects.create(form=form, course=course)
+                    course.registered += 1
+                    course.save()
+                
                 
             return Response(
                 data={
