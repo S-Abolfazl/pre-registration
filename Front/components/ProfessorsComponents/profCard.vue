@@ -1,5 +1,5 @@
 <template>
-    <div class="card" style="width: 100%;">
+    <div class="card" style="width:100%;">
         <div class="header white1--text">
             <img :src="profileImage" alt="Profile" class="profile-image" style="margin-left: 4%;"/>
             <div>
@@ -39,12 +39,12 @@
 
       <div>
         <v-row  >
-            <v-col cols="2">
+            <v-col cols="4">
             <v-icon color="white" style="-webkit-text-stroke: 2px black;" size="x-large">
                 mdi-school
             </v-icon>
         </v-col>
-        <v-col cols="8" style="margin-right: -30px;">
+        <v-col cols="8" style="margin-right: -10px;">
             <p class="font-15 " style="font-weight: bold;">تحصيلات</p>
         </v-col>
         </v-row>
@@ -58,7 +58,7 @@
       
       <div>
         <v-row  >
-            <v-col cols="2">
+            <v-col cols="4">
             <v-icon color="white" style="-webkit-text-stroke: 2px black;" size="x-large">
                 mdi-phone
             </v-icon>
@@ -68,7 +68,7 @@
         </v-col>
         </v-row>
         <v-row >
-          <v-col cols="12" class="mx-2 grey--text" style="margin-top: -30px;">
+          <v-col cols="12" class="mx-2 grey--text" style="margin-top: -20px;">
             <v-row>
               <p class="font-10">شماره تماس</p>
               <p class="font-10"> {{ phone }}</p>
