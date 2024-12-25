@@ -62,7 +62,7 @@ class EducationalChartGetApi(APIView):
             return Response(
                 data={
                     "msg": "error",
-                    "data": f"چارت درسی مورد نظر یافت نشد",
+                    "data": f"چارت درسی ای مربوط به ورودی شما یافت نشد",
                     "status":status.HTTP_404_NOT_FOUND
                 },
                 status=status.HTTP_404_NOT_FOUND
@@ -149,8 +149,8 @@ class AddCompletedCourseApi(APIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
         return Response(
-        {
-            "msg": "Courses added successfully.",
+       data={
+            "msg": "درس های انتخاب شده با موفقیت به لیست دروس گذارتده شده اضافه شدند",
             "added_courses": added_courses,
             "status": status.HTTP_200_OK,
         },
@@ -196,7 +196,14 @@ class CoursesForPassedCoursesApi(APIView):
                         ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first())
                     }  
                 except Exception as e:
-                    print(f"Error processing courses in key {key}: {e}")
+                    return Response(
+                        data={
+                            "msg": "error",
+                            "data": f"خطاای در پردازش درس ها رخ داده است",
+                            "status":status.HTTP_500_INTERNAL_SERVER_ERROR
+                        },
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
                 
             data["elective_course"] = {
                 num:{
@@ -212,7 +219,7 @@ class CoursesForPassedCoursesApi(APIView):
             return Response(
                 data={
                     "msg": "error",
-                    "data": f"EducationalChart not found",
+                    "data": f"چارت درسی ای مربوط به ورودی شما یافت نشد",
                     "status":status.HTTP_404_NOT_FOUND
                 },
                 status=status.HTTP_404_NOT_FOUND
