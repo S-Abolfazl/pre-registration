@@ -108,3 +108,65 @@ class MasteeDeleteApi(APIView):
                 "data":str(e),
                 "status": status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+class MasterUpdateApi(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    @swagger_auto_schema(
+        operation_summary="master Patch",
+        operation_description="Endpoint to partially update a master by id, including uploading an avatar.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'education': openapi.Schema(type=openapi.TYPE_STRING, description='education'),
+                'department': openapi.Schema(type=openapi.TYPE_STRING, description='department'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'description': openapi.Schema(type=openapi.TYPE_STRING, description='description'),
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='First name'),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Last name'),
+                'rate': openapi.Schema(type=openapi.TYPE_STRING, description='rate'),
+                'Master_type': openapi.Schema(type=openapi.TYPE_STRING, description='Master_type'),
+                'specialization': openapi.Schema(type=openapi.TYPE_STRING, description='specialization'),
+                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='Mobile number'),
+                'avatar': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format="binary",
+                    description="Upload an avatar image"
+                )
+            },
+        )
+    )
+    def patch(self, request):
+        try:
+            master = request.master
+            serializer = MasterSerializer(master, data = request.data, partial = True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data = {
+                    "msg": "ok",
+                    "data": f'master by id:{master.id} updated',
+                    "status": status.HTTP_200_OK
+                }, status=status.HTTP_200_OK)
+            return Response(
+                data={
+                    "msg": "error",
+                    "data": serializer.errors,
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Master.DoesNotExist:
+            return Response(data={
+                "msg": "error",
+                "data": "master not found",
+                "status": status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(data={
+                "msg": "error",
+                "data": str(e),
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
