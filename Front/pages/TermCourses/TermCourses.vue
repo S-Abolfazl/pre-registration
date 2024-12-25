@@ -3,21 +3,9 @@
     <v-col  class="my-4">
       
       <v-row class="align-center">
-        <v-col cols="12" md="6" class="d-flex align-center">
-          <span>
-            <b class="black1--text font_43">دروس ارائه شده در نیم سال اول </b>
-          </span>
-          <v-card class="year-card blue2 ml-4">
-            <v-row no-gutters>
-              <span class="title">
-                <b class="font_40 black1--text">1403-1404</b>
-              </span>
-              <span class="image-wrapper">
-                <img src="/image/panel/term_courses.png" alt="course" class="course-image" />
-              </span>
-            </v-row>
-          </v-card>
-        </v-col>
+        <h1 class="font_43 flex-end mt-6 black1--text"> تقویم آموزشی سال تحصیلی</h1>
+
+        <year_card class="font_24" text="1403-1404" ></year_card>
       </v-row>
 
       <v-row class="mt-4 justify-end ">
@@ -36,13 +24,14 @@
 <script>
 import Tabledata from '~/components/nextTerm_courses/Table.vue';
 import SearchBar from '~/components/nextTerm_courses/SearchBar.vue';
-// import { filter } from 'core-js/core/array';
+import year_card from '~/components/nextTerm_courses/year_card.vue';
+
 export default {
-  layouts:'Navigationbar',
 
   components: {
     Tabledata,
     SearchBar,
+    year_card,
   },
   data: () => ({
     searchQuery:'',
