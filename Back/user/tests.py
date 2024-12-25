@@ -82,14 +82,14 @@ class UserLoginApiTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data["msg"], "error")
-        self.assertEqual(response.data["data"], "Invalid username or password")
+        self.assertEqual(response.data["data"], "نام کاربری یا رمز عبور اشتباه است")
 
     def test_user_login_failure_missing_fields(self):
         response = self.client.post(self.login_url, data={}, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data["msg"], "error")
-        self.assertEqual(response.data["data"], "Invalid username or password")
+        self.assertEqual(response.data["data"], "نام کاربری یا رمز عبور اشتباه است")
         
 
 class UserListApiTest(APITestCase):
@@ -109,32 +109,31 @@ class UserListApiTest(APITestCase):
             entry_year=400
         )
         self.list_url = "/user/list/"
-        self.detail_url = f"/user/list/{self.student_user.id}"
+        self.detail_url = f"/user/detail/"
         
-        self.client.force_authenticate(user=self.admin_user)
 
     def test_admin_can_view_all_users(self):
+        self.client.logout()
+        self.client.force_authenticate(user=self.admin_user)
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
-
-    def test_admin_can_view_user_by_id(self):
-        response = self.client.get(self.detail_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["id"], str(self.student_user.id))
-        self.assertEqual(response.data["username"], self.student_user.username)
-        self.assertEqual(response.data["email"], self.student_user.email)
-
-    def test_user_not_found(self):
-        response = self.client.get("/user/list/invalid-id")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "error")
+        self.assertEqual(len(response.data['data']), 2)
 
     def test_non_admin_cannot_access(self):
         self.client.logout()
         self.client.force_authenticate(user=self.student_user)
         response = self.client.get(self.list_url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    
+    def test_user_detail(self):
+        self.client.logout()
+        self.client.force_authenticate(user=self.student_user)
+        response = self.client.get(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['data']['username'], self.student_user.username)
+        self.assertEqual(response.data['data']['email'], self.student_user.email)
+        self.assertEqual(response.data['data']['type'], self.student_user.type)
+        self.assertEqual(response.data['data']['entry_year'], self.student_user.entry_year)
         
         
 class UserDeleteApiTest(APITestCase):
@@ -176,12 +175,6 @@ class UserDeleteApiTest(APITestCase):
         
 class UserUpdateApiTest(APITestCase):
     def setUp(self):
-        self.admin_user = User.objects.create_superuser(
-            username="admin",
-            password="adminpassword",
-            email="admin@example.com",
-            type="admin"
-        )
         self.student_user = User.objects.create_user(
             username="student",
             password="studentpassword",
@@ -189,41 +182,15 @@ class UserUpdateApiTest(APITestCase):
             type="student",
             entry_year=400
         )
-        self.update_url = f"/user/update/{self.student_user.id}"
-        self.client.force_authenticate(user=self.admin_user)
+        self.update_url = f"/user/update/"
+        self.client.force_authenticate(user=self.student_user)
 
-    def test_admin_can_update_user_with_put(self):
-        data = {
-            "username": "400243068",
-            "password": "Test@12345",
-            "email": "updated_student@example.com",
-            "type": "student"
-        }
-        response = self.client.put(self.update_url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["msg"], "ok")
-        self.assertEqual(response.data["data"], f"user by id:{self.student_user.id} updated")
-        self.student_user.refresh_from_db()
-        self.assertEqual(self.student_user.username, "400243068")
-        self.assertEqual(self.student_user.email, "updated_student@example.com")
 
-    def test_admin_can_partially_update_user_with_patch(self):
+    def test_student_can_partially_update_user_with_patch(self):
         data = {"email": "partial_update@example.com"}
         response = self.client.patch(self.update_url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
-        self.assertEqual(response.data["data"], f"user by id:{self.student_user.id} updated")
+        self.assertEqual(response.data["data"], f"کاربر با نام کاربری {self.student_user.username} به روز شد")
         self.student_user.refresh_from_db()
         self.assertEqual(self.student_user.email, "partial_update@example.com")
-
-    def test_user_not_found(self):
-        response = self.client.put("/user/update/invalid-id", {"username": "test"})
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "error")
-
-    def test_non_admin_cannot_update_user(self):
-        self.client.logout()
-        self.client.force_authenticate(user=self.student_user)
-        data = {"email": "unauthorized_update@example.com"}
-        response = self.client.put(self.update_url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
