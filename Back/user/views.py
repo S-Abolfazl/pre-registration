@@ -61,7 +61,12 @@ class UserListApi(APIView):
     def get(self, request):
         users = User.objects.all()
         serializer = UserDetailSerializer(users, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(data={
+            "msg":"ok",
+            "data":serializer.data,
+            "status":status.HTTP_200_OK           
+            }
+            , status=status.HTTP_200_OK)
     
 class UserDetailApi(APIView):
     permission_classes = [IsAuthenticated, IsStudent]
@@ -119,7 +124,7 @@ class UserLoginApi(APIView):
         else:
             return Response(data={
                 "msg": "error",
-                "data": "Invalid username or password",
+                "data": "نام کاربری یا رمز عبور اشتباه است",
                 "status": status.HTTP_401_UNAUTHORIZED
             }, status=status.HTTP_401_UNAUTHORIZED)
             
@@ -148,13 +153,13 @@ class UserLogoutApi(APIView):
             token.blacklist()
             return Response(data={
                 "msg": "ok",
-                "data": "Successfully logged out",
+                "data": "با موفقیت خارج شدید",
                 "status": status.HTTP_200_OK
             }, status=status.HTTP_200_OK)
         except (TokenError, InvalidToken):
             return Response(data={
                 "msg": "error",
-                "data": "Invalid token or token already blacklisted",
+                "data": "توکن نامعتبر است یا قبلاً غیرفعال شده است",
                 "status": status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -228,7 +233,7 @@ class UserUpdateApi(APIView):
                 serializer.save()
                 return Response(data={
                     "msg": "ok",
-                    "data": f'user by id:{user.id} updated',
+                    "data": f'کاربر با نام کاربری {user.username} به روز شد',
                     "status": status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
@@ -242,15 +247,15 @@ class UserUpdateApi(APIView):
         except User.DoesNotExist:
             return Response(data={
                 "msg": "error",
-                "data": "user not found",
+                "data": "کاربر یافت نشد",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response(data={
                 "msg": "error",
-                "data": str(e),
-                "status": status.HTTP_400_BAD_REQUEST
-            }, status=status.HTTP_400_BAD_REQUEST)
+                "data": 'در پردازش اطلاعات مشکلی پیش آمده است',
+                "status": status.HTTP_500_INTERNAL_SERVER_ERROR
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             
             
@@ -325,7 +330,7 @@ class GoogleLoginApi(APIView):
             except User.DoesNotExist:
                 return Response(data={
                     "msg": "error", 
-                    "data": "User does not exist", 
+                    "data": "کاربری با این ایمیل یافت نشد", 
                     "status": status.HTTP_401_UNAUTHORIZED   
                 },
                 status=status.HTTP_401_UNAUTHORIZED
@@ -347,8 +352,8 @@ class GoogleLoginApi(APIView):
         except Exception as e:
             return Response(data={
                     "msg": "error", 
-                    "data": str(e), 
-                    "status": status.HTTP_400_BAD_REQUEST
+                    "data": "مشکلی در پردازش اطلاعات پیش آمده است", 
+                    "status": status.HTTP_500_INTERNAL_SERVER_ERROR
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
