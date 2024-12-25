@@ -179,7 +179,7 @@ class RegistrationFormDataApi(APIView):
             return Response(
                 data={
                     'msg': 'error',
-                    'data': 'Error in getting courses: ' + str(e),
+                    'data': 'مشکلی در دریافت اطلاعات دروس پیش ثبت نام به وجود آمده است',
                     "status": status.HTTP_400_BAD_REQUEST
                 },
                 status=status.HTTP_400_BAD_REQUEST
@@ -218,7 +218,7 @@ class RegistrationFormConfirmApi(APIView):
                 return Response(
                     data={
                         'msg': 'ok',
-                        'data': 'Courses removed successfully',
+                        'data': 'تمامی دروس انتخاب شده حذف شدند',
                         "status": status.HTTP_200_OK
                     }, 
                     status=status.HTTP_200_OK
@@ -259,17 +259,17 @@ class RegistrationFormConfirmApi(APIView):
             return Response(
                 data={
                     'msg': 'ok',
-                    'data': 'Courses added successfully',
+                    'data': 'دروس انتخاب شده با موفقیت ثبت شدند',
                     "status": status.HTTP_201_CREATED
                 },
                 status=status.HTTP_201_CREATED
             )
-        except Exception as e:
+        except:
             return Response(
                 data={
                     'msg': 'error',
-                    'data': 'Error in adding courses: ' + str(e),
-                    "status": status.HTTP_400_BAD_REQUEST
+                    'data': 'مشکلی در ثبت دروس انتخاب شده برای پیش ثبت نام به وجود آمده است',
+                    "status": status.HTTP_500_INTERNAL_SERVER_ERROR
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
