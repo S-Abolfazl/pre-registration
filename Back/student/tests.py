@@ -89,7 +89,7 @@ class AddCompletedCourseApiTest(APITestCase):
         response = self.client.post(self.url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["msg"], "Courses added successfully.")
+        self.assertEqual(response.data["msg"], "درس های انتخاب شده با موفقیت به لیست دروس گذارتده شده اضافه شدند")
         self.assertIn("added_courses", response.data)
         self.assertEqual(len(response.data["added_courses"]), 2)
         self.assertIn("Computer Science 101", response.data["added_courses"])
