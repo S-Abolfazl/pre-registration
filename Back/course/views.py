@@ -22,11 +22,11 @@ class CourseCreateApi(APIView):
     def post(self, request):
         
         try:
-            course_instance = get_object_or_404(AllCourses, course_id=request.data['course'])
+            course_instance = AllCourses.objects.get(course_id=request.data['course'])
         except Exception as e:
             return Response(data={
                 "msg":"error",
-                "data":"course not found: "+ str(e),
+                "data":"درس مورد نظر یافت نشد",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
             
@@ -38,7 +38,7 @@ class CourseCreateApi(APIView):
             course = serializer.save()
             return Response(data={
                 "msg":"ok",
-                "data":f'course by id:{course.c_id} created',
+                "data":f'درس با شناسه:{course.c_id} ایجاد شد',
                 "status":status.HTTP_201_CREATED
             }, status=status.HTTP_201_CREATED)
         
@@ -72,13 +72,13 @@ class CourseListApi(APIView):
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"course not found",
+                "data":"درس مورد نظر یافت نشد",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
         except ValidationError:
             return Response(data={
                 "msg":"error",
-                "data":"id validation error",
+                "data":"شناسه درس معتبر نیست",
                 "status":status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
         
@@ -101,7 +101,7 @@ class CourseUpdateApi(APIView):
                 serializer.save()
                 return Response(data={
                     "msg":"ok",
-                    "data":f'course by id:{course.c_id} updated',
+                    "data":f'درس با شناسه:{course.c_id} به روز شد',
                     "status":status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
@@ -112,10 +112,10 @@ class CourseUpdateApi(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        except Course.DoesNotExist:
+        except:
             return Response(data={
                 "msg":"error",
-                "data":"course not found"
+                "data":"درس مورد نظر یافت نشد",
             }, status=status.HTTP_404_NOT_FOUND)
     
     @swagger_auto_schema(
@@ -134,7 +134,7 @@ class CourseUpdateApi(APIView):
                 serializer.save()
                 return Response(data={
                     "msg":"ok",
-                    "data":f'course by id:{course.c_id} updated',
+                    "data":f'درس با شناسه:{course.c_id} به روز شد',
                     "status":status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
@@ -148,7 +148,7 @@ class CourseUpdateApi(APIView):
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"course not found"
+                "data":"درس مورد نظر یافت نشد",
             }, status=status.HTTP_404_NOT_FOUND)
         
 class CourseDeleteApi(APIView):
@@ -165,19 +165,19 @@ class CourseDeleteApi(APIView):
             course.delete()
             return Response(data={
                 "msg":"ok",
-                "data":f'course by id:{pk} deleted',
+                "data":f'درس با شناسه:{pk} حذف شد',
                 "status":status.HTTP_200_OK
             }, status=status.HTTP_200_OK)
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
-                "data":"course not found",
+                "data":"درس مورد نظر یافت نشد",
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
         except ValidationError:
             return Response(data={
                 "msg":"error",
-                "data":"id validation error",
+                "data":"شناسه درس معتبر نیست",
                 "status":status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
 
