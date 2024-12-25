@@ -119,7 +119,7 @@ class CourseListTest(APITestCase):
         response = self.client.get("/course/list-courses-in-term/invalid-id")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['msg'], "error")
-        self.assertEqual(response.data['data'], "id validation error")
+        self.assertEqual(response.data['data'], "شناسه درس معتبر نیست")
         
         
 
@@ -159,7 +159,7 @@ class CourseDeleteApiTest(APITestCase):
         response = self.client.delete(f"/course/delete-course-in-term/{self.course.c_id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['msg'], "ok")
-        self.assertIn(f"course by id:{self.course.c_id} deleted", response.data['data'])
+        self.assertIn(f"درس با شناسه:{self.course.c_id} حذف شد", response.data['data'])
         
         self.assertFalse(Course.objects.filter(c_id=self.course.c_id).exists())
     
@@ -168,7 +168,7 @@ class CourseDeleteApiTest(APITestCase):
         response = self.client.delete(f"/course/delete-course-in-term/{invalid_course_id}")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['msg'], "error")
-        self.assertEqual(response.data['data'], "id validation error")
+        self.assertEqual(response.data['data'], "شناسه درس معتبر نیست")
         
 
 class AllCourseCreateApiTest(APITestCase):
