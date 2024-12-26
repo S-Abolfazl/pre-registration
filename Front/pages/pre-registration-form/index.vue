@@ -34,12 +34,6 @@
         borderRadius="25px"
       />
 
-      <!-- notif icon -->
-      <!-- <div class="ml-7 mr-11">
-        <v-icon class="font_45" @click="notif()" title="اطلاعات">
-          mdi-alert-circle-outline
-        </v-icon>
-      </div> -->
     </v-row>
 
     <v-row no-gutters class="w-max">
@@ -77,6 +71,7 @@ export default {
               start: `${this.getDate(course.class_time1)} ${String(course.class_start_time)}`,
               end: `${this.getDate(course.class_time1)} ${String(course.class_end_time)}`,
               selected: false,
+              disabled: false,
             });
 
             if (course.class_time1 != course.class_time2) {
@@ -86,6 +81,7 @@ export default {
               start: `${this.getDate(course.class_time2)} ${String(course.class_start_time)}`,
               end: `${this.getDate(course.class_time2)} ${String(course.class_end_time)}`,
               selected: false,
+              disabled: false,
             });
             }
           });
@@ -113,5 +109,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-</style>
