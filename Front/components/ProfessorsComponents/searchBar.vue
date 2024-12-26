@@ -9,8 +9,8 @@
         class="search-input"
         type="text"
         placeholder="دنبال كي هستی دوست عزیز؟"
-        v-model="searchQuery"
-        @input="updateSearch"
+        v-model="internalValue"
+        @input="emitSearch"
       />
     </div>
   </template>
@@ -21,6 +21,9 @@
   export default {
     
     props: {
+      value: {
+        type:String,
+      },
       bgColor: {
         type: String,
         default: "#ffffff", 
@@ -30,12 +33,20 @@
         default: "100%", 
       },
     },
-    data: () => ({
-    searchQuery: "", 
-  }),
+    data() {
+    return {
+      internalValue: this.value || "", // Local value for input
+    };
+  },
+  watch: {
+    // Keep internal value in sync with external prop
+    value(newValue) {
+      this.internalValue = newValue;
+    },
+  },
   methods: {
-    updateSearch() {
-      this.$emit("search-updated", this.searchQuery); // ارسال مقدار جستجو به والد
+    emitSearch() {
+      this.$emit("search", this.internalValue); // Emit the search event
     },
   },
 };

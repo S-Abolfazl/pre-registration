@@ -7,7 +7,12 @@
         <h2 class="font_24" style="text-align: right">
           برای انتخاب واحد بهتر و آشنایی بیشتر با اساتید میتونید در این صفحه نظرات دانشجویان ببینید
         </h2>
-        <SearchBar style="margin-top: 8%;" width="70%"></SearchBar>
+        <SearchBar
+      v-model="searchQuery"
+      style="margin-top: 8%;"
+      width="70%"
+      @search="onSearch"
+    />
       </v-col>
       <v-col cols="4">
         <img
@@ -34,7 +39,7 @@
             :faculty="prof.faculty"
             :field="prof.field"
             :degree="prof.degree"
-            :degreeDescription="prof.degreeDescription"
+            :degreeDiscreption="prof.degreeDiscreption"
           />
         </div>
       </v-col>
@@ -53,7 +58,7 @@
             :faculty="prof.faculty"
             :field="prof.field"
             :degree="prof.degree"
-            :degreeDescription="prof.degreeDescription"
+            :degreeDiscreption="prof.degreeDiscreption"
           />
         </div>
       </v-col>
@@ -72,6 +77,7 @@ export default {
   },
   data() {
     return {
+      searchQuery: '',
       professors: [
         {
           name: "مجتبی وحیدی اصل",
@@ -84,7 +90,7 @@ export default {
           faculty: "مهندسی و علوم کامپیوتر",
           field: "نرم افزار و سامانه های اطلاعاتی",
           degree: "دکتری",
-          degreeDescription: "دانشگاه علم و صنعت ایران - تهران",
+          degreeDiscreption: "دانشگاه علم و صنعت ایران - تهران",
         },
         {
           name: "رامک قوامی زاده مبیدی",
@@ -97,7 +103,7 @@ export default {
           faculty: "مهندسی و علوم کامپیوتر",
           field: "نرم افزار و سامانه های اطلاعاتی",
           degree: "دکتری",
-          degreeDescription: "فرانسه، مهندسی کامپیوتر - نرم افزار",
+          degreeDiscreption: "فرانسه، مهندسی کامپیوتر - نرم افزار",
         },
         {
           name: "فرشاد صفائی سمنانی",
@@ -110,7 +116,7 @@ export default {
           faculty: "مهندسی و علوم کامپیوتر",
           field: "معماری کامپیوتر و شبکه",
           degree: "دکتری",
-          degreeDescription: "دانشگاه علم و صنعت ایران - تهران، مهندسی کامپیوتر - معماری کامپیوتر",
+          degreeDiscreption: "دانشگاه علم و صنعت ایران - تهران، مهندسی کامپیوتر - معماری کامپیوتر",
         },
         {
           name: "صادق علی اکبری",
@@ -123,20 +129,35 @@ export default {
           faculty: "مهندسی و علوم کامپیوتر",
           field: "نرم افزار و سامانه های اطلاعاتی",
           degree: "دکتری",
-          degreeDescription: "دانشگاه صنعتی شریف - تهران، مهندسی کامپیوتر",
+          degreeDiscreption: "دانشگاه صنعتی شریف - تهران، مهندسی کامپیوتر",
         },
       ],
     };
   },
   computed: {
-    leftProfessors() {
-      // First half of the professors array
-      return this.professors.slice(0, Math.ceil(this.professors.length / 2));
+    // Dynamically filters professors based on the search query
+    filteredProfessors() {
+      const query = this.searchQuery.toLowerCase();
+      return this.professors.filter(prof =>
+        prof.name.toLowerCase().includes(query)
+      );
     },
+    // Splits the filtered professors into the left column
+    leftProfessors() {
+      return this.filteredProfessors.filter((_, index) => index % 2 === 0);
+    },
+    // Splits the filtered professors into the right column
     rightProfessors() {
-      // Second half of the professors array
-      return this.professors.slice(Math.ceil(this.professors.length / 2));
+      return this.filteredProfessors.filter((_, index) => index % 2 === 1);
     },
   },
+  methods: {
+    onSearch(query) {
+      this.searchQuery = query; // Update searchQuery when user types
+    },
+  },
+mounted() {
+  this.filteredProfessors = this.professors; // Default to all professors
+}
 };
 </script>
