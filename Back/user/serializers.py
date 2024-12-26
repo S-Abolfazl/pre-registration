@@ -44,7 +44,10 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
             
         if user_type == 'student':
-            user.entry_year = int(username[:3])
+            if username[0] == 4:
+                user.entry_year = int(username[:3])
+            else:
+                user.entry_year = int(username[:2])
         elif user_type == 'admin':
             user.is_staff = True
             user.is_superuser = True
@@ -73,6 +76,9 @@ class UserSerializer(serializers.ModelSerializer):
         
         if not value.isdigit():
             raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد")
+        
+        if value[0] != '4' and value[0] != '9':
+            raise serializers.ValidationError("نام کاربری معتبر نیست")
     
         return value
     
