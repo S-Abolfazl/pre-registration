@@ -7,4 +7,5 @@ urlpatterns = [
     path('chart/', EducationalChartGetApi.as_view(), name='get_chart'),
     path('selecet-passed-course/',AddCompletedCourseApi.as_view(), name='selecetpassed_Course'),
     path('courses/', CoursesForPassedCoursesApi.as_view(), name='get_courses'),
+    path('completed-courses/', CompletedCoursesApi.as_view(), name='complete_courses'),
 ]

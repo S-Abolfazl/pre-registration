@@ -225,4 +225,30 @@ class CoursesForPassedCoursesApi(APIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+            
+class CompletedCoursesApi(APIView):
+    permission_classes = [IsStudent, IsAuthenticated]
+    @swagger_auto_schema(
+        operation_summary="Get Completed Courses",
+        operation_description="Endpoint to get list of completed courses for a student.",
+    )
+    def get(self, request):
+        student = request.user
+        completed_courses = CompletedCourses.objects.filter(student=student)
+        data = {
+            "completed_courses": [
+                {
+                    "course_id": course.course.course_id,
+                    "course_name": course.course.courseName,
+                    "unit": course.course.unit,
+                    "type": course.course.type,
+                }
+                for course in completed_courses
+            ]
+        }
+        return Response(data={
+            "msg": "ok",
+            "data": data,
+            "status": status.HTTP_200_OK    
+        }, status=status.HTTP_200_OK)
 
