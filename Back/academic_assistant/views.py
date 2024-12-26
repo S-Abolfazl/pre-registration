@@ -54,7 +54,7 @@ class StatisticsBarChartApi(APIView):
         }, status=status.HTTP_200_OK)
         
              
-class StatisticsParticipationPercent(APIView):
+class StatisticsParticipationPercentApi(APIView):
     permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
@@ -95,3 +95,46 @@ class StatisticsParticipationPercent(APIView):
                 "status":status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)    
         
+        
+class StatisticsOwerFlowedCoursesApi(APIView):
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    
+    @swagger_auto_schema(
+        operation_summary="Statistics OwerFlowed Courses API",
+        operation_description="This API returns the courses that have been overflowed",
+    )
+    
+    def get(self, request):
+        try:
+            courses = Course.objects.annotate(
+                overflow=F("registered") - F("capacity")
+            ).filter(overflow__gt=0).order_by("-overflow")
+            
+            data = []
+            for course in courses:
+                class_start_end = ""
+                if course.class_start_time and course.class_end_time:
+                    start = course.class_start_time.strftime("%H:%M")
+                    end = course.class_end_time.strftime("%H:%M") 
+                    class_start_end = f"{start} - {end}"
+                data.append({
+                    'courseName': course.course.courseName,
+                    'teacherName': course.teacherName,
+                    'class_time1': course.class_time1 if course.class_time1 else "",
+                    'class_time2': course.class_time2 if course.class_time1 else "",
+                    'class_start_end': class_start_end,
+                    'capacity': course.capacity,
+                    'registered': course.registered,
+                })
+            
+            return Response(data={
+                "msg":"ok",
+                "data":data,
+                "status":status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(data={
+                "msg":"error",
+                "data":"مشکلی در دریافت اطلاعات به وجود آمده است" + " " + str(e),
+                "status":status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
