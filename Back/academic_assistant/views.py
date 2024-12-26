@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from django.db.models import Count
+from django.db.models import Count, F
 from  user.permissions import IsAcademicAssistantOrAdmin, IsAcademicAssistant
 from course.models import Course, AllCourses
 from user.models import User
@@ -64,24 +64,30 @@ class StatisticsParticipationPercent(APIView):
     
     def get(self, request):
         try:
-            student_users_by_entry_year = (
-                User.objects.filter(type="student")
-                .values("entry_year")
-                .annotate(count=Count("id"))
-                .order_by("entry_year")
-            )
+            all_participated_users = RegistrationForm.objects.all().count()
             
             participated_users_by_endtry_year = (
                 RegistrationForm.objects.all()
-                .values("student_id__entry_year")
+                .values(entry_year=F("student_id__entry_year"))
                 .annotate(count=Count("form_id"))
-                .order_by("student_id__entry_year")
+                .order_by("entry_year")
             )
             
-            print(student_users_by_entry_year)
-            print(participated_users_by_endtry_year)
+            data = []
+            for particapation in participated_users_by_endtry_year:
+                entry_year = particapation["entry_year"]
+                count = particapation["count"]
+                data.append({
+                    "entry_year": entry_year,
+                    "count": count,
+                    "percent": round((count / all_participated_users) * 100, 2)
+                })
             
-            return Response(data={}, status=status.HTTP_200_OK)
+            return Response(data={
+                "msg":"ok",
+                "data":data,
+                "status":status.HTTP_200_OK    
+            }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(data={
                 "msg":"error",

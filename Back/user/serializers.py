@@ -44,9 +44,9 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
             
         if user_type == 'student':
-            if username[0] == 4:
+            if username[0] == '4':
                 user.entry_year = int(username[:3])
-            else:
+            elif username[0] == '9': 
                 user.entry_year = int(username[:2])
         elif user_type == 'admin':
             user.is_staff = True
