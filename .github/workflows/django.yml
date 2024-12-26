@@ -29,7 +29,7 @@ jobs:
     - name: Run Django Tests
       run: |
         sleep 10
-        docker compose logs my-django
+        docker logs my-django
         docker exec my-django sh -c "python manage.py test"
 
     - name: Tear Down Services
