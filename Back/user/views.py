@@ -128,6 +128,47 @@ class UserLoginApi(APIView):
                 "status": status.HTTP_401_UNAUTHORIZED
             }, status=status.HTTP_401_UNAUTHORIZED)
             
+    
+class RefreshTokenApi(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_summary="Refresh Token",
+        operation_description="Endpoint to refresh an access token using a refresh token.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['refresh_token'],
+            properties={
+                'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh Token')
+            }
+        )
+    )
+    
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            if not refresh_token:
+                return Response(data={
+                    "msg": "error",
+                    "data": "رفرش توکن مورد نیاز است",
+                    "status": status.HTTP_400_BAD_REQUEST
+                })
+            token = RefreshToken(refresh_token)
+            access_token = str(token.access_token)
+            return Response(data={
+                "msg": "ok",
+                "data": {
+                    "access_token": access_token,
+                    "status": status.HTTP_200_OK
+                }
+            }, status=status.HTTP_200_OK)
+        except (TokenError, InvalidToken):
+            return Response(data={
+                "msg": "error",
+                "data": "توکن نامعتبر است یا قبلاً غیرفعال شده است",
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
 
 
 class UserLogoutApi(APIView):

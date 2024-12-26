@@ -11,5 +11,6 @@ urlpatterns = [
     path('update/', UserUpdateApi.as_view(), name='update_user'),
     path('reset-password/', UserResetPasswordApi.as_view(), name='reset_password_user'),
     path('login-google/', GoogleLoginApi.as_view(), name='login_google_user'),
+    path('refresh-token/', RefreshTokenApi.as_view(), name='refresh_token_user'),
 ]
 
