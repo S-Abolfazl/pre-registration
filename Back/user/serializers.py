@@ -197,25 +197,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return user
 
     def validate_first_name(self, value):
-        if re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("نام نمی‌تواند شامل حرف انگلیسی باشد.")
-        if re.search(r'[a-z]', value):
-            raise serializers.ValidationError("نام نمی‌تواند شامل حرف انگلیسی باشد.")
-        if value.isdigit():
-            raise serializers.ValidationError("نام نمی‌تواند عدد باشد.")
-        if re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
-            raise serializers.ValidationError("نام باید فقط شامل حروف باشد.")
+        if not re.fullmatch(r'^[\u0600-\u06FF\s]+$', value):
+            raise serializers.ValidationError("نام باید فقط شامل حروف فارسی باشد.")
         return value
 
     def validate_last_name(self, value):
-        if re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("نام خانوادگی نمی‌تواند شامل حرف انگلیسی باشد.")
-        if re.search(r'[a-z]', value):
-            raise serializers.ValidationError("نام خانوادگی نمی‌تواند شامل حرف انگلیسی باشد.")
-        if value.isdigit():
-            raise serializers.ValidationError("نام خانوادگی نمی‌تواند عدد باشد.")
-        if re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
-            raise serializers.ValidationError("نام خانوادگی باید فقط شامل حروف باشد.")
+        if not re.fullmatch(r'^[\u0600-\u06FF\s]+$', value):
+            raise serializers.ValidationError("نام خانوادگی باید فقط شامل حروف فارسی باشد.")
         return value
 
     def validate_mobile_number(self, value):
