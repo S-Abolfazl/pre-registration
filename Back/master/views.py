@@ -9,14 +9,12 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Master
 from django.views.decorators.csrf import csrf_exempt
-
-from .models import Course, AllCourses
-from .serializers import MasterSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer
+from .serializers import MasterSerializer, MasterUpdateSerializer
 from user.permissions import IsAcademicAssistantOrAdmin, IsStudentOrIsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
 
-class MasterCreateView(APIView):
+class MasterCreateApi(APIView):
     permission_classes = [IsAuthenticated]  # فقط کاربران احراز هویت شده اجازه دسترسی دارند
 
     @swagger_auto_schema(
@@ -74,7 +72,7 @@ class MasterCreateView(APIView):
                #     serializer = MasterSerializer(master,many = True)
              #   return Response(data = serializer.data, status = status.HTTP_200_ok)
             #except Master
-class MasteeDeleteApi(APIView):
+class MasterDeleteApi(APIView):
     permission_classes = [AllowAny, IsAdminUser]
     @swagger_auto_schema(
         operation_summary = "Master Delete",
@@ -141,7 +139,7 @@ class MasterUpdateApi(APIView):
     def patch(self, request):
         try:
             master = request.master
-            serializer = MasterSerializer(master, data = request.data, partial = True)
+            serializer = MasterUpdateSerializer(master, data = request.data, partial = True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data = {
