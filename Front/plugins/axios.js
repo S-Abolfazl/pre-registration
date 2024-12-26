@@ -59,7 +59,7 @@ export default async ({ $axios, $toast, store }, inject) => {
               })
             break
           case 'patch':
-            $axios.$patch(url, { data, config })
+            $axios.$patch(url, data)
               .then((response) => {
                 let check = checkResponse(response, getOnlyData, config)
                 if (check.status) {
@@ -141,13 +141,24 @@ export default async ({ $axios, $toast, store }, inject) => {
 
   function checkErrorResponse(error) {
     try {
+
       if (
         error &&
         error.response &&
         error.response.data &&
-        error.response.data.message
+        error.response.data.data
       ) {
-        $toast.error(error.response.data.message)
+        if (typeof error.response.data.data === "object") {
+          const response = error.response.data.data;
+          for (const field in response) {
+            if (response.hasOwnProperty(field)) {
+              $toast.error(`${response[field].join(', ')}`);
+            }
+          }
+        }
+        else {
+          $toast.error(error.response.data.data);
+        }
       } else {
         $toast.error(error_message)
       }

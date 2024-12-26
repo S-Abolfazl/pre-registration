@@ -26,7 +26,7 @@
         width="65%"
         borderRadius="99px"
         isPro
-        @sabt="sabt($event)"
+        @sabt="sabt('first_name')"
         v-model="user.first_name"
       />
 
@@ -36,7 +36,7 @@
         width="65%"
         borderRadius="99px"
         isPro
-        @sabt="sabt($event)"
+        @sabt="sabt('last_name')"
         v-model="user.last_name"
       />
 
@@ -48,7 +48,7 @@
         cClass="ltr-item"
         rules="phone"
         isPro
-        @sabt="sabt($event)"
+        @sabt="sabt('mobile_number')"
         v-model="user.mobile_number"
       />
 
@@ -60,7 +60,7 @@
         cClass="ltr-item"
         rules="email"
         isPro
-        @sabt="sabt($event)"
+        @sabt="sabt('email')"
         v-model="user.email"
       />
 
@@ -71,7 +71,7 @@
         borderRadius="99px"
         cClass="ltr-item"
         isPro
-        @sabt="sabt($event)"
+        @sabt="sabt('password')"
         v-model="user.password"
       />
 
@@ -113,31 +113,38 @@ export default {
       this.user = response;
       localStorage.setItem('user', JSON.stringify(this.user));
       this.user.password = '';
+      this.the_username = this.user.first_name + ' ' + this.user.last_name;
     })
     .catch((error) => {
       this.$toast.error(error);
     });
   },
   methods: {
-    sabt() {
-      this.$reqApi('/user/update/', this.user, {}, true, 'patch')
-        .then((_) => {
+    sabt(data) {
+      let form = {
+        [data]: this.user[data],
+      }
+
+      this.$reqApi('user/update/', form, {}, true, 'patch')
+        .then((response) => {
           localStorage.setItem('user', JSON.stringify(this.user));
           this.user.password = '';
-          this.$toast.success("با موفقیت ثبت شد");
+          this.$toast.success(response);
         })
         .catch((error) => {
           this.$toast.error(error);
         });
     },
     logout() {
-      this.$reqApi(`/user/logout/`)
-        .then((_) => {
-          localStorage.removeItem('user');
-          this.$toast.success("با موفقیت حذف شد");
+      this.$reqApi(`/user/logout/`, {
+        "refresh_token" : localStorage.getItem("refresh_token")
+      })
+        .then((response) => {
+          this.$store.dispatch('auth/error401');
+          this.$toast.success(response);
         })
         .catch((error) => {
-          this.$toast.error(error);
+          console.error(error);
         });
     },
     onFileChange(event) {
