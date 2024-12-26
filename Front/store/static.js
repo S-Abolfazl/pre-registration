@@ -2,6 +2,7 @@ export const state = () => ({
   status,
   user_types,
   role_types,
+  course_type,
 })
 
 let status = [
@@ -21,4 +22,12 @@ let role_types = {
   academicassistant: 'معاون آموزشی',
   admin: 'ادمین',
   support: 'پشتیبان',
+}
+
+let course_type = {
+  theory_course: "اختصاصي",
+  public_course: "عمومي",
+  basic_course: "پايه",
+  practical_course: "عملی",
+  elective_course: "اختياري",
 }

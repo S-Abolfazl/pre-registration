@@ -1,20 +1,33 @@
 <template>
   <div>
-    <v-chip
-      :color="computedColor"
-      :class="['custom-chip', kind === 'اختياري' ? 'gradient-chip' : '']"
-      :outlined="computedBorder"
-    >
-      <span :class="['font_16', computedBorder ? 'blue2--text' : 'white1--text']" v-html="text"> </span>
-      <v-chip
-        :color="computedBorder ? 'blue2' : 'white1'"
-        class="inner-circle"
-      >
-        <div :class="['font_12', `${computedBorder ? 'white1' : computedColor}--text`, 'pa-n3']" >
-          {{ number }}
-        </div>
-      </v-chip>
-    </v-chip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-chip
+          v-bind="attrs"
+          v-on="on"
+          :color="computedColor"
+          :class="['custom-chip', $store.state.static.course_type[kind] == 'اختياري' ? 'gradient-chip' : '']"
+          :outlined="computedBorder"
+        >
+          <span :class="['font_16', computedBorder ? 'blue2--text' : 'white1--text']" v-html="courseName"> </span>
+          <v-chip
+            :color="computedBorder ? 'blue2' : 'white1'"
+            class="inner-circle"
+          >
+            <div :class="['font_12', `${computedBorder ? 'white1' : computedColor}--text`, 'pa-n3']">
+              {{ unit }}
+            </div>
+          </v-chip>
+        </v-chip>
+      </template>
+      <span>
+        <strong>هم نیاز ها : </strong>
+        {{ formattedCourseName(coreq) }}
+        <br>
+        <strong>پیش نیاز ها : </strong>
+        {{ formattedCourseName(prereq) }}
+      </span>
+    </v-tooltip>
   </div>
 </template>
 
@@ -22,11 +35,17 @@
 export default {
   name: "Courses",
   props: {
-    text: {
+    coreq: {
+      type: Array,
+    },
+    prereq: {
+      type: Array,
+    },
+    courseName: {
       type: String,
       required: true,
     },
-    number: {
+    unit: {
       type: [String, Number],
       required: true,
       default: 0,
@@ -34,12 +53,11 @@ export default {
     kind: {
       type: String,
       required: true,
-      validator: (value) => ["اختياري", "اختصاصي", "عمومي", "پايه"].includes(value),
     },
   },
   computed: {
     computedColor() {
-      switch (this.kind) {
+      switch (this.$store.state.static.course_type[this.kind]) {
         case "اختصاصي":
           return "blue2";
         case "پايه":
@@ -53,9 +71,14 @@ export default {
       }
     },
     computedBorder() {
-      return this.kind === "عمومي";
+      return this.$store.state.static.course_type[this.kind] === "عمومي";
     },
   },
+  methods: {
+    formattedCourseName(data) {
+      return data.join(', ');
+    },
+  }
 };
 </script>
 
