@@ -30,6 +30,8 @@ jobs:
       run: |
         sleep 10
         docker logs my-django
+        docker exec -it my-postgres psql -U admin -d mydatabase -c "\dt"
+        docker exec -it my-postgres psql -U admin -d default -c "\dt"
         docker exec my-django sh -c "python manage.py test"
 
     - name: Tear Down Services
