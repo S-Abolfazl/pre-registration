@@ -80,7 +80,16 @@ export default {
       console.log('Navigate to settings');
     },
     logout() {
-      console.log('Logged out');
+      this.$reqApi(`/user/logout/`, {
+        "refresh_token" : localStorage.getItem("refresh_token")
+      })
+        .then((response) => {
+          this.$store.dispatch('auth/error401');
+          this.$toast.success(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };

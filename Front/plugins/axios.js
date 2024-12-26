@@ -142,7 +142,11 @@ export default async ({ $axios, $toast, store }, inject) => {
   function checkErrorResponse(error) {
     try {
 
-      if (
+      if (error.response.data.code == "token_not_valid"){
+        console.log('asd');
+        // TODO
+      }
+      else if (
         error &&
         error.response &&
         error.response.data &&

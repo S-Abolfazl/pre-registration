@@ -21,7 +21,7 @@
       <v-avatar color="primary" class="pointer" @click="toggleMenu()">
         <img
           v-if="user.avatar"
-          :src="user.avatar"
+          :src="$store.state.server_url + user.avatar"
           alt="user"
         >
         <v-icon v-else dark class="font_35">
@@ -96,9 +96,14 @@ export default {
     },
   }),
   mounted(){
-    if (Boolean(localStorage.getItem('user'))){
-      this.user = JSON.parse(localStorage.getItem('user'));
-    }
+    this.$reqApi('/user/detail/', {}, {}, true, 'get')
+    .then((response) => {
+      this.user = response;
+      this.the_username = this.user.first_name + ' ' + this.user.last_name;
+    })
+    .catch((error) => {
+      this.$toast.error(error);
+    });
   },
   methods: {
     navigateToPreRegistration() {

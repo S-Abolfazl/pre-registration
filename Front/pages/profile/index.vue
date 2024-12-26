@@ -2,10 +2,20 @@
   <v-row no-gutters class="pb-8">
     <v-col cols="6" class="d-flex flex-column justify-center align-center">
       <v-row no-gutters class="my-8 w-65">
-        <v-avatar color="primary" class="pointer" width="30%" height="120%" @click="triggerFileInput()">
-          <img v-if="previewImage" :src="previewImage" alt="User Avatar" class="w-max h-max" />
+        <v-avatar
+          class="pointer hover-avatar"
+          width="30%"
+          height="100%"
+          color="primary"
+          @click="triggerFileInput()"
+        >
+        <div class="hover-content">
+          <v-icon dark class="hover-icon">mdi-camera</v-icon>
+          <span class="hover-text">تغییر تصویر</span>
+        </div>
+          <img v-if="previewImage" :src="$store.state.server_url + previewImage" alt="User Avatar" class="w-max h-max icon-dakheli" />
 
-          <v-icon v-else dark class="font_112">
+          <v-icon v-else dark class="font_112 icon-dakheli">
             mdi-account
           </v-icon>
 
@@ -15,7 +25,7 @@
         <div class="mr-7">
           <b class="font_35">{{ the_username }}</b>
           <br>
-          <b class="font_30">{{ user.student_number }}</b>
+          <b class="font_30">{{ user.username }}</b>
           <p class="font_26">{{ $store.state.static.role_types[user.type] }}</p>
         </div>
       </v-row>
@@ -105,7 +115,8 @@ export default {
     user: {},
     the_username: "",
     previewImage: "",
-    selectedFile: null, // Store the selected file for upload
+    hover: false,
+    selectedFile: null,
   }),
   mounted() {
     this.$reqApi('/user/detail/', {}, {}, true, 'get')
@@ -113,6 +124,7 @@ export default {
       this.user = response;
       localStorage.setItem('user', JSON.stringify(this.user));
       this.user.password = '';
+      this.previewImage = this.user.avatar;
       this.the_username = this.user.first_name + ' ' + this.user.last_name;
     })
     .catch((error) => {
@@ -158,21 +170,16 @@ export default {
     triggerFileInput() {
       this.$refs.fileInput.click();
     },
-    async uploadAvatar() {
+    uploadAvatar() {
       if (!this.selectedFile) return;
-
       const formData = new FormData();
       formData.append('avatar', this.selectedFile);
-
       try {
-        const response = await this.$reqApi('/user/update/', formData, {}, true, 'patch');
-        console.log(response);
-
-        if (response && response.avatar_url) {
-          this.user.avatar = response.avatar_url; // Update user avatar URL
-          localStorage.setItem('user', JSON.stringify(this.user));
+        this.$reqApi('/user/update/', formData, {}, true, 'patch')
+        .then((_) => {
           this.$toast.success("تصویر با موفقیت آپلود شد");
-        }
+          window.location.reload();
+        })
       } catch (error) {
         this.$toast.error("آپلود تصویر با خطا مواجه شد");
       }
@@ -187,5 +194,51 @@ p {
 }
 .w-65 {
   width: 65%;
+}
+
+.avatar-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.hover-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hover-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.hover-text {
+  font-size: 14px;
+  color: #000;
+  background: #E8E8E9;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.hover-avatar:hover .hover-content {
+  opacity: 1;
+}
+
+.hover-avatar:hover .icon-dakheli {
+  opacity: 0.2;
+}
+
+.hover-avatar:hover .avatar-image {
+  opacity: 0.3;
 }
 </style>
