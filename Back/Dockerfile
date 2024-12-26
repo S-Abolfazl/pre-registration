@@ -12,7 +12,6 @@ EXPOSE 8000
 
 ENTRYPOINT ["sh", "-c", "find . -path './*migrations/*' -not -name '__init__.py' -delete && \
     python manage.py makemigrations && \
-    python manage.py sqlmigrate user 0001_initial && \
     python manage.py migrate && \
     python manage.py shell -c 'exec(open(\"data/1_data_for_chart.py\", encoding=\"utf-8\").read())' && \
     python manage.py shell -c 'exec(open(\"data/2_data_for_all_courses.py\", encoding=\"utf-8\").read())' && \

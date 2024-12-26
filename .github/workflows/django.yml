@@ -31,7 +31,7 @@ jobs:
         set -x
         sleep 10
         docker logs my-django
-        docker exec my-django sh -c "python manage.py test --keepdb" &
+        docker exec my-django sh -c "python manage.py test" &
         sleep 1
         docker exec my-postgres psql -U admin -d test_mydatabase -c "\dt"
 
