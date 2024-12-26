@@ -7,10 +7,10 @@ from django.core.files.base import ContentFile
 class UserSerializer(serializers.ModelSerializer):
 
     default_error_messages = {
-        'username_required': 'نام کاربری نمی‌تواند خالی باشد.',
-        'password_required': 'رمز عبور نمی‌تواند خالی باشد.',
-        'email_invalid': 'ایمیل وارد شده معتبر نیست.',
-        'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد.',
+        'username_required': 'نام کاربری نمی‌تواند خالی باشد',
+        'password_required': 'رمز عبور نمی‌تواند خالی باشد',
+        'email_invalid': 'ایمیل وارد شده معتبر نیست',
+        'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد',
     }
     class Meta:
         model = User
@@ -44,7 +44,10 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
             
         if user_type == 'student':
-            user.entry_year = int(username[:3])
+            if username[0] == '4':
+                user.entry_year = int(username[:3])
+            elif username[0] == '9': 
+                user.entry_year = int(username[:2])
         elif user_type == 'admin':
             user.is_staff = True
             user.is_superuser = True
@@ -69,31 +72,34 @@ class UserSerializer(serializers.ModelSerializer):
         return user
     def validate_username(self, value):
         if len(value) < 8:
-            raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد.")
+            raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد")
         
         if not value.isdigit():
-            raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد.")
+            raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد")
+        
+        if value[0] != '4' and value[0] != '9':
+            raise serializers.ValidationError("نام کاربری معتبر نیست")
     
         return value
     
     def validate_password(self, value):
         
         if len(value) < 8:
-            raise serializers.ValidationError("رمز عبور باید حداقل 8 کاراکتر باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل 8 کاراکتر باشد")
     
         if not re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد")
         
         if not re.search(r'[a-z]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف کوچک انگلیسی باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف کوچک انگلیسی باشد")
         
         if not re.search(r'[0-9]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک عدد باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک عدد باشد")
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک کاراکتر خاص (!@#$%^&*(),.?\":{}|<>) باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک کاراکتر خاص (!@#$%^&*(),.?\":{}|<>) باشد")
         
         if re.search(r'\s', value):
-            raise serializers.ValidationError("رمز عبور نباید شامل فاصله باشد.")
+            raise serializers.ValidationError("رمز عبور نباید شامل فاصله باشد")
         
         return value
     
@@ -115,13 +121,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(required=False, allow_null=True)
 
     default_error_messages = {
-        'username_required': 'نام کاربری نمی‌تواند خالی باشد.',
-        'password_required': 'رمز عبور نمی‌تواند خالی باشد.',
-        'email_invalid': 'ایمیل وارد شده معتبر نیست.',
-        'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد.',
-        'first_name_required': 'نام نمی‌تواند خالی باشد.',
-        'last_name_required': 'نام خانوادگی نمی‌تواند خالی باشد.',
-        'mobile_number_required': 'شماره موبایل نمی‌تواند خالی باشد.',
+        'username_required': 'نام کاربری نمی‌تواند خالی باشد',
+        'password_required': 'رمز عبور نمی‌تواند خالی باشد',
+        'email_invalid': 'ایمیل وارد شده معتبر نیست',
+        'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد',
+        'first_name_required': 'نام نمی‌تواند خالی باشد',
+        'last_name_required': 'نام خانوادگی نمی‌تواند خالی باشد',
+        'mobile_number_required': 'شماره موبایل نمی‌تواند خالی باشد',
     }
 
     class Meta:
@@ -198,39 +204,39 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     def validate_first_name(self, value):
         if not re.fullmatch(r'^[\u0600-\u06FF\s]+$', value):
-            raise serializers.ValidationError("نام باید فقط شامل حروف فارسی باشد.")
+            raise serializers.ValidationError("نام باید فقط شامل حروف فارسی باشد")
         return value
 
     def validate_last_name(self, value):
         if not re.fullmatch(r'^[\u0600-\u06FF\s]+$', value):
-            raise serializers.ValidationError("نام خانوادگی باید فقط شامل حروف فارسی باشد.")
+            raise serializers.ValidationError("نام خانوادگی باید فقط شامل حروف فارسی باشد")
         return value
 
     def validate_mobile_number(self, value):
         if not value.isdigit():
-            raise serializers.ValidationError("شماره همراه باید عدد باشد.")
+            raise serializers.ValidationError("شماره همراه باید عدد باشد")
         return value
 
     def validate_username(self, value):
         if len(value) < 8:
-            raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد.")
+            raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد")
         if not value.isdigit():
-            raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد.")
+            raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد")
         return value
 
     def validate_password(self, value):
         if len(value) < 8:
-            raise serializers.ValidationError("رمز عبور باید حداقل 8 کاراکتر باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل 8 کاراکتر باشد")
         if not re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف بزرگ انگلیسی باشد")
         if not re.search(r'[a-z]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف کوچک انگلیسی باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک حرف کوچک انگلیسی باشد")
         if not re.search(r'[0-9]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک عدد باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک عدد باشد")
         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', value):
-            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک کاراکتر خاص (!@#$%^&*(),.?\":{}|<>) باشد.")
+            raise serializers.ValidationError("رمز عبور باید حداقل شامل یک کاراکتر خاص (!@#$%^&*(),.?\":{}|<>) باشد")
         if re.search(r'\s', value):
-            raise serializers.ValidationError("رمز عبور نباید شامل فاصله باشد.")
+            raise serializers.ValidationError("رمز عبور نباید شامل فاصله باشد")
         return value
 
     
