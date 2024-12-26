@@ -64,28 +64,33 @@
       :activator="selectedElement"
       offset-x
     >
-      <v-card color="grey lighten-4" min-width="350px" flat>
-        <v-card-title>
-          جزئیات درس
-
-          <v-checkbox
-            v-model="selectedEvent.selected"
-            label="انتخاب"
-            class="mr-auto"
-          />
+      <v-card min-width="10%" flat color="#EAE6FA" elevation="0" class="card">
+        <v-card-title class="pa-2">
+          <b class="font_19 pr-4">
+            جزئیات درس
+          </b>
         </v-card-title>
+
+        <hr
+          style="border: 1px solid gray; margin: 0 50px; border-radius: 99px;"
+        />
+
         <v-card-text>
-          <p><strong>نام درس : </strong> {{ selectedEvent?.name }}</p>
-          <p><strong> شروع : </strong>
-            {{ start_time(selectedEvent) }}
-          </p>
-          <p><strong>پایان : </strong>
-            {{ end_time(selectedEvent) }}
-          </p>
-          <p><strong>نام استاد : </strong> {{ selectedEvent?.teacherName || '-'}}</p>
+          <p class="font_16">{{ selectedEvent?.name }}</p>
+          <p class="font_16">استاد {{ selectedEvent?.teacherName }}</p>
+          <p class="font_16">{{ end_time(selectedEvent) }} - {{ start_time(selectedEvent) }}</p>
         </v-card-text>
-        <v-card-actions>
-          <v-btn text color="primary" @click="selectedOpen = false">بستن</v-btn>
+        <v-card-actions class="justify-center">
+          <BaseButton
+            color="primary"
+            :outlined="!selectedEvent?.selected"
+            @click="select2(selectedEvent)"
+            text="انتخاب"
+            textClass="font_18"
+            width="80%"
+            height="33px"
+            borderRadius="99px"
+          />
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -156,17 +161,23 @@ export default {
       return (start1 < end2 && start2 < end1);
     },
     openMenu(event, eventData) {
+
       this.selectedEvent = eventData;
       this.selectedElement = event.currentTarget;
-      this.selectedOpen = true;
+      this.selectedOpen = !this.selectedOpen;
     },
     start_time(data) {
       if ('start' in data)
         return data.start.slice(data.start.length - 5, data.start.length)
-      },
+    },
     end_time(data) {
       if ('end' in data)
         return data.end.slice(data.end.length - 5, data.end.length)
+    },
+    select2(event) {
+      if ('selected' in event) {
+        event.selected = !event.selected;
+      }
     },
   },
 };
@@ -182,5 +193,13 @@ export default {
 .w-max2 {
   width: 100%;
   overflow-x: scroll;
+}
+.v-menu__content {
+  box-shadow: none !important;
+  border: 2px solid #7B5FF1 !important;
+  border-radius: 33px;
+}
+.custom-chip {
+  width: 80% !important; /* Set width to 80% */
 }
 </style>
