@@ -28,9 +28,9 @@ jobs:
 
     - name: Run Django Tests
       run: |
+        set -x
         sleep 10
         docker logs my-django
-        docker exec my-postgres psql -U admin -d mydatabase -c "\dt"
         docker exec my-django sh -c "python manage.py test" &
         docker exec my-postgres psql -U admin -d test_mydatabase -c "\dt"
 
