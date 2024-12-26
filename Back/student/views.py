@@ -82,8 +82,9 @@ class EducationalChartGetApi(APIView):
                         "courseName": course_name,
                         "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
                         "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)) if course else [],
-                        "unit": course.unit if course else 3,
-                        "kind": course.type if course else "elective_course",
+                        "unit": course.unit,
+                        "kind": course.type,
+                        "course_id": course.course_id,
                     }
                     for course_name in value
                 ]
@@ -145,7 +146,7 @@ class AddCompletedCourseApi(APIView):
                     added_courses.append(course.courseName)
             except:
                 return Response(
-                    {"msg": f"Course with ID {course_id} does not exist."},
+                    {"msg": f"Course with ID {course_id} does not exist"},
                     status=status.HTTP_404_NOT_FOUND,
                 )
         return Response(
