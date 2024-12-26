@@ -28,7 +28,7 @@
   export default {
     methods: {
       goToProfessor() {
-        this.$router.push('/panel/Professor');
+        this.$router.push('/professors');
       },
       imgWidth() {
           // if (window.innerWidth > 2300)
