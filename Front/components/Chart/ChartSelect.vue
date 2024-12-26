@@ -48,6 +48,11 @@
         default: '100px',
       },
 },
+    watch: {
+      selected(newVal) {
+        this.$emit("select", newVal)
+      },
+    },
 mounted() {
 }
 

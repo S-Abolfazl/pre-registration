@@ -65,7 +65,8 @@ export default {
   },
   watch: {
     darkMode(newVal) {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      this.$vuetify.theme.dark = newVal;
+      localStorage.setItem('isDark', newVal);
     },
   },
   methods: {
@@ -79,7 +80,16 @@ export default {
       console.log('Navigate to settings');
     },
     logout() {
-      console.log('Logged out');
+      this.$reqApi(`/user/logout/`, {
+        "refresh_token" : localStorage.getItem("refresh_token")
+      })
+        .then((response) => {
+          this.$store.dispatch('auth/error401');
+          this.$toast.success(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };
@@ -116,7 +126,7 @@ export default {
 }
 
 .v-list-item-custom:hover {
-  background-color: rgba(255, 255, 255, 0.1);  
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menu-icon {

@@ -21,7 +21,7 @@
       <v-avatar color="primary" class="pointer" @click="toggleMenu()">
         <img
           v-if="user.avatar"
-          :src="user.avatar"
+          :src="$store.state.server_url + user.avatar"
           alt="user"
         >
         <v-icon v-else dark class="font_35">
@@ -34,10 +34,10 @@
 
       <div class="mr-2">
         <v-row no-gutters>
-          <b class="font_20">{{ user.username }}</b>
+          <b class="font_20">{{ user.first_name }} {{ user.last_name }}</b>
         </v-row>
         <v-row no-gutters>
-          <span class="font_20">{{ user.role }}</span>
+          <span class="font_20">{{ getRole(user.type) }}</span>
         </v-row>
       </div>
       <v-spacer></v-spacer>
@@ -88,14 +88,26 @@ export default {
   data: () => ({
     menuVisible: false,
     user: {
-      username: 'حسين گرزين',
-      avatar: '', // Add a valid avatar URL or leave empty for the fallback image
-      role: 'ادمين',
+      first_name: "",
+      last_name: "",
+      avatar: "",
+      name: "",
+      type: "",
     },
   }),
+  mounted(){
+    this.$reqApi('/user/detail/', {}, {}, true, 'get')
+    .then((response) => {
+      this.user = response;
+      this.the_username = this.user.first_name + ' ' + this.user.last_name;
+    })
+    .catch((error) => {
+      this.$toast.error(error);
+    });
+  },
   methods: {
     navigateToPreRegistration() {
-      this.$router.push('/pre-registration'); // Adjust the route path as needed
+      this.$router.push('/pre-registration-form'); // Adjust the route path as needed
     },
     navigateToFeedback() {
       this.$router.push('/feedback');
@@ -112,6 +124,9 @@ export default {
     goToPanel() {
       this.$router.push('/panel');
     },
+    getRole(data) {
+      return this.$store.state.static.role_types[data]
+    }
   },
 };
 </script>
