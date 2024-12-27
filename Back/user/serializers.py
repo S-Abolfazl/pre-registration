@@ -88,14 +88,6 @@ class UserSerializer(serializers.ModelSerializer):
         if value[0] != '4' and value[0] != '9':
             raise serializers.ValidationError("نام کاربری معتبر نیست")
         
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError(self.default_error_messages['username_exists'])
-    
-        return value
-
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError(self.default_error_messages['email_exists'])
         return value
 
     
