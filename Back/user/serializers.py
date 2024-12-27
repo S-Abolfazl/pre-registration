@@ -9,8 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
     default_error_messages = {
         'username_required': 'نام کاربری نمی‌تواند خالی باشد',
         'password_required': 'رمز عبور نمی‌تواند خالی باشد',
+        'email_required': 'ایمیل نمی‌تواند خالی باشد',
         'email_invalid': 'ایمیل وارد شده معتبر نیست',
+        'type_required': 'نوع کاربر نمی‌تواند خالی باشد',
         'type_invalid': 'نوع کاربر باید یکی از مقادیر معتبر باشد',
+        'username_exists': 'کاربری با این نام کاربری از قبل وجود دارد',
+        'email_exists': 'کاربری با این ایمیل از قبل وجود دارد',
     }
     class Meta:
         model = User
@@ -28,9 +32,13 @@ class UserSerializer(serializers.ModelSerializer):
             'blank': self.default_error_messages['password_required']
         })
         self.fields['email'].error_messages.update({
+            'required': self.default_error_messages['email_required'],
+            'blank': self.default_error_messages['email_required'],
             'invalid': self.default_error_messages['email_invalid']
         })
         self.fields['type'].error_messages.update({
+            'required': self.default_error_messages['type_required'],
+            'blank': self.default_error_messages['type_required'],
             'invalid_choice': self.default_error_messages['type_invalid']
         })
         
@@ -79,8 +87,17 @@ class UserSerializer(serializers.ModelSerializer):
         
         if value[0] != '4' and value[0] != '9':
             raise serializers.ValidationError("نام کاربری معتبر نیست")
+        
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(self.default_error_messages['username_exists'])
     
         return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(self.default_error_messages['email_exists'])
+        return value
+
     
     def validate_password(self, value):
         
@@ -111,11 +128,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
-
-
-from rest_framework import serializers
-import re
-from .models import User
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(required=False, allow_null=True)
