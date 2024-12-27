@@ -212,12 +212,10 @@ class RegistrationFormPrereqFilterApi(APIView):
                 if all(prereq in completed_courses for prereq in prereqs):
                     filterd_courses.append(course)
                 else:
-                    print("course:", course.course.courseName)
                     course_is_coreqs = Coreq.objects.filter(coreq_course=course.course).values_list('course', flat=True)
                     should_remove.extend(course_is_coreqs)
             
             filterd_courses = [course for course in filterd_courses if course.c_id not in should_remove]
-            print(filterd_courses.__len__())
             data = []
             for course in filterd_courses:
                 data.append({
