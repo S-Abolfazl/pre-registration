@@ -306,6 +306,9 @@ class RegistrationFormConfirmApi(APIView):
                     course = Course.objects.get(c_id=course_id)
                     course.registered -= 1
                     course.save()
+                        
+            selected_for_now = [Course.objects.get(c_id=c_id) for c_id in course_ids]
+            selected_for_now = [c.course.course_id for c in selected_for_now]
             
             for course_id in course_ids:
                 course = Course.objects.get(c_id=course_id)
@@ -322,7 +325,17 @@ class RegistrationFormConfirmApi(APIView):
                         },
                         status=status.HTTP_400_BAD_REQUEST
                     )
-               
+                coreqs = Coreq.objects.filter(course=base_course)
+                coreqs = coreqs.values_list('coreq_course', flat=True)
+                if not all((coreq in completed_courses or coreq in selected_for_now) for coreq in coreqs):
+                    return Response(data={
+                       "msg": "error",
+                        "data": f"شما تمام هم‌نیازهای درس {course.course.courseName} را انتخاب نکرده‌اید",
+                        "status": status.HTTP_400_BAD_REQUEST
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )       
+                        
                 if not SelectedCourse.objects.filter(form=form, course=course).exists(): 
                     SelectedCourse.objects.create(form=form, course=course)
                     course.registered += 1
