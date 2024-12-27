@@ -69,6 +69,9 @@ export default {
       localStorage.setItem('isDark', newVal);
     },
   },
+  mounted() {
+    this.darkMode = this.$vuetify.theme.dark;
+  },
   methods: {
     goToProfile() {
       this.$router.push("/profile")
