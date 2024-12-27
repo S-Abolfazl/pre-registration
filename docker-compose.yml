@@ -16,29 +16,29 @@ services:
       interval: 5s
       retries: 5
 
-  # django:
-  #   build:
-  #     context: ./Back
-  #     dockerfile: Dockerfile
-  #   container_name: my-django
-  #   environment:
-  #     DEBUG: '1'
-  #     SECRET_KEY: django-insecure-0+)c$i_v#a2s^c=1(qx-lmr5nx+&on1+mf3!d8vu^1bg+*b-ll
-  #     DATABASE_ENGINE: django.db.backends.postgresql
-  #     DATABASE_NAME: mydatabase
-  #     DATABASE_USER: admin
-  #     DATABASE_PASSWORD: '0146'
-  #     DATABASE_HOST: postgres
-  #     DATABASE_PORT: 5433
-  #   ports:
-  #     - "8000:8000"
+  django:
+    build:
+      context: ./Back
+      dockerfile: Dockerfile
+    container_name: my-django
+    environment:
+      DEBUG: '1'
+      SECRET_KEY: django-insecure-0+)c$i_v#a2s^c=1(qx-lmr5nx+&on1+mf3!d8vu^1bg+*b-ll
+      DATABASE_ENGINE: django.db.backends.postgresql
+      DATABASE_NAME: mydatabase
+      DATABASE_USER: admin
+      DATABASE_PASSWORD: '0146'
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+    ports:
+      - "8000:8000"
     
-  #   # volumes:
-  #   #   - ./Back:/app
+    # volumes:
+    #   - ./Back:/app
     
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
