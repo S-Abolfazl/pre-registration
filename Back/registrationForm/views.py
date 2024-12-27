@@ -184,7 +184,82 @@ class RegistrationFormDataApi(APIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    
+class RegistrationFormPrereqFilterApi(APIView):
+    permission_classes = (IsAuthenticated, IsStudent)
+    
+    @swagger_auto_schema(
+        operation_summary="Filter Courses by Prerequisites",
+        operation_description="Endpoint to get courses filtered by prerequisites.",
+    )
+    
+    def get(self, request):
+        try:
+            student_id = request.user.id
+            courses = Course.objects.all()
+            completed_courses = CompletedCourses.objects.filter(student_id=student_id)
+            completed_courses = completed_courses.values_list('course', flat=True)
+            selected_courses = SelectedCourse.objects.filter(form__student_id=student_id)
+            selected_courses = selected_courses.values_list('course_id', flat=True)
+            for com_course in completed_courses:
+                courses = courses.exclude(course=com_course)
+
+            filterd_courses = []
+            should_remove = []
+            for course in courses:
+                prereqs = Prereq.objects.filter(course=course.course).values_list('prereq_course', flat=True)
+                if all(prereq in completed_courses for prereq in prereqs):
+                    filterd_courses.append(course)
+                else:
+                    print("course:", course.course.courseName)
+                    course_is_coreqs = Coreq.objects.filter(coreq_course=course.course).values_list('course', flat=True)
+                    should_remove.extend(course_is_coreqs)
             
+            filterd_courses = [course for course in filterd_courses if course.c_id not in should_remove]
+            print(filterd_courses.__len__())
+            data = []
+            for course in filterd_courses:
+                data.append({
+                    "c_id": course.c_id,
+                    "teacherName": course.teacherName,
+                    "isExperimental": course.isExperimental,
+                    "class_time1": course.class_time1,
+                    "class_time2": course.class_time2,
+                    "class_start_time": str(course.class_start_time)[:-3],
+                    "class_end_time": str(course.class_end_time)[:-3],
+                    "exam_date": course.exam_date,
+                    "exam_start_time": str(course.exam_start_time)[:-3],
+                    "exam_end_time": str(course.exam_end_time)[:-3],
+                    "capacity": course.capacity,
+                    "registered": course.registered,
+                    "description": course.description,
+                    "course": {
+                        "course_id": course.course.course_id,
+                        "courseName": course.course.courseName,
+                        "unit": course.course.unit,
+                        "type": course.course.type
+                    },
+                    "selected": True if course.c_id in selected_courses else False
+                })
+            return Response(
+                data={
+                    'msg': 'ok',
+                    'data': data,
+                    "status": status.HTTP_200_OK
+                },
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                data={
+                    'msg': 'error',
+                    'data': 'مشکلی در دریافت اطلاعات دروس پیش ثبت نام به وجود آمده است',
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 class RegistrationFormConfirmApi(APIView):
     permission_classes = (IsAuthenticated, IsStudent)
     

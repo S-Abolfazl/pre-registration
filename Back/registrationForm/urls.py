@@ -12,4 +12,5 @@ urlpatterns = [
 
      path('courses-data/', RegistrationFormDataApi.as_view(), name='registration_form_data'),
      path('confirm/', RegistrationFormConfirmApi.as_view(), name='registration_form_confirm'),
+     path('courses-data/prereq-filter/', RegistrationFormPrereqFilterApi.as_view(), name='prereq_filter'),
 ]
