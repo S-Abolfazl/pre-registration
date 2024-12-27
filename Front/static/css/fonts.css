@@ -33,6 +33,10 @@ h2 {
   font-size: 16px !important;
 }
 
+.font_17 {
+  font-size: 17px !important;
+}
+
 .font_18 {
   font-size: 18px !important;
 }
@@ -53,6 +57,10 @@ h2 {
   font-size: 24px !important;
 }
 
+.font_26 {
+  font-size: 26px !important;
+}
+
 .font_30 {
   font-size: 30px !important;
 }
@@ -71,6 +79,14 @@ h2 {
 
 .font_43 {
   font-size: 43px !important;
+}
+
+.font_45 {
+  font-size: 45px !important;
+}
+
+.font_112 {
+  font-size: 90px !important;
 }
 
 .font_13 > .v-btn__content {

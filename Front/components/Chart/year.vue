@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex align-center">
+    <div class="d-flex align-center mr-3">
       <div class="d-flex flex-column align-end">
         <img :src="require('~/static/image/chart/books.png')" alt="books"  class="books-picture mb-n1">
         <v-chip

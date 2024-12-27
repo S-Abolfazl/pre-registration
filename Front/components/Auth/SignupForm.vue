@@ -126,8 +126,9 @@ import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
           .then((response) => {
             this.$store.dispatch('auth/login', response)
             .then((_) => {
-              this.$toast.success("با موفقیت وارد شدید")
+              this.$toast.success("ثبت نام با موفقیت انجام شد")
               this.$router.push('/')
+              localStorage.setItem('isDark', false);
             })
           })
           .catch((error) => {

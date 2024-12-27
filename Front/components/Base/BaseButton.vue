@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    :class="cClass"
+    :class="[cClass, non_box_shodow ? 'non-box-shodow' : '']"
     :disabled="disabled || loading"
     :outlined="outlined"
     @click="handleClick"
@@ -17,9 +17,11 @@
   >
     <img v-if="svg" :src="svg" class="button-svg" />
 
-    <v-icon v-if="icon">{{ icon }}</v-icon>
+    <v-icon v-if="icon" :color="iconColor">{{ icon }}</v-icon>
 
     <span v-if="!loading" :class="textClass">{{ text }}</span>
+
+    <img v-if="image" :src="image" :class="[imageClass]" :style="imageStyle" />
   </v-btn>
 </template>
 
@@ -35,6 +37,22 @@ export default {
       default: 'primary',
     },
     svg: {
+      type: String,
+      default: '',
+    },
+    image: {
+      type: String,
+      default: '',
+    },
+    imageClass: {
+      type: String,
+      default: '',
+    },
+    iconColor: {
+      type: String,
+      default: '',
+    },
+    imageStyle: {
       type: String,
       default: '',
     },
@@ -58,6 +76,10 @@ export default {
       default: 'medium',
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    non_box_shodow: {
       type: Boolean,
       default: false,
     },
@@ -99,6 +121,9 @@ export default {
 </script>
 
 <style scoped>
+.non-box-shodow {
+  box-shadow: none !important;
+}
 .base-button {
   display: inline-flex;
   align-items: center;

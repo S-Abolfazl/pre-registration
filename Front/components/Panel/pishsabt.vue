@@ -29,7 +29,7 @@
     export default {
       methods: {
         goToPishsabt() {
-          this.$router.push('/panel/pishsabt');
+          this.$router.push('/pre-registration-form');
         },
         imgWidth() {
           // if (window.innerWidth > 2300)

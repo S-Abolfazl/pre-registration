@@ -1,5 +1,5 @@
 export const state = () => ({
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   action: [],
   role_id: "",
   token: '',
@@ -14,19 +14,16 @@ export const state = () => ({
     student_id: '',
     professor_id: '',
     supporter_id: '',
-
   },
 })
 
 export const mutations = {
   set_user(state, data) {
+    localStorage.setItem("user", JSON.stringify(data));
     state.user = data
   },
   set_action(state, data) {
     state.action = data
-  },
-  set_role_id(state, data) {
-    state.role_id = data
   },
   set_token(state, data) {
     state.token = data.token
@@ -144,7 +141,6 @@ export const actions = {
     localStorage.clear('refresh_token')
     window.location.href = '/#/auth/login'
   },
-
   async setAction({ commit }, user) {
     if (Boolean(user) && Boolean(user.actions)){
       await commit('set_action', user.actions);

@@ -46,7 +46,7 @@
   };
   </script>
 
-  <style scoped>
+<style scoped>
 .custom-chip {
     display: flex;
     justify-content: center;
