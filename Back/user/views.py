@@ -9,6 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from social_django.utils import load_strategy
 from social_core.backends.google import GoogleOAuth2
+from rest_framework import serializers
 
 from .models import User
 from .serializers import UserSerializer, UserDetailSerializer, UserUpdateSerializer
@@ -299,30 +300,61 @@ class UserUpdateApi(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             
-            
-class UserResetPasswordApi(APIView):
-    permission_classes = [IsAuthenticated]
+        
+class UserForgotPasswordApi(APIView):
+    permission_classes = [AllowAny]
+    
+    @swagger_auto_schema(
+        operation_summary="Forgot Password",
+        operation_description="Endpoint to reset a user's password.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email', 'password', 'confirm_password'],
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'confirm_password': openapi.Schema(type=openapi.TYPE_STRING, description='Confirm Password')
+            }
+        )
+    )
     def post(self, request):
         try:
-            user = User.objects.get(username=request.user.username)
-            if request.data["password"] == request.data["confirm_password"]:
-                user.set_password(request.data["password"])
-                user.save()
+            email = request.data.get("email")
+            password = request.data.get("password")
+            confirm_password = request.data.get("confirm_password")
+            
+            user = User.objects.get(email=email)
+            
+            if password != confirm_password:
                 return Response(data={
-                    "msg":"ok",
-                    "data":"password reset",
-                    "status": status.HTTP_200_OK
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response(data={
-                    "msg":"error",
-                    "data":"passwords do not match",
+                    "msg": "error",
+                    "data": "کلمه عبور و تکرار آن باید یکسان باشند",
                     "status": status.HTTP_400_BAD_REQUEST
                 }, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer = UserSerializer()
+            try:
+                validated_password = serializer.validate_password(password)
+            except serializers.ValidationError as e:
+                return Response(data={
+                    "msg": "error",
+                    "data": e.detail,
+                    "status": status.HTTP_400_BAD_REQUEST
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            user.set_password(validated_password)
+            user.save()
+            
+            return Response(data={
+                "msg": "ok",
+                "data": "کلمه عبور با موفقیت تغییر یافت",
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
+
         except User.DoesNotExist:
             return Response(data={
-                "msg":"error",
-                "data":"user not found",
+                "msg": "error",
+                "data": "User not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
             
