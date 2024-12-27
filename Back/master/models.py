@@ -11,8 +11,8 @@ class Master(models.Model):
 
     }
     id = models.UUIDField(default = uuid.uuid4, primary_key = True, unique = True)
-    first_name = models.CharField(max_length = 255 , null = True, blank = True)
-    last_name = models.CharField(max_length = 255 , null = True, blank = True)
+    name = models.CharField(max_length = 255 , null = True, blank = True)
+    #last_name = models.CharField(max_length = 255 , null = True, blank = True)
     education = models.CharField(max_length = 255 , null = True, blank = True)
     specialization = models.CharField(max_length = 255 , null = True, blank = True)
     description = models.TextField(null = True, blank = True)
@@ -26,4 +26,4 @@ class Master(models.Model):
     class Meta:
         db_table = "Master"
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.name}"
