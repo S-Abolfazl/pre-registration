@@ -57,6 +57,7 @@ export default {
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
+          gray4: '#303030',
 
           black1: '#FFFFFF',
           black2: '#FFFFAA',
@@ -74,9 +75,11 @@ export default {
           primary: '#6938EF',
           orange1: '#FF8B37',
           orange2: '#FFD7C7',
+
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
+          gray4: '#EAE6FA',
 
           black1: '#100F14',
           black2: '#19181F',

@@ -64,7 +64,7 @@
       :activator="selectedElement"
       offset-x
     >
-      <v-card min-width="10%" flat color="#EAE6FA" elevation="0" class="card">
+      <v-card min-width="10%" flat color="gray4" elevation="0" class="card">
         <v-card-title class="pa-2">
           <b class="font_19 pr-4">
             جزئیات درس
