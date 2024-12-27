@@ -31,18 +31,19 @@
             <div
               v-bind="attrs"
               v-on="on"
-              :class="['custom-event', event.selected ? '' : 'primary--text']"
+              :class="[ 'custom-event', event.selected ? '' : 'primary--text', event.disabled ? 'd-none' : '' ]"
+              @click.stop="openMenu($event, event)"
             >
               {{ event.name }}
               <br>
               <div class="d-flex justify-end ml-2">
-                {{ event.end.slice(event.end.length  - 5, event.end.length) }}
+                {{ event.end.slice(event.end.length - 5, event.end.length) }}
                   -
                 {{ event.start.slice(event.start.length - 5, event.start.length) }}
               </div>
             </div>
           </template>
-          <div >
+          <div>
             تاریخ امتحان :
             <span dir="ltr">
               {{ event.exam_date ? `  ${event.exam_start_time} - ${event.exam_end_time} , ${event.exam_date}` : "" }}
@@ -55,8 +56,44 @@
           </div>
         </v-tooltip>
       </template>
-
     </v-calendar>
+
+    <v-menu
+      v-model="selectedOpen"
+      :close-on-content-click="false"
+      :activator="selectedElement"
+      offset-x
+    >
+      <v-card min-width="10%" flat color="#EAE6FA" elevation="0" class="card">
+        <v-card-title class="pa-2">
+          <b class="font_19 pr-4">
+            جزئیات درس
+          </b>
+        </v-card-title>
+
+        <hr
+          style="border: 1px solid gray; margin: 0 50px; border-radius: 99px;"
+        />
+
+        <v-card-text>
+          <p class="font_16">{{ selectedEvent?.name }}</p>
+          <p class="font_16">استاد {{ selectedEvent?.teacherName }}</p>
+          <p class="font_16">{{ end_time(selectedEvent) }} - {{ start_time(selectedEvent) }}</p>
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <BaseButton
+            color="primary"
+            :outlined="!selectedEvent?.selected"
+            @click="select2(selectedEvent)"
+            text="انتخاب"
+            textClass="font_18"
+            width="80%"
+            height="33px"
+            borderRadius="99px"
+          />
+        </v-card-actions>
+      </v-card>
+    </v-menu>
   </div>
 </template>
 
@@ -73,18 +110,18 @@ export default {
   data() {
     return {
       events: [],
+      selectedOpen: false,
+      selectedEvent: {
+        selected: false,
+      },
+      selectedElement: null,
     };
   },
   watch: {
     'Datas': {
       deep: true,
       handler(newValue) {
-        if (newValue.length > 0){
-          this.events = this.Datas.slice(0, 50);
-          // console.log(this.events);
-
-          // this.events = [this.Datas[9]];
-        }
+        this.events = this.Datas;
       },
     },
   },
@@ -100,9 +137,45 @@ export default {
       return "white1";
     },
     select(data) {
-      console.log(data.event);
+      const selectedEvent = data.event;
 
       data.event.selected = !data.event.selected;
+
+      this.events.forEach(event => {
+        if (event != selectedEvent) {
+          const overlap = this.checkOverlap(selectedEvent, event);
+          event.disabled = selectedEvent.selected && overlap;
+        }
+      });
+      console.log(this.events);
+
+    },
+    checkOverlap(event1, event2) {
+      const start1 = new Date(event1.start).getTime();
+      const end1 = new Date(event1.end).getTime();
+      const start2 = new Date(event2.start).getTime();
+      const end2 = new Date(event2.end).getTime();
+
+      return (start1 < end2 && start2 < end1);
+    },
+    openMenu(event, eventData) {
+
+      this.selectedEvent = eventData;
+      this.selectedElement = event.currentTarget;
+      this.selectedOpen = !this.selectedOpen;
+    },
+    start_time(data) {
+      if ('start' in data)
+        return data.start.slice(data.start.length - 5, data.start.length)
+    },
+    end_time(data) {
+      if ('end' in data)
+        return data.end.slice(data.end.length - 5, data.end.length)
+    },
+    select2(event) {
+      if ('selected' in event) {
+        event.selected = !event.selected;
+      }
     },
   },
 };
@@ -118,5 +191,13 @@ export default {
 .w-max2 {
   width: 100%;
   overflow-x: scroll;
+}
+.v-menu__content {
+  box-shadow: none !important;
+  border: 2px solid #7B5FF1 !important;
+  border-radius: 33px;
+}
+.custom-chip {
+  width: 80% !important; /* Set width to 80% */
 }
 </style>
