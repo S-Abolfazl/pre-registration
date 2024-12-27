@@ -115,5 +115,5 @@ class AddCompletedCourseApiTest(APITestCase):
         response = self.client.post(self.url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data["msg"], "Course with ID fake1234 does not exist.")
+        self.assertEqual(response.data["msg"], "Course with ID fake1234 does not exist")
     

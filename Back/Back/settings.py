@@ -135,10 +135,18 @@ DATABASES = {
        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
        'HOST': os.getenv('DATABASE_HOST'),
        'PORT': os.getenv('DATABASE_PORT'),
-        'TEST': {
+       'TEST': {
             'NAME': 'test_mydatabase',
-        }
-   }
+        },
+    },
+    'test':{
+       'ENGINE': os.getenv('DATABASE_ENGINE'),
+       'NAME': "test_mydatabase",
+       'USER': os.getenv('DATABASE_USER'),
+       'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+       'HOST': os.getenv('DATABASE_HOST'),
+       'PORT': os.getenv('DATABASE_PORT'),
+    }
 }
 
 # DATABASES = {

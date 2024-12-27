@@ -25,15 +25,20 @@ jobs:
       run: |
         docker compose down -v
         docker compose up -d
-
-    - name: Run Django Tests
+    
+    - name: Make Test Database
       run: |
         set -x
         sleep 10
         docker logs my-django
-        docker exec my-django sh -c "python manage.py test" &
-        sleep 1
+        docker exec my-postgres psql -U admin -d mydatabase  -c "CREATE DATABASE test_mydatabase;"
+        docker exec my-django sh -c "python manage.py migrate --database test"
         docker exec my-postgres psql -U admin -d test_mydatabase -c "\dt"
+    
+    - name: Run Django Tests
+      run: |
+        set -x
+        docker exec my-django sh -c "python manage.py test --keepdb" 
 
     - name: Tear Down Services
       if: always()
