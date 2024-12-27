@@ -127,23 +127,28 @@ class AddCompletedCourseApi(APIView):
         student = request.user
         course_ids = request.data.get('course_ids', [])
         if not course_ids:
+            CompletedCourses.objects.filter(student=student).delete()
             return Response(
                 data={
-                    "msg": "error",
-                    "data": "Course IDs list is required",
-                    "status": status.HTTP_400_BAD_REQUEST
+                    "msg": "ok",
+                    "data": "تمامی دروس گذرانده شده حذف شدند",
+                    "status": status.HTTP_200_OK,
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_200_OK,
             )
-        added_courses = []
+        completed_before = CompletedCourses.objects.filter(student=student).values_list("course", flat=True)
+        for course_id in completed_before:
+            if str(course_id) not in course_ids:
+                CompletedCourses.objects.filter(student=student, course=course_id).delete()
+            
+        completed_courses = []
         for course_id in course_ids:
             try:
                 course = AllCourses.objects.get(course_id=course_id)
-                completed_course, created = CompletedCourses.objects.get_or_create(
+                CompletedCourses.objects.get_or_create(
                     student=student, course=course
                 )
-                if created:
-                    added_courses.append(course.courseName)
+                completed_courses.append(course.courseName)
             except:
                 return Response(
                     {"msg": f"Course with ID {course_id} does not exist"},
@@ -152,7 +157,7 @@ class AddCompletedCourseApi(APIView):
         return Response(
        data={
             "msg": "درس های انتخاب شده با موفقیت به لیست دروس گذارتده شده اضافه شدند",
-            "added_courses": added_courses,
+            "completed_courses": completed_courses,
             "status": status.HTTP_200_OK,
         },
         status=status.HTTP_200_OK,
