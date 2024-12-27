@@ -121,9 +121,7 @@ export default {
     'Datas': {
       deep: true,
       handler(newValue) {
-        if (newValue.length > 0){
-          this.events = this.Datas.slice(0, 50);
-        }
+        this.events = this.Datas;
       },
     },
   },

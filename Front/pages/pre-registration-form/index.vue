@@ -14,17 +14,7 @@
         class="ml-2"
       />
 
-      <BaseButton
-        text="فیلتر کنم برات؟"
-        width="14%"
-        borderRadius="25px"
-        @click="filter()"
-        icon="mdi-filter-outline"
-        textClass="black1--text"
-        iconColor="black1"
-        class="mx-2"
-        outlined
-      />
+      <Filteration @passed_courses="passed_courses" @course_type="course_type" />
 
       <BaseInput
         class="mr-auto"
@@ -32,60 +22,81 @@
         prependInnerIcon="mdi-magnify"
         width="23%"
         borderRadius="25px"
+        @input="search"
       />
-
     </v-row>
 
     <v-row no-gutters class="w-max">
-      <TimeTable :Datas="main_data" />
+      <TimeTable :Datas="detail_data" />
     </v-row>
   </div>
 </template>
 
 <script>
 import TimeTable from "~/components/PreRegistrationForm/TimeTable.vue";
+import Filteration from "~/components/PreRegistrationForm/Filteration.vue";
 export default {
   head() {
     return {
       title: 'پیش ثبت نام',
     }
   },
-  components: { TimeTable },
+  components: { TimeTable, Filteration },
   data: () => ({
-    search_data: '',
     main_data: [],
+    detail_data: [],
   }),
+  beforeCreate() {
+    this.$reqApi('/student/completed-courses/', {}, {}, true, 'get')
+    .then((response) => {
+      if (response.length == 0) {
+        this.$toust.error("ابتدا دروسی که پاس کرده اید را مشحص کنید");
+        this.$router.push('/courses')
+      }
+      // localStorage.setItem("passed_courses", response)
+      })
+    .catch((error) => {
+      this.$toast.error(error);
+    });
+  },
   beforeMount() {
     this.getDatas();
+    this.detail_data = this.main_data;
   },
   methods: {
     register() {},
-    filter() {},
+    search(data) {
+      this.detail_data = this.main_data.filter((course) =>
+        course.name.toLowerCase().includes(data.toLowerCase())
+      );
+    },
     getDatas() {
       this.$reqApi('/registration-form/courses-data/', {}, {}, true, 'get')
       .then((response) => {
-          response.forEach(course => {
-            this.main_data.push({
-              ...course,
-              name: course.course.courseName,
-              start: `${this.getDate(course.class_time1)} ${String(course.class_start_time)}`,
-              end: `${this.getDate(course.class_time1)} ${String(course.class_end_time)}`,
-              selected: false,
-              disabled: false,
-            });
+        let validate_courses = this.validCourses(response);
 
-            if (course.class_time1 != course.class_time2) {
-              this.main_data.push({
-              ...course,
-              name: course.course.courseName,
-              start: `${this.getDate(course.class_time2)} ${String(course.class_start_time)}`,
-              end: `${this.getDate(course.class_time2)} ${String(course.class_end_time)}`,
-              selected: false,
-              disabled: false,
-            });
-            }
+        validate_courses.forEach(course => {
+          this.main_data.push({
+            ...course,
+            name: course.course.courseName,
+            start: `${this.getDate(course.class_time1)} ${String(course.class_start_time)}`,
+            end: `${this.getDate(course.class_time1)} ${String(course.class_end_time)}`,
+            selected: false,
+            disabled: false,
           });
-        })
+
+          if (course.class_time1 != course.class_time2) {
+            this.main_data.push({
+            ...course,
+            name: course.course.courseName,
+            start: `${this.getDate(course.class_time2)} ${String(course.class_start_time)}`,
+            end: `${this.getDate(course.class_time2)} ${String(course.class_end_time)}`,
+            selected: false,
+            disabled: false,
+          });
+          }
+          });
+      })
       .catch((error) => {
         this.$toast.error(error);
       });
@@ -105,7 +116,69 @@ export default {
         case 'پنج‌شنبه':
           return '2024-12-5';
       }
-    }
+    },
+    validCourses(courses) {
+      const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+      return courses.filter(
+        (course) =>
+          course.class_start_time &&
+          timeRegex.test(course.class_start_time)
+      );
+    },
+    passed_courses() {
+      this.$reqApi('/registration-form/courses-data/prereq-filter/', {}, {}, true, 'get')
+      .then((response) => {
+        let validate_courses = this.validCourses(response);
+
+        validate_courses.forEach(course => {
+          this.detail_data.push({
+            ...course,
+            name: course.course.courseName,
+            start: `${this.getDate(course.class_time1)} ${String(course.class_start_time)}`,
+            end: `${this.getDate(course.class_time1)} ${String(course.class_end_time)}`,
+            selected: false,
+            disabled: false,
+          });
+
+          if (course.class_time1 != course.class_time2) {
+            this.detail_data.push({
+            ...course,
+            name: course.course.courseName,
+            start: `${this.getDate(course.class_time2)} ${String(course.class_start_time)}`,
+            end: `${this.getDate(course.class_time2)} ${String(course.class_end_time)}`,
+            selected: false,
+            disabled: false,
+          });
+          }
+          });
+      })
+      .catch((error) => {
+        this.$toast.error(error);
+      });
+    },
+    course_type(type) {
+      if (!type) {
+        this.detail_data = this.main_data;
+      }
+      this.detail_data = this.main_data.filter(
+        (course) => course.course.type == this.get_type(type)
+      );
+    },
+    get_type(type) {
+      switch (type) {
+        case "اختصاصي":
+          return "theory_course";
+        case "عمومي":
+          return "public_course";
+        case "پايه":
+          return "basic_course";
+        case "عملی":
+          return "practical_course";
+        case "اختياري":
+          return "elective_course";
+      }
+    },
   }
 };
 </script>
