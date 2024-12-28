@@ -41,7 +41,7 @@ export default {
     "unit": 1,
     "type": "عملی",
     "capacity": 15,
-    "teacher": "دکتر وزین نژاد",
+    "teacherName": "دکتر وزین نژاد",
     "schedule": "سه‌شنبه‌ها 19:00-17:00",
     "description": "مدرس: دکتر وزین نژاد"
   },
@@ -50,7 +50,7 @@ export default {
     "unit": 3,
     "type": "نظری",
     "capacity": 60,
-    "teacher": "مهندس حمیدرضا",
+    "teacherName": "مهندس حمیدرضا",
     "schedule": "یک‌شنبه 09:00-12:00",
     "description": "امتحان: 13/03/1403"
   }
