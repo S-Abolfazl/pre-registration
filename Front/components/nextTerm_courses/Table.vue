@@ -18,7 +18,7 @@
           <td>{{ row.unit }}</td>
           <td>{{ row.type }}</td>
           <td>{{ row.capacity }}</td>
-          <td>{{ row.teacher }}</td>
+          <td>{{ row.teacherName }}</td>
           <td>{{ row.schedule }}</td>
           <td>{{ row.description }}</td>
         </tr>
