@@ -11,13 +11,13 @@
       </v-col>
       <!-- Year Selection -->
       <v-col cols="2" class="d-flex justify-center">
-        <YearSelection
+        <!-- <YearSelection
           years="years"
           v-model="selectedYear"
           height="40px"
           width="200px"
 
-        />
+        /> -->
       </v-col>
       <!-- Chart Select -->
       <v-col cols="2" class="d-flex justify-center" >
