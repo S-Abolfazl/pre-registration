@@ -84,6 +84,7 @@ export default {
 
           blue1: '#E3E3FF',
           blue2: '#7B5FF1',
+          blue3: '#EBE7FD',
         }
       },
     },
