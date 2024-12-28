@@ -56,8 +56,10 @@ class EducationalChartGetApi(APIView):
             type = 'even'
         else:
             type = 'odd'
+        other_type = 'even' if type == 'odd' else 'odd'
         try:
             chart = EducationalChart.objects.get(year=year, type=type)
+            other_chart = EducationalChart.objects.get(year=year, type=other_type)
         except:
             return Response(
                 data={
@@ -68,37 +70,43 @@ class EducationalChartGetApi(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         serializer = EducationalChartSerializer(chart)
+        other_serializer = EducationalChartSerializer(other_chart)
+        types = [type, other_type]
+        serializers = [serializer, other_serializer]
         data = {}
-        data['terms'] = {}
-        term = 1
-        course_name = None
-        for key, value in serializer.data.items():
-            if key == "units" or key == "year" or key == "type" or key == "chart_id":
-                data[key] = value
-                continue            
-            try:
-                data['terms'][term] = [
-                    {
-                        "courseName": course_name,
-                        "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
-                        "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)) if course else [],
-                        "unit": course.unit,
-                        "kind": course.type,
-                        "course_id": course.course_id,
-                    }
-                    for course_name in value
-                ]
-                
-                term += 1
-            except Exception as e:
-                return Response(
-                    data={
-                        "msg": "error",
-                        "data": f"خطاای در پردازش درس ها رخ داده است",
-                        "status":status.HTTP_500_INTERNAL_SERVER_ERROR
-                    },
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
+        data["user_type"] = type
+        for type, serializer in zip(types, serializers):
+            data[type] = {}
+            data[type]['terms'] = {}
+            term = 1
+            course_name = None
+            for key, value in serializer.data.items():
+                if key == "units" or key == "year" or key == "type" or key == "chart_id":
+                    data[type][key] = value
+                    continue            
+                try:
+                    data[type]['terms'][term] = [
+                        {
+                            "courseName": course_name,
+                            "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
+                            "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)) if course else [],
+                            "unit": course.unit,
+                            "kind": course.type,
+                            "course_id": course.course_id,
+                        }
+                        for course_name in value
+                    ]
+                    
+                    term += 1
+                except Exception as e:
+                    return Response(
+                        data={
+                            "msg": "error",
+                            "data": f"خطاای در پردازش درس ها رخ داده است",
+                            "status":status.HTTP_500_INTERNAL_SERVER_ERROR
+                        },
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
                 
         return Response(data={
                 "msg": "ok",
