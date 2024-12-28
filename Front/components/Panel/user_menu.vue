@@ -2,50 +2,53 @@
   <v-card
     class="menu-container" :width="width"
   >
-    <list dense class="menu-list">
+    <div dense class="menu-list">
       <!-- profile item-->
       <v-list-item @click="goToProfile" class="v-list-item-custom">
-        <img src="image/panel/profile.png" class="menu-icon" alt="profile" />
+        <img src="image/menu/profile.png" class="menu-icon" alt="profile" />
         <span class="menu-text font_24">حساب کاربری</span>
       </v-list-item>
       <!-- course item -->
       <v-list-item @click="goToLessons" class="v-list-item-custom">
-        <img src="image/panel/course.png" class="menu-icon" alt="courses" />
+        <img src="image/menu/course.png" class="menu-icon" alt="courses" />
         <span class="menu-text font_24">دروس پاس شده</span>
       </v-list-item>
       <!-- settings item -->
       <v-list-item @click="goToSettings" class="v-list-item-custom">
-        <img src="image/panel/setting.png" class="menu-icon" alt="settings" />
-        <span class="menu-text font_24">تنظیمات</span>
+        <img src="image/menu/Manegement.png" class="menu-icon" alt="management" />
+        <span class="menu-text font_24">مدیریت کاربران</span>
       </v-list-item>
 
 
-      <v-divider></v-divider>
+      <v-divider class="menu-divider"></v-divider>
 
       <!-- آیتم زبان -->
       <v-list-item class="v-list-item-custom">
-        <img src="image/panel/world.png" class="menu-icon" alt="languge" />
+        <img src="image/menu/AboutUs.png" class="menu-icon" alt="AboutUs" />
+        <span class="menu-text font_24">درباره ما</span>
+      </v-list-item>
+
+      <v-list-item class="v-list-item-custom">
+        <img src="image/menu/world.png" class="menu-icon" alt="languge" />
         <span class="menu-text font_24">زبان</span>
         <span class="current-language font_20">{{ currentLanguage }}</span>
       </v-list-item>
 
-      <v-divider></v-divider>
+      <v-divider class="menu-divider"></v-divider>
 
       <!-- حالت شب -->
       <v-list-item class="v-list-item-custom">
-        <img src="image/panel/moon.png" class="menu-icon" alt="Night" />
+        <img src="image/menu/moon.png" class="menu-icon" alt="Night" />
         <span class="menu-text font_24">حالت شب</span>
         <v-switch v-model="darkMode" class="ml-auto"></v-switch>
       </v-list-item>
-
-      <v-divider></v-divider>
 
       <!-- خروج -->
       <v-list-item @click="logout" class="v-list-item-custom">
         <v-icon class="menu-icon" color="red">mdi-logout</v-icon>
         <span class="menu-text text-red font_24">خروج از حساب کاربری</span>
       </v-list-item>
-    </list>
+    </div>
   </v-card>
 </template>
 
@@ -134,6 +137,11 @@ export default {
 
 .text-red {
   color: red;
+}
+
+.menu-divider{
+  border-width: 2px; /* ضخامت */
+  border-color:rgb(255, 255, 255, 0.3); /* رنگ */
 }
 
 </style>
