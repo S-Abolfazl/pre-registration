@@ -14,16 +14,16 @@
         <YearSelection
           years="years"
           v-model="selectedYear"
-          height="40px" 
+          height="40px"
           width="200px"
 
         />
       </v-col>
       <!-- Chart Select -->
       <v-col cols="2" class="d-flex justify-center" >
-        <ChartSelect 
-          width="200px" 
-          height="40px" 
+        <ChartSelect
+          width="200px"
+          height="40px"
         />
       </v-col>
     </v-row>
@@ -59,23 +59,23 @@
       <v-col cols="2" class="d-flex justify-center" >
         <BaseButton text="ثبت دروس" />
       </v-col>
-      
-      
+
+
       <v-col cols="2" class="d-flex justify-center" >
         <BaseButton text="رد کردن" color="gray2" />
       </v-col>
     </v-row>
 
       <div class="action-buttons">
-       
-        
+
+
       </div>
-        
-    
-      
+
+
+
     </div>
   </template>
-  
+
   <script>
     import BaseButton from '../Base/BaseButton.vue';
     import ChartSelect from '../PassedCourses/ChartSelect.vue';
@@ -190,6 +190,6 @@
     }
   }
 
-    
+
   </script>
-  
+

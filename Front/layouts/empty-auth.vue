@@ -17,12 +17,10 @@ export default {
   async mounted() {
     // Hide the loading element after the component is mounted
     const loadingElement = document.getElementById('loading');
-    {
-      let data = localStorage.getItem('isDark')
-      if (Boolean(data)) {
-        this.$vuetify.theme.dark = data;
-      }
-    }
+    setTimeout(() => {
+      if (Boolean(localStorage.getItem('isDark')))
+        this.$vuetify.theme.dark = Boolean(localStorage.getItem('isDark'));
+    }, 2);
     if (loadingElement) loadingElement.style.display = 'none';
 
     // should set

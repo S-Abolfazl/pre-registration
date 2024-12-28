@@ -78,7 +78,6 @@
 </template>
 
 <script lang="ts">
-import BaseButton from '../Base/BaseButton.vue';
 import user_menu from '../Panel/user_menu.vue';
 
 export default {

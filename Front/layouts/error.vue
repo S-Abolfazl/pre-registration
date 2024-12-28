@@ -5,12 +5,10 @@
 <script>
 export default {
   mounted() {
-    {
-      let data = localStorage.getItem('isDark')
-      if (Boolean(data)) {
-        this.$vuetify.theme.dark = data;
-      }
-    }
+    setTimeout(() => {
+      if (Boolean(localStorage.getItem('isDark')))
+        this.$vuetify.theme.dark = Boolean(localStorage.getItem('isDark'));
+    }, 2);
     this.$router.push('/error')
   },
 }

@@ -16,13 +16,13 @@ export default {
   }),
   beforeMount() {
     document.getElementById('loading').style.display = 'none';
-    {
-      let data = localStorage.getItem('isDark')
-      if (Boolean(data)) {
-        this.$vuetify.theme.dark = data;
-      }
-    }
-    // should set
+
+    setTimeout(() => {
+      if (Boolean(localStorage.getItem('isDark')))
+        this.$vuetify.theme.dark = Boolean(localStorage.getItem('isDark'));
+    }, 2);
+
+
     this.checkAuth();
   },
   methods: {

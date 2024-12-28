@@ -12,9 +12,9 @@
       </v-col>
 
       <!-- Chart Select -->
-      <v-col  cols="3" class="align-left">
+      <!-- <v-col  cols="3" class="align-left">
         <ChartSelect width="80%" height="40px" @select="getData" />
-      </v-col>
+      </v-col> -->
     </v-row>
 
     <v-row class="align-center no-gutters mr-4" :style="{  paddingTop: '5%', width: '100%' }">
@@ -67,7 +67,7 @@
       <v-chip-group column multiple>
         <Course
           v-for="course in value"
-
+          :key="course.course_id"
           :courseName="course.courseName"
           :unit="course.unit"
           :kind="course.kind"
