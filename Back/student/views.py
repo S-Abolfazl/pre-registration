@@ -182,6 +182,7 @@ class CoursesForPassedCoursesApi(APIView):
             chart = EducationalChart.objects.get(year=year, type=type)
             serializer = EducationalChartSerializer(chart)
             data = {}
+            data["terms"] = {}
             for key, value in serializer.data.items():
                 if key == "year" or key == "type":
                     data[key] = value
@@ -189,18 +190,21 @@ class CoursesForPassedCoursesApi(APIView):
                 if key == "units" or key == "chart_id":
                     continue            
                 try:
-                    data[key] = {
-                        num: {
-                            "id": course.course_id if course else None,
-                            "courseName": course_name,
-                            "passed": CompletedCourses.objects.filter(student=student, course = course).exists() if course else False,
-                        }
-                        for num, course_name in enumerate(value, start=1)
-                        if (course := AllCourses.objects.filter(
+                    data["terms"][key[-1]] = {}
+                    num = 1
+                    for course_name in value:
+                        course = AllCourses.objects.filter(
                             courseName=course_name,
                             type__in=['theory_course', 'elective_course', 'practical_course', 'basic_course', 'public_course']
-                        ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first())
-                    }  
+                        ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first()
+                        
+                        if course:
+                            data["terms"][key[-1]][num] = {
+                                "id": course.course_id,
+                                "courseName": course_name,
+                                "passed": CompletedCourses.objects.filter(student=student, course=course).exists(),
+                            }
+                            num += 1  
                 except Exception as e:
                     return Response(
                         data={
@@ -220,7 +224,11 @@ class CoursesForPassedCoursesApi(APIView):
                 ), start=1) 
             }
 
-            return Response(data=data, status=status.HTTP_200_OK)
+            return Response(data={
+                "msg": "ok",
+                "data": data,
+                "status":status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
         except EducationalChart.DoesNotExist:
             return Response(
                 data={
