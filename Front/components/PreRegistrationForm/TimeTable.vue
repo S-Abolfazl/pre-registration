@@ -21,7 +21,6 @@
       :interval-count="14"
       :interval-minutes="60"
       interval-height="60"
-      show-interval-label
       :interval-format="formatInterval"
       @click:event="select"
     >

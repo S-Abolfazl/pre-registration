@@ -10,8 +10,10 @@
 export default {
   mounted() {
     setTimeout(() => {
-      if (Boolean(localStorage.getItem('isDark')))
-        this.$vuetify.theme.dark = Boolean(localStorage.getItem('isDark'));
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
     }, 2);
     document.getElementById('loading').style.display = 'none'
   },

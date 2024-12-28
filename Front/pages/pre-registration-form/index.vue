@@ -49,11 +49,11 @@ export default {
   beforeCreate() {
     this.$reqApi('/student/completed-courses/', {}, {}, true, 'get')
     .then((response) => {
-      if (response.length == 0) {
-        this.$toust.error("ابتدا دروسی که پاس کرده اید را مشحص کنید");
-        this.$router.push('/courses')
+      if (response.completed_courses.length == 0) {
+        this.$toast.error("ابتدا دروسی که پاس کرده اید را مشحص کنید");
+        this.$router.push('/passed-courses');
       }
-      // localStorage.setItem("passed_courses", response)
+      localStorage.setItem("passed_courses", response.completed_courses)
       })
     .catch((error) => {
       this.$toast.error(error);

@@ -74,10 +74,10 @@ export default {
   },
   methods: {
     goToProfile() {
-      this.$router.push("/profile")
+      this.$router.push("/profile");
     },
     goToLessons() {
-      console.log('Navigate to lessons');
+      this.$router.push("/passed-courses");
     },
     goToSettings() {
       console.log('Navigate to settings');
