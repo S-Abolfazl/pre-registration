@@ -10,7 +10,7 @@
 
       <addCourse
       :showAddCourse="showAddCourseModal"
-      @course-added="addCourseToTable"
+      @course-added="sendNewCourse"
       @close-modal="showAddCourseModal = false"
       />
 
@@ -114,13 +114,22 @@ export default {
     this.showAddCourseModal = true;
     },
 
-    addCourseToTable(newCourse) {
-    // اضافه کردن درس جدید به دیتا محلی
-    this.ComponentTabeleData.push(newCourse);
+    sendNewCourse(course){
+      axios.post('/api/courses', course)
+      .then(response => {
+        console.log('Course added successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error adding course:', error);
+      });
+  },
+    }
 
-    // اینجا می‌تونی درخواست به سرور برای ذخیره درس جدید ارسال کنی
-    console.log('درس جدید به جدول اضافه شد:', newCourse);
-    },
+    // addCourseToTable(newCourse) {
+    
+    // this.ComponentTabeleData.push(newCourse);
+    // console.log('درس جدید به جدول اضافه شد:', newCourse);
+    // },
   },
 };
 </script>

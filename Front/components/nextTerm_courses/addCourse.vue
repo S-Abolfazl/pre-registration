@@ -314,11 +314,33 @@ import BaseTitle from '../Base/BaseTitle.vue';
       isSelectedDay(day) {
         return this.newCourse.class_days.includes(day);
       },
+      
+      processCourseData(course) {
+        const processedCourse = { ...course };
+
+        // Format times
+        processedCourse.class_start_time = this.formatTime(course.class_start_time);
+        processedCourse.class_end_time = this.formatTime(course.class_end_time);
+        processedCourse.exam_start_time = this.formatTime(course.exam_start_time);
+        processedCourse.exam_end_time = this.formatTime(course.exam_end_time);
+
+        // Split class_days into two variables
+        const days = course.class_days;
+        processedCourse.class_time1 = days[0] || null;
+        processedCourse.class_time2 = days[1] || days[0] || null;
+
+        // Remove original class_days array
+        delete processedCourse.class_days;
+
+        return processedCourse;
+      },
 
       addCourse() {
         if (this.formValid) {
         
-          this.$emit("course-added", { ...this.newCourse });
+          const processedCourse = this.processCourseData(this.newCourse);
+
+          this.$emit("course-added", processedCourse);
   
           this.newCourse = {
             courseName: "",
