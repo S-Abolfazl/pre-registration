@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'student',
     'registrationForm',
     'support',
+    'master',
 ]
 
 REST_FRAMEWORK = {
