@@ -1,6 +1,6 @@
 let jmoment = require('jalali-moment')
 
-export default ({ _, store, _ }, inject) => {
+export default ({ _, store }, inject) => {
   inject('reloadPage', () => {
     window.location.reload()
   })

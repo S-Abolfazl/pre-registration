@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div>
+    <div class="ma-3 h-max w-max d-flex align-center">
       <nuxt />
     </div>
   </v-app>
@@ -8,13 +8,14 @@
 
 <script>
 export default {
-  data: () => ({
-    title: '',
-  }),
   mounted() {
     setTimeout(() => {
-      document.getElementById('loading-parent').style.display = 'none'
-    }, 1000)
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
+    }, 2);
+    document.getElementById('loading').style.display = 'none'
   },
 }
 </script>

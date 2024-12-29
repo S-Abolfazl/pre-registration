@@ -1,13 +1,13 @@
-import { version } from './package.json'
-import colors from 'vuetify/es5/util/colors'
-const fa = require('./locales/vuetifyjs.fa.json')
+import { version } from './package.json';
+import colors from 'vuetify/es5/util/colors';
+const fa = require('./locales/vuetifyjs.fa.json');
 
 export default {
   ssr: false,
   target: 'static',
   telemetry: false,
   head: {
-    title: 'صفحه اصلی',
+    title: 'سامانه پیش ثبت‌نام',
     titleTemplate: '%s',
     htmlAttrs: {
       lang: 'fa',
@@ -22,14 +22,13 @@ export default {
       { rel: 'stylesheet', href: '/css/fonts.css' },
       { rel: 'stylesheet', href: '/css/mobile.css' },
       { rel: 'stylesheet', href: '/css/google_font.css' },
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }
     ],
   },
   plugins: [
-    '~/plugins/base',
     '~/plugins/axios',
-    '~/plugins/axios-processmaker',
     '~/plugins/helper',
+    '~/plugins/apexcharts.js',
     { src: '~/plugins/other.js', ssr: false },
     { src: '~/plugins/vue-persian-datetime-picker', ssr: false },
   ],
@@ -42,22 +41,31 @@ export default {
     duration: 3000,
     position: 'bottom-left',
   },
-  // moment: {
-  //   defaultTimezone: 'Asia/Tehran'
-  // },
   vuetify: {
-    // customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: false,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.blue.darken4,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
+          info: '#00ABE1',
+          error: '#ff0000',
+          accent: '#1A2238',
+          success: '#169e1a',
+          warning: '#ffbb00',
+          primary: '#6938EF',
+
+          orange1: '#FF8B37',
+
+          gray1: '#686677',
+          gray2: '#CBCAD7',
+          gray3: '#9794AA',
+          gray4: '#303030',
+
+          black1: '#FFFFFF',
+          black2: '#FFFFAA',
+
+          white1: '#19181F',
+
+          red1: '#FF1100',
         },
         light: {
           info: '#00ABE1',
@@ -65,10 +73,25 @@ export default {
           accent: '#1A2238',
           success: '#169e1a',
           warning: '#ffbb00',
-          primary: '#602EAA',
-          darkpurple: '#2f1753',
-          secondary: '#0649dc',
-          background: '#e4e4e4'
+          primary: '#6938EF',
+          orange1: '#FF8B37',
+          orange2: '#FFD7C7',
+
+          gray1: '#686677',
+          gray2: '#CBCAD7',
+          gray3: '#9794AA',
+          gray4: '#EAE6FA',
+
+          black1: '#100F14',
+          black2: '#19181F',
+          black3: '#000000',
+
+          white1: '#FFFFFF',
+
+          blue1: '#E3E3FF',
+          blue2: '#7B5FF1',
+
+          red1: '#FF1100',
         }
       },
     },
@@ -78,10 +101,12 @@ export default {
       current: 'fa',
     },
     icons: {
-      iconfont: 'md',
+      defaultSet: 'mdi', // Use the Material Design Icons
+      iconfont: 'mdi',    // Ensure the correct font is used
     },
-    defaultAssets: false,
-    materialIcons: false,
+    defaultAssets: {
+      icons: 'mdi', // Ensure default assets are loaded
+    },
   },
   router: {
     mode: 'hash'
@@ -92,7 +117,11 @@ export default {
   build: {
     postcss: null,
     extend(config, ctx) {
-      config.resolve.alias['vue'] = 'vue/dist/vue.common'
+      config.resolve.alias['vue'] = 'vue/dist/vue.common';
     },
-  }
-}
+    transpile: ['vue-apexcharts', 'apexcharts'],
+  },
+  css: [
+    '@mdi/font/css/materialdesignicons.css'
+  ]
+};

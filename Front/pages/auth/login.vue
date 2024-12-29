@@ -1,16 +1,18 @@
 <template>
-
+  <div class="w-max">
+    <LoginForm />
+  </div>
 </template>
 
 <script>
+import LoginForm from "~/components/Auth/LoginForm.vue";
 export default {
-  data: () => ({
-    title: 'ورود به سامانه',
-  }),
-  mounted() {
-    this.$store.dispatch('setPageTitle', this.title)
+  layout: 'site',
+  head() {
+    return {
+      title: 'ورود به سامانه',
+    }
   },
-  methods: {
-  }
-}
+  components: { LoginForm, }
+};
 </script>
