@@ -3,7 +3,7 @@
     <v-col  class="my-4">
       
       <v-row class="align-center mb-6">
-        <h1 class="font_43 flex-end mt-6 black1--text"> تقویم آموزشی سال تحصیلی</h1>
+        <h1 class="font_43 flex-end mt-6 black1--text">دروس ارائه شده در نیم سال اول</h1>
 
         <year_card class="font_24" text="1403-1404" ></year_card>
       </v-row>
