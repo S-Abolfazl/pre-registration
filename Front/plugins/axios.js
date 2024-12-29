@@ -141,6 +141,10 @@ export default async ({ $axios, $toast, store }, inject) => {
 
   function checkErrorResponse(error) {
     try {
+      if (error.response.data.code == "user_not_found"){
+        store.dispatch('auth/error401');
+      }
+
       if (error.response.data.code == "token_not_valid"){
         $axios.$post("user/refresh-token/", {
           "refresh_token" : localStorage.getItem("refresh_token")

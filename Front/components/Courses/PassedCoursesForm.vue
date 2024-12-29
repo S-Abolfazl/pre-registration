@@ -113,7 +113,7 @@ export default {
 
       this.$reqApi("/student/selecet-passed-course/", {"course_ids" : passedCourseIds})
       .then((response) => {
-        this.$toast.success("درس های انتخاب شده با موفقیت به لیست دروس گذارتده شده اضافه شدند");
+        this.$toast.success("درس های انتخاب شده با موفقیت به لیست دروس گذارنده شده اضافه شدند");
       })
       .catch((error) => {
         this.$toast.error(error);
