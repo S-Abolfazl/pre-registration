@@ -50,8 +50,6 @@ services:
     volumes:
     #   - ./Front:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=production
     depends_on:
       - django
 
