@@ -115,13 +115,14 @@ export default {
     },
 
     sendNewCourse(course){
-      axios.post('/api/courses', course)
+      this.$reqApi.post('/courses', course)
       .then(response => {
-        console.log('Course added successfully:', response.data);
+        console.log('Course added:', response.data);
       })
       .catch(error => {
-        console.error('Error adding course:', error);
+        console.error('Error:', error);
       });
+
     },
   
 

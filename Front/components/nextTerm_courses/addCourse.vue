@@ -319,10 +319,10 @@ import BaseTitle from '../Base/BaseTitle.vue';
         const processedCourse = { ...course };
 
         // Format times
-        processedCourse.class_start_time = this.formatTime(course.class_start_time);
-        processedCourse.class_end_time = this.formatTime(course.class_end_time);
-        processedCourse.exam_start_time = this.formatTime(course.exam_start_time);
-        processedCourse.exam_end_time = this.formatTime(course.exam_end_time);
+        processedCourse.class_start_time = this.formatTime12to24(course.class_start_time);
+        processedCourse.class_end_time = this.formatTime12to24(course.class_end_time);
+        processedCourse.exam_start_time = this.formatTime12to24(course.exam_start_time);
+        processedCourse.exam_end_time = this.formatTime12to24(course.exam_end_time);
 
         // Split class_days into two variables
         const days = course.class_days;
@@ -363,6 +363,24 @@ import BaseTitle from '../Base/BaseTitle.vue';
       closeModal() {
         this.$emit("close-modal"); 
       },
+    
+      formatTime12to24(time) {
+        if (!time || typeof time !== 'string') return '00:00'; 
+        const [timePart, modifier] = time.split(' '); 
+        let [hours, minutes] = timePart.split(':').map(Number);
+      
+        if (modifier === 'PM' && hours < 12) {
+          hours += 12;
+        }
+        if (modifier === 'AM' && hours === 12) {
+          hours = 0;
+        }
+      
+        const formattedHours = hours.toString().padStart(2, '0');
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+      
+        return `${formattedHours}:${formattedMinutes}`;
+      }
     },
   };
   </script>
