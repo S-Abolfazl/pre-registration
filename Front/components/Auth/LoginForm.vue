@@ -47,10 +47,24 @@
         />
 
         <div class="d-flex flex-end w-75">
-          <span @click="passwordForgot" class="primary--text underline pointer font_16">
+          <span @click="toggleForgotPassword" class="primary--text underline pointer font_16">
             رمز عبور خود را فراموش کردید؟
           </span>
         </div>
+
+        <div
+  v-if="showForgotPassword"
+  class="overlay"
+>
+  <div
+    ref="forgotPasswordModal"
+    class="modal"
+    style="border-radius: 50px; padding-left: 100px; padding-right: 100px;"
+  >
+    <ForgotPassword @close="toggleForgotPassword" />
+  </div>
+</div>
+
 
         <BaseButton
           color="primary"
@@ -86,19 +100,38 @@
   </v-form>
 </template>
 
+
 <script>
+import ForgotPassword from '../Login/ForgotPassword.vue';
+
 export default {
+  components:{
+    ForgotPassword,
+  },
   data: () => ({
+    
     valid: false,
     loading: false,
     form: {
       username: '',
       password: '',
     },
+    showForgotPassword: false,
   }),
   methods: {
+    toggleForgotPassword() {
+      this.showForgotPassword = !this.showForgotPassword;
+    },
+    handleOutsideClick(event) {
+      if (
+        this.showForgotPassword &&
+        this.$refs.forgotPassword &&
+        !this.$refs.forgotPassword.contains(event.target)
+      ) {
+        this.showForgotPassword = false;
+      }
+    },
     login_with_google() {},
-    passwordForgot() {},
     login() {
       this.$reqApi('user/login/', this.form)
         .then((response) => {
@@ -116,7 +149,13 @@ export default {
     signup() {
       this.$router.push('/auth/signup');
     },
-  }
+  },
+  mounted() {
+    document.addEventListener("click", this.handleOutsideClick);
+  },
+  beforeDestroy() {
+    document.removeEventListener("click", this.handleOutsideClick);
+  },
 }
 </script>
 <style scoped>
@@ -135,5 +174,24 @@ export default {
   }
   .w-75 {
     width: 75%;
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
   }
 </style>
