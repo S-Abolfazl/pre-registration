@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div class="the-border">
     <v-card class="professors-card blue1"  @click="goToProfessor">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
@@ -65,11 +65,15 @@
 </script>
 
 <style scoped>
+.the-border {
+  border-radius: 25px;
+  border: 3px solid #7B5FF1 !important;
+}
 .professors-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
   /* background-color: var(blue1); */
-  border: 3px solid #7B5FF1 !important;
+  /* border: 3px solid #7B5FF1 !important; */
   /* width: 33%;  */
   height: auto;
   min-height: 280px;

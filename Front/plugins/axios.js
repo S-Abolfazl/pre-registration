@@ -109,7 +109,7 @@ export default async ({ $axios, $toast, store }, inject) => {
   function checkResponse(response) {
     // TODO : check response.statusCode
     if (response) {
-      if (response.msg == 'ok') {
+      if (response.msg == 'ok' || response.status == 200) {
         return {
           status: true,
           data: response.data,
@@ -141,10 +141,16 @@ export default async ({ $axios, $toast, store }, inject) => {
 
   function checkErrorResponse(error) {
     try {
-
       if (error.response.data.code == "token_not_valid"){
-        console.log('asd');
-        // TODO
+        $axios.$post("user/refresh-token/", {
+          "refresh_token" : localStorage.getItem("refresh_token")
+        }).then((response) => {
+          console.log("res : ", response);
+          localStorage.setItem("token", response);
+        })
+        .catch((_) => {
+          store.dispatch('auth/error401');
+        });
       }
       else if (
         error &&
