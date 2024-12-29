@@ -122,8 +122,8 @@ export default {
       .catch(error => {
         console.error('Error adding course:', error);
       });
-  },
-    }
+    },
+  
 
     // addCourseToTable(newCourse) {
     
