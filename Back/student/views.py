@@ -50,59 +50,69 @@ class EducationalChartGetApi(APIView):
         operation_description="Endpoint to get a specific educational chart.",
     )
     def get(self, request):
+        student = request.user
+        year = int(student.entry_year)
+        if int(student.username[-1]) % 2 == 0:
+            type = 'even'
+        else:
+            type = 'odd'
+        other_type = 'even' if type == 'odd' else 'odd'
         try:
-            student = request.user
-            year = int(student.entry_year)
-            if int(student.username[-1]) % 2 == 0:
-                type = 'even'
-            else:
-                type = 'odd'
-            try:
-                chart = EducationalChart.objects.get(year=year, type=type)
-            except:
-                return Response(
-                    data={
-                        "msg": "error",
-                        "data": f"چارت درسی مورد نظر یافت نشد",
-                        "status":status.HTTP_404_NOT_FOUND
-                    },
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            serializer = EducationalChartSerializer(chart)
-            data = {}
-            data['terms'] = {}
+            chart = EducationalChart.objects.get(year=year, type=type)
+            other_chart = EducationalChart.objects.get(year=year, type=other_type)
+        except:
+            return Response(
+                data={
+                    "msg": "error",
+                    "data": f"چارت درسی ای مربوط به ورودی شما یافت نشد",
+                    "status":status.HTTP_404_NOT_FOUND
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = EducationalChartSerializer(chart)
+        other_serializer = EducationalChartSerializer(other_chart)
+        types = [type, other_type]
+        serializers = [serializer, other_serializer]
+        data = {}
+        data["user_type"] = type
+        for type, serializer in zip(types, serializers):
+            data[type] = {}
+            data[type]['terms'] = {}
             term = 1
             course_name = None
             for key, value in serializer.data.items():
                 if key == "units" or key == "year" or key == "type" or key == "chart_id":
-                    data[key] = value
+                    data[type][key] = value
                     continue            
                 try:
-                    data['terms'][term] = [
+                    data[type]['terms'][term] = [
                         {
                             "courseName": course_name,
                             "prereq": list(course.prereqs_for.values_list("prereq_course__courseName", flat=True)) if (course := AllCourses.objects.filter(courseName=course_name).first()) else [],
                             "coreq": list(course.coreqs_for.values_list("coreq_course__courseName", flat=True)) if course else [],
-                            "unit": course.unit if course else 3,
-                            "kind": course.type if course else "elective_course",
+                            "unit": course.unit,
+                            "kind": course.type,
+                            "course_id": course.course_id,
                         }
                         for course_name in value
                     ]
                     
                     term += 1
                 except Exception as e:
-                    print(f"Error processing courses in key {key}: {e}")
-                    
-            return Response(data=data, status=status.HTTP_200_OK)
-        except EducationalChart.DoesNotExist:
-            return Response(
-                data={
-                    "msg": "error",
-                    "data": f"EducationalChart not found {course_name}",
-                    "status":status.HTTP_404_NOT_FOUND
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
+                    return Response(
+                        data={
+                            "msg": "error",
+                            "data": f"خطاای در پردازش درس ها رخ داده است",
+                            "status":status.HTTP_500_INTERNAL_SERVER_ERROR
+                        },
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
+                
+        return Response(data={
+                "msg": "ok",
+                "data": data,
+                "status":status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
 
 class AddCompletedCourseApi(APIView):
     permission_classes = [IsStudent, IsAuthenticated]
@@ -125,32 +135,37 @@ class AddCompletedCourseApi(APIView):
         student = request.user
         course_ids = request.data.get('course_ids', [])
         if not course_ids:
+            CompletedCourses.objects.filter(student=student).delete()
             return Response(
                 data={
-                    "msg": "error",
-                    "data": "Course IDs list is required",
-                    "status": status.HTTP_400_BAD_REQUEST
+                    "msg": "ok",
+                    "data": "تمامی دروس گذرانده شده حذف شدند",
+                    "status": status.HTTP_200_OK,
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_200_OK,
             )
-        added_courses = []
+        completed_before = CompletedCourses.objects.filter(student=student).values_list("course", flat=True)
+        for course_id in completed_before:
+            if str(course_id) not in course_ids:
+                CompletedCourses.objects.filter(student=student, course=course_id).delete()
+            
+        completed_courses = []
         for course_id in course_ids:
             try:
                 course = AllCourses.objects.get(course_id=course_id)
-                completed_course, created = CompletedCourses.objects.get_or_create(
+                CompletedCourses.objects.get_or_create(
                     student=student, course=course
                 )
-                if created:
-                    added_courses.append(course.courseName)
+                completed_courses.append(course.courseName)
             except:
                 return Response(
-                    {"msg": f"Course with ID {course_id} does not exist."},
+                    {"msg": f"Course with ID {course_id} does not exist"},
                     status=status.HTTP_404_NOT_FOUND,
                 )
         return Response(
-        {
-            "msg": "Courses added successfully.",
-            "added_courses": added_courses,
+       data={
+            "msg": "درس های انتخاب شده با موفقیت به لیست دروس گذارتده شده اضافه شدند",
+            "completed_courses": completed_courses,
             "status": status.HTTP_200_OK,
         },
         status=status.HTTP_200_OK,
@@ -175,6 +190,7 @@ class CoursesForPassedCoursesApi(APIView):
             chart = EducationalChart.objects.get(year=year, type=type)
             serializer = EducationalChartSerializer(chart)
             data = {}
+            data["terms"] = {}
             for key, value in serializer.data.items():
                 if key == "year" or key == "type":
                     data[key] = value
@@ -182,20 +198,30 @@ class CoursesForPassedCoursesApi(APIView):
                 if key == "units" or key == "chart_id":
                     continue            
                 try:
-                    data[key] = {
-                        num: {
-                            "id": course.course_id if course else None,
-                            "courseName": course_name,
-                            "passed": CompletedCourses.objects.filter(student=student, course = course).exists() if course else False,
-                        }
-                        for num, course_name in enumerate(value, start=1)
-                        if (course := AllCourses.objects.filter(
+                    data["terms"][key[-1]] = {}
+                    num = 1
+                    for course_name in value:
+                        course = AllCourses.objects.filter(
                             courseName=course_name,
                             type__in=['theory_course', 'elective_course', 'practical_course', 'basic_course', 'public_course']
-                        ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first())
-                    }  
+                        ).exclude(courseName__in=["گروه معارف", "دانش خانواده"]).first()
+                        
+                        if course:
+                            data["terms"][key[-1]][num] = {
+                                "id": course.course_id,
+                                "courseName": course_name,
+                                "passed": CompletedCourses.objects.filter(student=student, course=course).exists(),
+                            }
+                            num += 1  
                 except Exception as e:
-                    print(f"Error processing courses in key {key}: {e}")
+                    return Response(
+                        data={
+                            "msg": "error",
+                            "data": f"خطاای در پردازش درس ها رخ داده است",
+                            "status":status.HTTP_500_INTERNAL_SERVER_ERROR
+                        },
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
                 
             data["elective_course"] = {
                 num:{
@@ -206,14 +232,44 @@ class CoursesForPassedCoursesApi(APIView):
                 ), start=1) 
             }
 
-            return Response(data=data, status=status.HTTP_200_OK)
+            return Response(data={
+                "msg": "ok",
+                "data": data,
+                "status":status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
         except EducationalChart.DoesNotExist:
             return Response(
                 data={
                     "msg": "error",
-                    "data": f"EducationalChart not found",
+                    "data": f"چارت درسی ای مربوط به ورودی شما یافت نشد",
                     "status":status.HTTP_404_NOT_FOUND
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+            
+class CompletedCoursesApi(APIView):
+    permission_classes = [IsStudent, IsAuthenticated]
+    @swagger_auto_schema(
+        operation_summary="Get Completed Courses",
+        operation_description="Endpoint to get list of completed courses for a student.",
+    )
+    def get(self, request):
+        student = request.user
+        completed_courses = CompletedCourses.objects.filter(student=student)
+        data = {
+            "completed_courses": [
+                {
+                    "course_id": course.course.course_id,
+                    "course_name": course.course.courseName,
+                    "unit": course.course.unit,
+                    "type": course.course.type,
+                }
+                for course in completed_courses
+            ]
+        }
+        return Response(data={
+            "msg": "ok",
+            "data": data,
+            "status": status.HTTP_200_OK    
+        }, status=status.HTTP_200_OK)
 

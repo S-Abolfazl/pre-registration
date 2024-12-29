@@ -9,9 +9,10 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from social_django.utils import load_strategy
 from social_core.backends.google import GoogleOAuth2
+from rest_framework import serializers
 
 from .models import User
-from .serializers import UserSerializer, UserDetailSerializer, UserUpdateSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 from user.permissions import IsStudent
 class UserSignupApi(APIView):
     permission_classes = [AllowAny]
@@ -19,7 +20,16 @@ class UserSignupApi(APIView):
     @swagger_auto_schema(
         operation_summary="User Signup",
         operation_description="Endpoint to create a new user and return tokens.",
-        request_body=UserSerializer,
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['username', 'password', 'email', 'type'],
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
+            }
+        )
     )
     
     def post(self, request):
@@ -61,7 +71,12 @@ class UserListApi(APIView):
     def get(self, request):
         users = User.objects.all()
         serializer = UserDetailSerializer(users, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(data={
+            "msg":"ok",
+            "data":serializer.data,
+            "status":status.HTTP_200_OK           
+            }
+            , status=status.HTTP_200_OK)
     
 class UserDetailApi(APIView):
     permission_classes = [IsAuthenticated, IsStudent]
@@ -107,10 +122,17 @@ class UserLoginApi(APIView):
             access_token = str(refresh.access_token)
             refresh_token = str(refresh)
             
+            serializer = UserSerializer(user)
+            user_data = {}
+            user_data = {
+                key: value
+                for key, value in serializer.data.items()
+                if key not in ['password', 'first_name', 'last_name', 'mobile_number', 'avatar']
+            }
             return Response(data={
                 "msg": "ok",
                 "data": {
-                    "user": UserSerializer(user).data,
+                    "user": user_data,
                     "access_token": access_token,
                     "refresh_token": refresh_token,
                     "status": status.HTTP_200_OK
@@ -119,9 +141,50 @@ class UserLoginApi(APIView):
         else:
             return Response(data={
                 "msg": "error",
-                "data": "Invalid username or password",
+                "data": "نام کاربری یا رمز عبور اشتباه است",
                 "status": status.HTTP_401_UNAUTHORIZED
             }, status=status.HTTP_401_UNAUTHORIZED)
+            
+    
+class RefreshTokenApi(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        operation_summary="Refresh Token",
+        operation_description="Endpoint to refresh an access token using a refresh token.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['refresh_token'],
+            properties={
+                'refresh_token': openapi.Schema(type=openapi.TYPE_STRING, description='Refresh Token')
+            }
+        )
+    )
+    
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            if not refresh_token:
+                return Response(data={
+                    "msg": "error",
+                    "data": "رفرش توکن مورد نیاز است",
+                    "status": status.HTTP_400_BAD_REQUEST
+                })
+            token = RefreshToken(refresh_token)
+            access_token = str(token.access_token)
+            return Response(data={
+                "msg": "ok",
+                "data": {
+                    "access_token": access_token,
+                    "status": status.HTTP_200_OK
+                }
+            }, status=status.HTTP_200_OK)
+        except (TokenError, InvalidToken):
+            return Response(data={
+                "msg": "error",
+                "data": "توکن نامعتبر است یا قبلاً غیرفعال شده است",
+                "status": status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)
             
 
 
@@ -148,13 +211,13 @@ class UserLogoutApi(APIView):
             token.blacklist()
             return Response(data={
                 "msg": "ok",
-                "data": "Successfully logged out",
+                "data": "با موفقیت خارج شدید",
                 "status": status.HTTP_200_OK
             }, status=status.HTTP_200_OK)
         except (TokenError, InvalidToken):
             return Response(data={
                 "msg": "error",
-                "data": "Invalid token or token already blacklisted",
+                "data": "توکن نامعتبر است یا قبلاً غیرفعال شده است",
                 "status": status.HTTP_400_BAD_REQUEST
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -223,12 +286,12 @@ class UserUpdateApi(APIView):
     def patch(self, request):
         try:
             user = request.user
-            serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+            serializer = UserSerializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
                     "msg": "ok",
-                    "data": f'user by id:{user.id} updated',
+                    "data": f'کاربر با نام کاربری {user.username} به روز شد',
                     "status": status.HTTP_200_OK
                 }, status=status.HTTP_200_OK)
             return Response(
@@ -242,41 +305,72 @@ class UserUpdateApi(APIView):
         except User.DoesNotExist:
             return Response(data={
                 "msg": "error",
-                "data": "user not found",
+                "data": "کاربر یافت نشد",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response(data={
                 "msg": "error",
-                "data": str(e),
-                "status": status.HTTP_400_BAD_REQUEST
-            }, status=status.HTTP_400_BAD_REQUEST)
+                "data": 'در پردازش اطلاعات مشکلی پیش آمده است',
+                "status": status.HTTP_500_INTERNAL_SERVER_ERROR
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             
-            
-class UserResetPasswordApi(APIView):
-    permission_classes = [IsAuthenticated]
+        
+class UserForgotPasswordApi(APIView):
+    permission_classes = [AllowAny]
+    
+    @swagger_auto_schema(
+        operation_summary="Forgot Password",
+        operation_description="Endpoint to reset a user's password.",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['email', 'password', 'confirm_password'],
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'confirm_password': openapi.Schema(type=openapi.TYPE_STRING, description='Confirm Password')
+            }
+        )
+    )
     def post(self, request):
         try:
-            user = User.objects.get(username=request.user.username)
-            if request.data["password"] == request.data["confirm_password"]:
-                user.set_password(request.data["password"])
-                user.save()
+            email = request.data.get("email")
+            password = request.data.get("password")
+            confirm_password = request.data.get("confirm_password")
+            
+            user = User.objects.get(email=email)
+            
+            if password != confirm_password:
                 return Response(data={
-                    "msg":"ok",
-                    "data":"password reset",
-                    "status": status.HTTP_200_OK
-                }, status=status.HTTP_200_OK)
-            else:
-                return Response(data={
-                    "msg":"error",
-                    "data":"passwords do not match",
+                    "msg": "error",
+                    "data": "کلمه عبور و تکرار آن باید یکسان باشند",
                     "status": status.HTTP_400_BAD_REQUEST
                 }, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer = UserSerializer()
+            try:
+                validated_password = serializer.validate_password(password)
+            except serializers.ValidationError as e:
+                return Response(data={
+                    "msg": "error",
+                    "data": e.detail,
+                    "status": status.HTTP_400_BAD_REQUEST
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            user.set_password(validated_password)
+            user.save()
+            
+            return Response(data={
+                "msg": "ok",
+                "data": "کلمه عبور با موفقیت تغییر یافت",
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
+
         except User.DoesNotExist:
             return Response(data={
-                "msg":"error",
-                "data":"user not found",
+                "msg": "error",
+                "data": "User not found",
                 "status": status.HTTP_404_NOT_FOUND
             }, status=status.HTTP_404_NOT_FOUND)
             
@@ -325,7 +419,7 @@ class GoogleLoginApi(APIView):
             except User.DoesNotExist:
                 return Response(data={
                     "msg": "error", 
-                    "data": "User does not exist", 
+                    "data": "کاربری با این ایمیل یافت نشد", 
                     "status": status.HTTP_401_UNAUTHORIZED   
                 },
                 status=status.HTTP_401_UNAUTHORIZED
@@ -347,8 +441,8 @@ class GoogleLoginApi(APIView):
         except Exception as e:
             return Response(data={
                     "msg": "error", 
-                    "data": str(e), 
-                    "status": status.HTTP_400_BAD_REQUEST
+                    "data": "مشکلی در پردازش اطلاعات پیش آمده است", 
+                    "status": status.HTTP_500_INTERNAL_SERVER_ERROR
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

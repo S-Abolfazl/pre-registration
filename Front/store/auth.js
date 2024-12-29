@@ -1,5 +1,5 @@
 export const state = () => ({
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   action: [],
   role_id: "",
   token: '',
@@ -14,19 +14,16 @@ export const state = () => ({
     student_id: '',
     professor_id: '',
     supporter_id: '',
-
   },
 })
 
 export const mutations = {
   set_user(state, data) {
+    localStorage.setItem("user", JSON.stringify(data));
     state.user = data
   },
   set_action(state, data) {
     state.action = data
-  },
-  set_role_id(state, data) {
-    state.role_id = data
   },
   set_token(state, data) {
     state.token = data.token
@@ -75,7 +72,7 @@ export const actions = {
             'token': token,
             'refresh_token': refresh_token,
            })
-          await this.$reqApi(`/auth/user`, { get_token: true})
+          await this.$reqApi(`/user/login`, { get_token: true})
             .then(async (response) => {
               await dispatch('setAction', response.user)
               await commit('set_user', response.user)
@@ -114,13 +111,14 @@ export const actions = {
       }
     })
   },
-  async login({ commit, dispatch }, { user, Authorization }) {
-    commit('set_user', user)
-    await dispatch('setAction', user)
-    await dispatch('setRole', user)
+  async login({ commit, dispatch }, data) {
+
+    commit('set_user', data.user)
+    // await dispatch('setAction', data.user.type)
+    await dispatch('setRole', data.user.type)
     await commit('set_token', {
-      token: Authorization.token,
-      refresh_token: Authorization.refresh_token,
+      token: data.access_token,
+      refresh_token: data.refresh_token,
     });
   },
   async logout({ dispatch }) {
@@ -143,7 +141,6 @@ export const actions = {
     localStorage.clear('refresh_token')
     window.location.href = '/#/auth/login'
   },
-
   async setAction({ commit }, user) {
     if (Boolean(user) && Boolean(user.actions)){
       await commit('set_action', user.actions);

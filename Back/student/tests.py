@@ -89,11 +89,11 @@ class AddCompletedCourseApiTest(APITestCase):
         response = self.client.post(self.url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["msg"], "Courses added successfully.")
-        self.assertIn("added_courses", response.data)
-        self.assertEqual(len(response.data["added_courses"]), 2)
-        self.assertIn("Computer Science 101", response.data["added_courses"])
-        self.assertIn("Computer Science 102", response.data["added_courses"])
+        self.assertEqual(response.data["msg"], "درس های انتخاب شده با موفقیت به لیست دروس گذارتده شده اضافه شدند")
+        self.assertIn("completed_courses", response.data)
+        self.assertEqual(len(response.data["completed_courses"]), 2)
+        self.assertIn("Computer Science 101", response.data["completed_courses"])
+        self.assertIn("Computer Science 102", response.data["completed_courses"])
 
         self.assertTrue(CompletedCourses.objects.filter(student=self.student, course=self.course1).exists())
         self.assertTrue(CompletedCourses.objects.filter(student=self.student, course=self.course2).exists())
@@ -104,9 +104,9 @@ class AddCompletedCourseApiTest(APITestCase):
         }
         response = self.client.post(self.url, data, format="json")
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "error")
-        self.assertEqual(response.data["data"], "Course IDs list is required")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], "تمامی دروس گذرانده شده حذف شدند")
         
     def test_add_completed_courses_course_not_found(self):
         data = {
@@ -115,5 +115,5 @@ class AddCompletedCourseApiTest(APITestCase):
         response = self.client.post(self.url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(response.data["msg"], "Course with ID fake1234 does not exist.")
+        self.assertEqual(response.data["msg"], "Course with ID fake1234 does not exist")
     

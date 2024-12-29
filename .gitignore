@@ -11,3 +11,7 @@ __pycache__/
 Back/static
 Back/staticfiles
 Back/media
+Front/node_modules
+Front/jsconfig.json
+Front/.nuxt
+Front/static/sw.js

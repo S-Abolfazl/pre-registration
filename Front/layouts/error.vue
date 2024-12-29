@@ -4,15 +4,14 @@
 
 <script>
 export default {
-  props: {},
-  data: () => ({
-    title: '',
-  }),
   mounted() {
-    this.$router.push('/error')
     setTimeout(() => {
-      document.getElementById('loading-parent').style.display = 'none'
-    }, 1000)
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
+    }, 2);
+    this.$router.push('/error')
   },
 }
 </script>

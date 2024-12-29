@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import RegistrationForm, SelectedCourse
-from course.models import Course, AllCourses
+from course.models import Course, AllCourses, Prereq, Coreq
 from student.models import CompletedCourses
 from .serializers import RegistrationFormSerializer, RegisterationFormDetailSerializer
 from user.permissions import IsStudentOrAdmin, IsStudent
@@ -76,11 +76,11 @@ class RegistrationFormCreateView(APIView):
             )
         return Response(
             data={
-                'msg': 'error',
-                'data': serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST
+                'msg': 'ok',
+                'data': 'فرم پیش ثبت نام برای این دانشجو قبلا ساخته شده است',
+                "status": status.HTTP_200_OK
             },
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_200_OK
         )
 
 
@@ -179,12 +179,85 @@ class RegistrationFormDataApi(APIView):
             return Response(
                 data={
                     'msg': 'error',
-                    'data': 'Error in getting courses: ' + str(e),
+                    'data': 'مشکلی در دریافت اطلاعات دروس پیش ثبت نام به وجود آمده است',
                     "status": status.HTTP_400_BAD_REQUEST
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    
+class RegistrationFormPrereqFilterApi(APIView):
+    permission_classes = (IsAuthenticated, IsStudent)
+    
+    @swagger_auto_schema(
+        operation_summary="Filter Courses by Prerequisites",
+        operation_description="Endpoint to get courses filtered by prerequisites.",
+    )
+    
+    def get(self, request):
+        try:
+            student_id = request.user.id
+            courses = Course.objects.all()
+            completed_courses = CompletedCourses.objects.filter(student_id=student_id)
+            completed_courses = completed_courses.values_list('course', flat=True)
+            selected_courses = SelectedCourse.objects.filter(form__student_id=student_id)
+            selected_courses = selected_courses.values_list('course_id', flat=True)
+            for com_course in completed_courses:
+                courses = courses.exclude(course=com_course)
+
+            filterd_courses = []
+            should_remove = []
+            for course in courses:
+                prereqs = Prereq.objects.filter(course=course.course).values_list('prereq_course', flat=True)
+                if all(prereq in completed_courses for prereq in prereqs):
+                    filterd_courses.append(course)
+                else:
+                    course_is_coreqs = Coreq.objects.filter(coreq_course=course.course).values_list('course', flat=True)
+                    should_remove.extend(course_is_coreqs)
             
+            filterd_courses = [course for course in filterd_courses if course.c_id not in should_remove]
+            data = []
+            for course in filterd_courses:
+                data.append({
+                    "c_id": course.c_id,
+                    "teacherName": course.teacherName,
+                    "isExperimental": course.isExperimental,
+                    "class_time1": course.class_time1,
+                    "class_time2": course.class_time2,
+                    "class_start_time": str(course.class_start_time)[:-3],
+                    "class_end_time": str(course.class_end_time)[:-3],
+                    "exam_date": course.exam_date,
+                    "exam_start_time": str(course.exam_start_time)[:-3],
+                    "exam_end_time": str(course.exam_end_time)[:-3],
+                    "capacity": course.capacity,
+                    "registered": course.registered,
+                    "description": course.description,
+                    "course": {
+                        "course_id": course.course.course_id,
+                        "courseName": course.course.courseName,
+                        "unit": course.course.unit,
+                        "type": course.course.type
+                    },
+                    "selected": True if course.c_id in selected_courses else False
+                })
+            return Response(
+                data={
+                    'msg': 'ok',
+                    'data': data,
+                    "status": status.HTTP_200_OK
+                },
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                data={
+                    'msg': 'error',
+                    'data': 'مشکلی در دریافت اطلاعات دروس پیش ثبت نام به وجود آمده است',
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 class RegistrationFormConfirmApi(APIView):
     permission_classes = (IsAuthenticated, IsStudent)
     
@@ -209,11 +282,16 @@ class RegistrationFormConfirmApi(APIView):
             student_id = request.user.id
             course_ids = request.data.get('course_ids', [])
             if not course_ids:
+                selected_courses = SelectedCourse.objects.filter(form__student_id=student_id).values_list('course', flat=True)
+                for c_id in selected_courses:
+                    course = Course.objects.get(c_id=c_id)
+                    course.registered -= 1
+                    course.save()
                 SelectedCourse.objects.filter(form__student_id=student_id).delete()
                 return Response(
                     data={
                         'msg': 'ok',
-                        'data': 'Courses removed successfully',
+                        'data': 'تمامی دروس انتخاب شده حذف شدند',
                         "status": status.HTTP_200_OK
                     }, 
                     status=status.HTTP_200_OK
@@ -223,27 +301,61 @@ class RegistrationFormConfirmApi(APIView):
             before_selected_course = SelectedCourse.objects.filter(form=form).values_list('course', flat=True)
             
             for course_id in before_selected_course:
-                if course_id not in course_ids:
+                if str(course_id) not in course_ids:
                     SelectedCourse.objects.get(form=form, course_id=course_id).delete()
+                    course = Course.objects.get(c_id=course_id)
+                    course.registered -= 1
+                    course.save()
+                        
+            selected_for_now = [Course.objects.get(c_id=c_id) for c_id in course_ids]
+            selected_for_now = [c.course.course_id for c in selected_for_now]
             
             for course_id in course_ids:
                 course = Course.objects.get(c_id=course_id)
-                SelectedCourse.objects.get_or_create(form=form, course=course)
+                base_course = course.course
+                prerequisites = Prereq.objects.filter(course=base_course)
+                prerequisites = prerequisites.values_list('prereq_course', flat=True)
+                completed_courses = CompletedCourses.objects.filter(student=student_id).values_list('course', flat=True)
+                if not all(prereq in completed_courses for prereq in prerequisites):
+                    return Response(
+                        data={
+                            'msg': 'error',
+                            'data': f"شما تمام پیشنیازهای درس {course.course.courseName} نگذرانده‌اید",
+                            "status": status.HTTP_400_BAD_REQUEST
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                coreqs = Coreq.objects.filter(course=base_course)
+                coreqs = coreqs.values_list('coreq_course', flat=True)
+                if not all((coreq in completed_courses or coreq in selected_for_now) for coreq in coreqs):
+                    return Response(data={
+                       "msg": "error",
+                        "data": f"شما تمام هم‌نیازهای درس {course.course.courseName} را انتخاب نکرده‌اید",
+                        "status": status.HTTP_400_BAD_REQUEST
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )       
+                        
+                if not SelectedCourse.objects.filter(form=form, course=course).exists(): 
+                    SelectedCourse.objects.create(form=form, course=course)
+                    course.registered += 1
+                    course.save()
+                
                 
             return Response(
                 data={
                     'msg': 'ok',
-                    'data': 'Courses added successfully',
+                    'data': 'دروس انتخاب شده با موفقیت ثبت شدند',
                     "status": status.HTTP_201_CREATED
                 },
                 status=status.HTTP_201_CREATED
             )
-        except Exception as e:
+        except:
             return Response(
                 data={
                     'msg': 'error',
-                    'data': 'Error in adding courses: ' + str(e),
-                    "status": status.HTTP_400_BAD_REQUEST
+                    'data': 'مشکلی در ثبت دروس انتخاب شده برای پیش ثبت نام به وجود آمده است',
+                    "status": status.HTTP_500_INTERNAL_SERVER_ERROR
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

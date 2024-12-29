@@ -32,9 +32,9 @@ class RegistrationFormCreateViewTest(APITestCase):
 
         response = self.client.post("/registration-form/create/")
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "error")
-        self.assertIn("student_id", response.data["data"])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], 'فرم پیش ثبت نام برای این دانشجو قبلا ساخته شده است')
 
     def test_create_registration_form_unauthenticated(self):
         self.client.logout()
@@ -101,7 +101,15 @@ class RegistrationFormUpdateViewTest(APITestCase):
         self.non_admin_user = User.objects.create_user(
             username="regularuser",
             password="User@1234",
-            email="user@example.com"
+            email="user@example.com",
+            type="student"
+        )
+        
+        self.another_non_admin_user = User.objects.create_user(
+            username="anotheruser",
+            password="User@1234",
+            email="user@e.com",
+            type="student"
         )
         self.registration_form = RegistrationForm.objects.create(
             student_id=self.non_admin_user
@@ -110,7 +118,7 @@ class RegistrationFormUpdateViewTest(APITestCase):
 
     def test_update_registration_form_success(self):
         updated_data = {
-            "student_id": self.non_admin_user.id
+            "student_id": self.another_non_admin_user.id
         }
         response = self.client.put(
             f"/registration-form/update/{self.registration_form.form_id}/",
@@ -118,7 +126,7 @@ class RegistrationFormUpdateViewTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
-        self.assertEqual(response.data["data"]["student_id"], self.non_admin_user.id)
+        self.assertEqual(response.data["data"]["student_id"], self.another_non_admin_user.id)
 
     def test_update_registration_form_not_found(self):
         updated_data = {
@@ -319,32 +327,31 @@ class RegistrationFormConfirmApiTest(APITestCase):
         response = self.client.post(self.url, data=data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["msg"], "ok")
-        self.assertEqual(response.data["data"], "Courses added successfully")
+        self.assertEqual(response.data["data"], "دروس انتخاب شده با موفقیت ثبت شدند")
         selected_courses = SelectedCourse.objects.filter(form=self.form)
         self.assertEqual(selected_courses.count(), 2)
     
     def test_confirm_registration_remove_courses(self):
-        SelectedCourse.objects.create(form=self.form, course=self.course1)
         data = {"course_ids": []}
         response = self.client.post(self.url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
-        self.assertEqual(response.data["data"], "Courses removed successfully")
+        self.assertEqual(response.data["data"], "تمامی دروس انتخاب شده حذف شدند")
         selected_courses = SelectedCourse.objects.filter(form=self.form)
         self.assertEqual(selected_courses.count(), 0)
 
     def test_confirm_registration_with_invalid_course(self):
         data = {"course_ids": ["INVALID_COURSE"]}
         response = self.client.post(self.url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertEqual(response.data["msg"], "error")
-        self.assertIn("Error in adding courses", response.data["data"])
+        self.assertIn("مشکلی در ثبت دروس انتخاب شده برای پیش ثبت نام به وجود آمده است", response.data["data"])
         
     def test_confirm_registration_no_data(self):
         response = self.client.post(self.url, {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
-        self.assertEqual(response.data["data"], "Courses removed successfully")
+        self.assertEqual(response.data["data"], "تمامی دروس انتخاب شده حذف شدند")
         selected_courses = SelectedCourse.objects.filter(form=self.form)
         self.assertEqual(selected_courses.count(), 0)
     

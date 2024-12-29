@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[4],{542:function(t,e,n){"use strict";n.r(e);var l={layout:"empty",data:function(){return{page_title:"خطا"}},mounted:function(){this.$store.dispatch("setPageTitle",this.page_title)}},o=n(22),component=Object(o.a)(l,(function(){return(0,this._self._c)("div")}),[],!1,null,null,null);e.default=component.exports}}]);

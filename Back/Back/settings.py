@@ -50,8 +50,6 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
 ]
 
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -87,7 +85,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -136,7 +134,18 @@ DATABASES = {
        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
        'HOST': os.getenv('DATABASE_HOST'),
        'PORT': os.getenv('DATABASE_PORT'),
-   }
+       'TEST': {
+            'NAME': 'test_mydatabase',
+        },
+    },
+    'test':{
+       'ENGINE': os.getenv('DATABASE_ENGINE'),
+       'NAME': "test_mydatabase",
+       'USER': os.getenv('DATABASE_USER'),
+       'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+       'HOST': os.getenv('DATABASE_HOST'),
+       'PORT': os.getenv('DATABASE_PORT'),
+    }
 }
 
 # DATABASES = {
