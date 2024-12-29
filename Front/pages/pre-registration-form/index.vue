@@ -54,12 +54,6 @@ export default {
         this.$router.push('/passed-courses');
       }
       localStorage.setItem("passed_courses", response.completed_courses);
-
-      this.$reqApi('/registration-form/create/')
-      .then((_) => {})
-      .catch((error) => {
-        this.$toast.error(error);
-      });
     })
     .catch((error) => {
       this.$toast.error(error);
@@ -68,6 +62,13 @@ export default {
   beforeMount() {
     this.getDatas();
     this.detail_data = this.main_data;
+  },
+  mounted(){
+    this.$reqApi('/registration-form/create/')
+      .then((_) => {})
+      .catch((error) => {
+        this.$toast.error(error);
+      });
   },
   methods: {
     register() {

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="pa-5">
-      <v-card-title class="text-center">مقایسه مشارکت ورودی ها</v-card-title>
+      <v-card-title class="text-center font_20">مقایسه مشارکت ورودی ها</v-card-title>
       <apexchart
         type="donut"
         :options="chartOptions"
@@ -18,20 +18,15 @@
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
-
 export default {
-  components: {
-    apexchart: VueApexCharts,
-  },
   data() {
     return {
-      series: [5, 15, 30, 20, 30],
+      series: [],
       chartOptions: {
         chart: {
           type: 'donut',
         },
-        labels: ['ورودی 99', 'ورودی 400', 'ورودی 401', 'ورودی 402', 'ورودی 403'],
+        labels: [],
         colors: ['#a6f157', '#69f0ae', '#ffa726', '#ff7043', '#7c4dff'],
         legend: {
           show: false,
@@ -47,19 +42,33 @@ export default {
           breakpoint: 480,
           options: {
             chart: {
-              width: 300
+              width: 300,
             },
-          }
+          },
         }],
       },
-      legendData: [
-        { label: 'ورودی 99 - 5%', color: '#a6f157' },
-        { label: 'ورودی 400 - 15%', color: '#69f0ae' },
-        { label: 'ورودی 401 - 30%', color: '#ffa726' },
-        { label: 'ورودی 402 - 20%', color: '#ff7043' },
-        { label: 'ورودی 403 - 30%', color: '#7c4dff' },
-      ],
+      legendData: [],
     };
+  },
+  mounted() {
+    this.fetchChartData();
+  },
+  methods: {
+    fetchChartData() {
+      this.$reqApi('/academic-assistant/statistics/participation-percent', {}, {}, true, 'get')
+        .then((response) => {
+          const colors = ['#a6f157', '#69f0ae', '#ffa726', '#ff7043', '#7c4dff'];
+          this.series = response.map(item => item.percent);
+          this.chartOptions.labels = response.map(item => `ورودی ${item.entry_year}`);
+          this.legendData = response.map((item, index) => ({
+            label: `ورودی ${item.entry_year} - ${item.percent}%`,
+            color: colors[index % colors.length],
+          }));
+        })
+        .catch((error) => {
+          this.$toast.error(error.message || 'Error fetching chart data.');
+        });
+    },
   },
 };
 </script>
