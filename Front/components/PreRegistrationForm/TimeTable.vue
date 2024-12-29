@@ -146,8 +146,6 @@ export default {
           event.disabled = selectedEvent.selected && overlap;
         }
       });
-      console.log(this.events);
-
     },
     checkOverlap(event1, event2) {
       const start1 = new Date(event1.start).getTime();
