@@ -12,7 +12,7 @@ from social_core.backends.google import GoogleOAuth2
 from rest_framework import serializers
 
 from .models import User
-from .serializers import UserSerializer, UserDetailSerializer, UserUpdateSerializer
+from .serializers import UserSerializer, UserDetailSerializer
 from user.permissions import IsStudent
 class UserSignupApi(APIView):
     permission_classes = [AllowAny]
@@ -20,7 +20,16 @@ class UserSignupApi(APIView):
     @swagger_auto_schema(
         operation_summary="User Signup",
         operation_description="Endpoint to create a new user and return tokens.",
-        request_body=UserSerializer,
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['username', 'password', 'email', 'type'],
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
+                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
+            }
+        )
     )
     
     def post(self, request):
@@ -113,10 +122,17 @@ class UserLoginApi(APIView):
             access_token = str(refresh.access_token)
             refresh_token = str(refresh)
             
+            serializer = UserSerializer(user)
+            user_data = {}
+            user_data = {
+                key: value
+                for key, value in serializer.data.items()
+                if key not in ['password', 'first_name', 'last_name', 'mobile_number', 'avatar']
+            }
             return Response(data={
                 "msg": "ok",
                 "data": {
-                    "user": UserSerializer(user).data,
+                    "user": user_data,
                     "access_token": access_token,
                     "refresh_token": refresh_token,
                     "status": status.HTTP_200_OK
@@ -270,7 +286,7 @@ class UserUpdateApi(APIView):
     def patch(self, request):
         try:
             user = request.user
-            serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+            serializer = UserSerializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
