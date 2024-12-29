@@ -1,18 +1,67 @@
 <!DOCTYPE html>
 <html {{ HTML_ATTRS }}>
-  <head {{ HEAD_ATTRS }}>
-    {{ HEAD }}
-    <style>
-      /* any css code */
-    </style>
-  </head>
-  <body {{ BODY_ATTRS }}>
-    <div id="loading">
+<head {{ HEAD_ATTRS }}>
+  {{ HEAD }}
+  <style>
+    #loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #FFFFFF;
+      z-index: 9999;
+    }
 
-    </div>
-    {{ APP }}
-  </body>
-  <script>
-    // any js code
-  </script>
+
+    .circular-gradient-loader {
+      width: 130px;
+      height: 130px;
+      position: relative;
+    }
+
+    .circular-gradient-loader::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #6938EF 0%,
+        rgba(105, 56, 239, 0.7) 25%,
+        rgba(105, 56, 239, 0.4) 50%,
+        rgba(105, 56, 239, 0.2) 75%,
+        #E0E0E0 100%
+      );
+      mask: radial-gradient(circle, transparent 48%, black 52%);
+      -webkit-mask: radial-gradient(circle, transparent 48%, black 52%);
+      animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(360deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+  </style>
+</head>
+<body {{ BODY_ATTRS }}>
+  <div id="loading">
+    <div class="circular-gradient-loader"></div>
+  </div>
+
+  <!-- Nuxt.js application content -->
+  {{ APP }}
+</body>
+<script>
+
+</script>
 </html>

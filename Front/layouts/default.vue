@@ -1,34 +1,43 @@
 <template>
   <v-app>
-    <v-main v-if="show_body">
+    <Bar></Bar>
+    <v-main v-if="show_body" class="w-max">
       <nuxt />
     </v-main>
   </v-app>
 </template>
 
 <script>
+import Bar from '~/components/Layout/Bar.vue';
 export default {
-  name: 'default',
-  head() {},
+  components: { Bar },
   data: () => ({
-    title: '',
     show_body: false,
   }),
-  watch: {},
   beforeMount() {
+    document.getElementById('loading').style.display = 'none';
+
+    setTimeout(() => {
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
+    }, 2);
+
     this.checkAuth();
-  },
-  mounted() {
-    this.$store.dispatch('setPageTitle', this.title);
   },
   methods: {
     checkAuth() {
       let user = this.$store.state.auth.user
-      document.getElementById('loading-parent').style.display = 'flex'
+
+      document.getElementById('loading').style.display = 'none';
+
       if (Boolean(user)) {
         this.show_body = true;
-      } else {
+      }
+      else {
         this.$store.dispatch('auth/nuxtServerInit').then(() => {
+          document.getElementById('loading').style.display = 'none';
           this.show_body = true;
         })
       }

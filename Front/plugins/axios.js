@@ -3,8 +3,8 @@ const error_message = 'پاسخی از سمت سرور دریافت نشد'
 export default async ({ $axios, $toast, store }, inject) => {
   $axios.defaults.baseURL = store.state.server_url
   $axios.onRequest((config) => {
-    if (store.state.auth.token) {
-        config.headers.common['Authorization'] = 'Bearer ' + store.state.auth.token
+    if (Boolean(localStorage.getItem('token'))) {
+        config.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
     }
   })
 
@@ -18,7 +18,7 @@ export default async ({ $axios, $toast, store }, inject) => {
               .then((response) => {
                 let check = checkResponse(response, getOnlyData, config)
                 if (check.status) {
-                    resolve(check.data)
+                    resolve(response.data)
                 } else {
                     reject()
                 }
@@ -59,7 +59,7 @@ export default async ({ $axios, $toast, store }, inject) => {
               })
             break
           case 'patch':
-            $axios.$patch(url, { data, config })
+            $axios.$patch(url, data)
               .then((response) => {
                 let check = checkResponse(response, getOnlyData, config)
                 if (check.status) {
@@ -107,8 +107,9 @@ export default async ({ $axios, $toast, store }, inject) => {
   )
 
   function checkResponse(response) {
-    if (response && response.status) {
-      if (response.status == 200) {
+    // TODO : check response.statusCode
+    if (response) {
+      if (response.msg == 'ok' || response.status == 200) {
         return {
           status: true,
           data: response.data,
@@ -140,13 +141,34 @@ export default async ({ $axios, $toast, store }, inject) => {
 
   function checkErrorResponse(error) {
     try {
-      if (
+      if (error.response.data.code == "token_not_valid"){
+        $axios.$post("user/refresh-token/", {
+          "refresh_token" : localStorage.getItem("refresh_token")
+        }).then((response) => {
+          console.log("res : ", response);
+          localStorage.setItem("token", response);
+        })
+        .catch((_) => {
+          store.dispatch('auth/error401');
+        });
+      }
+      else if (
         error &&
         error.response &&
         error.response.data &&
-        error.response.data.message
+        error.response.data.data
       ) {
-        $toast.error(error.response.data.message)
+        if (typeof error.response.data.data === "object") {
+          const response = error.response.data.data;
+          for (const field in response) {
+            if (response.hasOwnProperty(field)) {
+              $toast.error(`${response[field].join(', ')}`);
+            }
+          }
+        }
+        else {
+          $toast.error(error.response.data.data);
+        }
       } else {
         $toast.error(error_message)
       }

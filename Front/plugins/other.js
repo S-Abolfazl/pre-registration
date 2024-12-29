@@ -2,28 +2,28 @@ import Vue from 'vue'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import 'vue-json-pretty/lib/styles.css';
 
-import AmpHelp from '~/components/Base/AmpHelp.vue'
-import AmpCard from '~/components/Base/AmpCard.vue'
-import AmpChart from '~/components/Base/AmpChart.vue'
-import AmpInput from '~/components/Base/AmpInput.vue'
-import AmpTitle from '~/components/Base/AmpTitle.vue'
-import AmpJdate from '~/components/Base/AmpJdate.vue'
-import AmpSelect from '~/components/Base/AmpSelect.vue'
-import AmpButton from '~/components/Base/AmpButton.vue'
-import AmpTextarea from '~/components/Base/AmpTextarea.vue'
-import AmpDatePicker from '~/components/Base/AmpDatePicker.vue';
-import AmpAutocomplete from '~/components/Base/AmpAutocomplete.vue'
+import BaseHelp from '~/components/Base/BaseHelp.vue'
+import BaseCard from '~/components/Base/BaseCard.vue'
+import BaseInput from '~/components/Base/BaseInput.vue'
+import BaseLable from '~/components/Base/BaseLable.vue';
+import BaseTitle from '~/components/Base/BaseTitle.vue'
+import BaseJdate from '~/components/Base/BaseJdate.vue'
+import BaseSelect from '~/components/Base/BaseSelect.vue'
+import BaseButton from '~/components/Base/BaseButton.vue'
+import BaseTextarea from '~/components/Base/BaseTextarea.vue'
+import BaseDatePicker from '~/components/Base/BaseDatePicker.vue';
+import BaseAutocomplete from '~/components/Base/BaseAutocomplete.vue'
 
 Vue.component('persian-date-picker', VuePersianDatetimePicker)
 
-Vue.component('AmpHelp', AmpHelp)
-Vue.component('AmpCard', AmpCard)
-Vue.component('AmpInput', AmpInput)
-Vue.component('AmpTitle', AmpTitle)
-Vue.component('AmpJdate', AmpJdate)
-Vue.component('AmpChart', AmpChart)
-Vue.component('AmpSelect', AmpSelect)
-Vue.component('AmpButton', AmpButton)
-Vue.component('AmpTextarea', AmpTextarea)
-Vue.component('AmpDatePicker', AmpDatePicker)
-Vue.component('AmpAutocomplete', AmpAutocomplete)
+Vue.component('BaseHelp', BaseHelp)
+Vue.component('BaseCard', BaseCard)
+Vue.component('BaseInput', BaseInput)
+Vue.component('BaseLable', BaseLable)
+Vue.component('BaseTitle', BaseTitle)
+Vue.component('BaseJdate', BaseJdate)
+Vue.component('BaseSelect', BaseSelect)
+Vue.component('BaseButton', BaseButton)
+Vue.component('BaseTextarea', BaseTextarea)
+Vue.component('BaseDatePicker', BaseDatePicker)
+Vue.component('BaseAutocomplete', BaseAutocomplete)

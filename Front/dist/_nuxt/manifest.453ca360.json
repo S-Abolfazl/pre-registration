@@ -1,0 +1,9 @@
+{
+  "name": "pre_registration",
+  "short_name": "pre_registration",
+  "icons": [],
+  "start_url": "/?standalone=true",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "lang": "en"
+}
