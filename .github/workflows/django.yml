@@ -25,7 +25,7 @@ jobs:
       run: |
         docker compose down -v
         docker compose up -d
-    
+
     - name: Make Test Database
       run: |
         set -x

@@ -50,8 +50,6 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
 ]
 
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
