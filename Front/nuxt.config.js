@@ -24,6 +24,9 @@ export default {
       { rel: 'stylesheet', href: '/css/google_font.css' },
       { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }
     ],
+    script: [
+      { src: "https://accounts.google.com/gsi/client", async: true, defer: true },
+    ],
   },
   plugins: [
     '~/plugins/axios',

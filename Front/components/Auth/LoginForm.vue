@@ -43,7 +43,7 @@
           svg="image/login/google.png"
           width="75%"
           class="my-5"
-          @click="login_with_google"
+          @click="loginWithGoogle"
         />
 
         <div class="d-flex flex-end w-75">
@@ -52,19 +52,7 @@
           </span>
         </div>
 
-        <div
-  v-if="showForgotPassword"
-  class="overlay"
->
-  <div
-    ref="forgotPasswordModal"
-    class="modal"
-    style="border-radius: 50px; padding-left: 100px; padding-right: 100px;"
-  >
-    <ForgotPassword @close="toggleForgotPassword" />
-  </div>
-</div>
-
+        <ForgotPassword @reset-password="handleResetPassword" :dialog="dialog" />
 
         <BaseButton
           color="primary"
@@ -109,7 +97,7 @@ export default {
     ForgotPassword,
   },
   data: () => ({
-    
+    dialog: false,
     valid: false,
     loading: false,
     form: {
@@ -120,18 +108,17 @@ export default {
   }),
   methods: {
     toggleForgotPassword() {
-      this.showForgotPassword = !this.showForgotPassword;
+      this.dialog = !this.dialog;
     },
-    handleOutsideClick(event) {
-      if (
-        this.showForgotPassword &&
-        this.$refs.forgotPassword &&
-        !this.$refs.forgotPassword.contains(event.target)
-      ) {
-        this.showForgotPassword = false;
-      }
+    handleResetPassword(email) {
+      this.$reqApi("/api/reset-password", { email })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        this.$toast.error(error);
+      })
     },
-    login_with_google() {},
     login() {
       this.$reqApi('user/login/', this.form)
         .then((response) => {
@@ -149,12 +136,18 @@ export default {
     signup() {
       this.$router.push('/auth/signup');
     },
-  },
-  mounted() {
-    document.addEventListener("click", this.handleOutsideClick);
-  },
-  beforeDestroy() {
-    document.removeEventListener("click", this.handleOutsideClick);
+    loginWithGoogle() {
+      const clientId = '854888124710-lr4quh2biu4dk5pe87gboq8pusfv1225.apps.googleusercontent.com';
+      const redirectUri = `${this.$store.state.server_url}/user/login-google`;
+      const scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile';
+      const responseType = 'code';
+
+      // Construct the Google OAuth URL
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}`;
+
+      // Redirect the user to Google for authentication
+      window.location.href = authUrl;
+    },
   },
 }
 </script>
