@@ -446,3 +446,56 @@ class GoogleLoginApi(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+    def get(self, request):
+        # Retrieve the authorization code from query parameters
+        code = request.query_params.get('code')
+        if not code:
+            return Response(
+                {"msg": "error", "data": "Authorization code is required", "status": status.HTTP_400_BAD_REQUEST},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            # Load the strategy and backend
+            strategy = load_strategy(request)
+            backend = GoogleOAuth2(strategy=strategy)
+
+            # Exchange the code for a token
+            token_info = backend.request_access_token(code)
+            token = token_info.get("access_token")
+
+            # Retrieve user information
+            user_info = backend.user_data(token)
+            email = user_info.get("email")
+
+            if not email:
+                return Response(
+                    {"msg": "error", "data": "Email not found in token", "status": status.HTTP_400_BAD_REQUEST},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Check if the user exists
+            from django.contrib.auth.models import User
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response(
+                    {"msg": "error", "data": "کاربری با این ایمیل یافت نشد", "status": status.HTTP_401_UNAUTHORIZED},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+
+            # Redirect to frontend with tokens
+            frontend_redirect_url = f"http://127.0.0.1:3000/panel?access_token={access_token}&refresh_token={refresh_token}"
+            return redirect(frontend_redirect_url)
+
+        except Exception as e:
+            return Response(
+                {"msg": "error", "data": "مشکلی در پردازش اطلاعات پیش آمده است", "status": status.HTTP_500_INTERNAL_SERVER_ERROR},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

@@ -53,7 +53,7 @@ class CourseCreateApi(APIView):
 
 
 class CourseListApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    # permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course List",
