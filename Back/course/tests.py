@@ -37,7 +37,9 @@ class CourseCreateTest(APITestCase):
         }
         
     def test_create_course_success(self):
-        response = self.client.post("/course/create-courses-in-term/", self.valid_payload, format="json")
+        valid_payload = self.valid_payload.copy()
+        valid_payload['course'] = self.all_course.courseName
+        response = self.client.post("/course/create-courses-in-term/", valid_payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("data", response.data)
         self.assertIn("msg", response.data)

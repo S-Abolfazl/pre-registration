@@ -17,12 +17,28 @@ class CourseCreateApi(APIView):
     @swagger_auto_schema(
         operation_summary="Course Create",
         operation_description="Endpoint to create a new course in term.",
-        request_body=CourseSerializer
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'course': openapi.Schema(type=openapi.TYPE_STRING, description='course name'),
+                'teacherName': openapi.Schema(type=openapi.TYPE_STRING, description='teacher name'),
+                'isExperimental': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='is experimental'),
+                'class_time1': openapi.Schema(type=openapi.TYPE_STRING, description='class time1'),
+                'class_time2': openapi.Schema(type=openapi.TYPE_STRING, description='class time2'),
+                'class_start_time': openapi.Schema(type=openapi.TYPE_STRING, description='class start time'),
+                'class_end_time': openapi.Schema(type=openapi.TYPE_STRING, description='class end time'),
+                'exam_date': openapi.Schema(type=openapi.TYPE_STRING, description='exam date'),
+                'exam_start_time': openapi.Schema(type=openapi.TYPE_STRING, description='exam start time'),
+                'exam_end_time': openapi.Schema(type=openapi.TYPE_STRING, description='exam end time'),
+                'capacity': openapi.Schema(type=openapi.TYPE_INTEGER, description='capacity'),
+                'description': openapi.Schema(type=openapi.TYPE_STRING, description='description'),
+            }
+        )
     )
     def post(self, request):
         
         try:
-            course_instance = AllCourses.objects.get(course_id=request.data['course'])
+            course_instance = AllCourses.objects.get(courseName=request.data['course'])
         except Exception as e:
             return Response(data={
                 "msg":"error",
