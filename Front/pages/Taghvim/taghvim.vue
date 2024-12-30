@@ -2,11 +2,11 @@
 <template>
   <div>
     <v-row no-gutters class="align-center mx-2 " :style="{  width: '100%'}">
-     
+
       <h1 class="font_40 flex-end mt-6"> تقویم آموزشی سال تحصیلی</h1>
 
       <Year class="font_24" text="1403-1404" ></Year>
-        
+
       <Semester height="60px" class="mr-auto mx-10 mt-7" @update="switchSemester" />
     </v-row>
     <v-row class="align-center no-gutters" :style="{  paddingTop: '1%', width: '100%' }">
@@ -15,12 +15,12 @@
         </header>
     </v-row>
     <v-row no-gutters class="align-center my-6" :style="{  width: '100%'}">
-        
+
       <breadcrumb class="ml-9 mr-6"/>
     </v-row>
-       
 
-    
+
+
     <v-row no-gutter class="align-center mx-4 my-5" >
     <b class="font_40 ">زمان انتخاب واحد</b>
     </v-row>
@@ -28,15 +28,15 @@
       <table class="schedule-table">
         <thead>
           <tr class="blue2">
-            <th class="font_40">زمان</th>
-            <th class="font_40">دانشجویان دوره کارشناسی</th>
-            <th class="font_40">دانشجویان دوره‌های تحصیلات تکمیلی</th>
+            <th class="font_20">زمان</th>
+            <th class="font_20">دانشجویان دوره کارشناسی</th>
+            <th class="font_20">دانشجویان دوره‌های تحصیلات تکمیلی</th>
           </tr>
         </thead>
         <tbody >
           <tr v-for="row in activeSchedule" :key="row.id">
             <td  class="font_30">{{ row.time }}</td>
-            <td v-if="row.id === activeSchedule.length" 
+            <td v-if="row.id === activeSchedule.length"
               :colspan="2"  class="font_30">{{ row.bachelor }} </td>
             <template v-else>
             <td  class="font_30">{{ row.bachelor }}</td>
@@ -47,13 +47,13 @@
       </table>
     </v-row>
 
-   
+
     <v-col  no-gutters class="align-start my-10 mx-3"  >
       <b class=" font_40 ">یادآوری</b>
       <div class="mx-8">
         <ol>
           <li class="font_30 my-9"  v-for="note in notes" :key="note.id">{{ note.text }}</li>
-        </ol> 
+        </ol>
       </div>
   </v-col>
   </div>
@@ -140,7 +140,7 @@ export default {
 .schedule-table {
   width:100%;
   border-collapse: collapse;
-  
+
 }
 
 .schedule-table th,

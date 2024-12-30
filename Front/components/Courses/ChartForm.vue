@@ -12,9 +12,9 @@
       </v-col>
 
       <!-- Chart Select -->
-      <!-- <v-col  cols="3" class="align-left">
+      <v-col  cols="3" class="align-left">
         <ChartSelect width="80%" height="40px" @select="getData" />
-      </v-col> -->
+      </v-col>
     </v-row>
 
     <v-row class="align-center no-gutters mr-4" :style="{  paddingTop: '5%', width: '100%' }">
@@ -56,7 +56,7 @@
       </header>
     </v-row>
 
-    <div v-for="(value, key) in the_data.terms" :key="key + '-' + the_data.units[key]">
+    <div v-if="Object.keys(the_data).length > 0" v-for="(value, key) in the_data.terms" :key="key + '-' + the_data.units[key]">
       <header>
         <h1 class="font_24" style="text-align: right; padding: 2%;">
           ترم {{ getPersianTermLabel(key) }}
@@ -100,11 +100,20 @@ export default {
   },
   data() {
     return {
+      main: [],
       the_data: [],
     }
   },
   mounted() {
-    this.getData("even");
+    this.$reqApi("student/chart/", {}, {}, true, 'get')
+        .then((response) => {
+          this.main = response;
+          this.the_data = response.even;
+        })
+        .catch((error) => {
+          this.$toast.error(error);
+        })
+
   },
   methods: {
     getPersianTermLabel(termNumber) {
@@ -122,16 +131,10 @@ export default {
     },
     getData(data) {
       if (data == "odd") {
-        console.log(data);
+        this.the_data = this.main.odd;
       }
       else{
-        this.$reqApi("student/chart/", {}, {}, true, 'get')
-        .then((response) => {
-          this.the_data = response;
-        })
-        .catch((error) => {
-          this.$toast.error(error);
-        })
+        this.the_data = this.main.even;
       }
     },
   },

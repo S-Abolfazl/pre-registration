@@ -1,7 +1,7 @@
 <template>
   <v-form v-model="valid">
     <v-col  class="my-4">
-      
+
       <v-row class="align-center">
         <h1 class="font_43 flex-end mt-6 black1--text">دروس ارائه شده در نیم سال اول</h1>
 
@@ -56,6 +56,7 @@ export default {
   }
 ],
   DataSearch:[],
+  main: [],
 }),
   watch:{
     searchQuery(newvalue){
@@ -71,18 +72,24 @@ export default {
   },
   head(){
     return {
-      title: '  '
+      title: 'دروس ارائه شده'
     }
   },
-  computed: {
-  },
-  beforeMount() {
-    //this.$store.dispatch('setPageTitle', this.title);
-    // this.$store.dispatch('setTableData', this.TabeleData);
+  mounted(){
+    this.$reqApi("course/courses-in-term/data/", {}, {}, true, 'get')
+        .then((response) => {
+          this.main = response;
+          this.ComponentTabeleData = response;
+        })
+        .catch((error) => {
+          this.$toast.error(error);
+        });
   },
   methods: {
-    handleSearchUpdate(newSearch) {
-      this.searchQuery = newSearch;   
+    handleSearchUpdate(data) {
+      this.ComponentTabeleData = this.main.filter((course) =>
+        course.courseName.toLowerCase().includes(data.toLowerCase())
+      );
     },
   },
 };

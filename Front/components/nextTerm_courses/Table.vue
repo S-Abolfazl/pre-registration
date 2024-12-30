@@ -16,9 +16,9 @@
         <tr v-for="(row, index) in TableData" :key="index" :class="{ 'alt-row': index % 2 === 0 }">
           <td>{{ row.courseName }}</td>
           <td>{{ row.unit }}</td>
-          <td>{{ row.type }}</td>
+          <td>{{ $store.state.static.course_type[row.type] }}</td>
           <td>{{ row.capacity }}</td>
-          <td>{{ row.teacherName }}</td>
+          <td>{{ row.teacher }}</td>
           <td>{{ row.schedule }}</td>
           <td>{{ row.description }}</td>
         </tr>
@@ -51,16 +51,16 @@ export default {
   computed: {
       finalData() {
         //this.Data = TableData;
-        return this.TableData; 
+        return this.TableData;
     },
   },
 
   // mounted() {
-    
+
   //   fetch("/path/to/data.json")
   //     .then((response) => response.json())
   //     .then((data) => {
-  //       this.tableData = data; 
+  //       this.tableData = data;
   //     })
   //     .catch((error) => {
   //       console.error("Error loading JSON:", error);
@@ -84,20 +84,20 @@ export default {
   margin: 0 auto;
   width: calc(100% - 20px); /* جلوگیری از چسبیدن به لبه‌ها */
   padding: 10px; /* افزودن فاصله از لبه‌ها */
-  
+
 }
 
 .responsive-table {
   width: 100%;
   border-collapse: collapse;
   text-align: center;
-  direction: rtl;  
+  direction: rtl;
   border-radius: 20px;
   overflow: hidden;
 }
 
 .responsive-table th {
-  
+
   background-color: #7B5FF1;
   color: white;
   border: 3px solid #7B5FF1; /* هم‌رنگ با خطوط کلی جدول */
@@ -106,13 +106,13 @@ export default {
 }
 
 .responsive-table td {
- 
+
   border: 3px solid #7B5FF1; /* یکنواخت‌سازی خطوط داخلی */
   padding: 8px;
 }
 
 .responsive-table tr.alt-row td {
-  background-color: rgba(123, 95, 241, 0.15); 
+  background-color: rgba(123, 95, 241, 0.15);
 }
 
 @media (max-width: 768px) {
