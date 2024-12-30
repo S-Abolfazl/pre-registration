@@ -31,115 +31,115 @@ def add_test_users():
         {
             "username": "400243024",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student5@example.com",
             "type": "student",
         },
         {
             "username": "400243025",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student6@example.com",
             "type": "student",
         },
         {
             "username": "400243026",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student7@example.com",
             "type": "student",
         },
         {
             "username": "401243020",
             "password": "Hosein@1382",
-            "email": "student1@example.com",
+            "email": "student8@example.com",
             "type": "student",
         },
         {
             "username": "401234021",
             "password": "Hosein@13  ",
-            "email": "student2@example.com",
+            "email": "student9@example.com",
             "type": "student",
         },
         {
             "username": "401243022",
             "password": "Hosein@1382",
-            "email": "student3@example.com",
+            "email": "student10@example.com",
             "type": "student",
         },
         {
             "username": "401243023",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student11@example.com",
             "type": "student",
         },
         {
             "username": "402243020",
             "password": "Hosein@1382",
-            "email": "student1@example.com",
+            "email": "student12@example.com",
             "type": "student",
         },
         {
             "username": "402234021",
             "password": "Hosein@13  ",
-            "email": "student2@example.com",
+            "email": "student13@example.com",
             "type": "student",
         },
         {
             "username": "402243022",
             "password": "Hosein@1382",
-            "email": "student3@example.com",
+            "email": "student14@example.com",
             "type": "student",
         },
         {
             "username": "402243023",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student15@example.com",
             "type": "student",
         },
         {
             "username": "403243020",
             "password": "Hosein@1382",
-            "email": "student1@example.com",
+            "email": "student16@example.com",
             "type": "student",
         },
         {
             "username": "403234021",
             "password": "Hosein@13  ",
-            "email": "student2@example.com",
+            "email": "student17@example.com",
             "type": "student",
         },
         {
             "username": "403243022",
             "password": "Hosein@1382",
-            "email": "student3@example.com",
+            "email": "student18@example.com",
             "type": "student",
         },
         {
             "username": "403243023",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student19@example.com",
             "type": "student",
         },
         {
             "username": "99243020",
             "password": "Hosein@1382",
-            "email": "student1@example.com",
+            "email": "student20@example.com",
             "type": "student",
         },
         {
             "username": "99234021",
             "password": "Hosein@13  ",
-            "email": "student2@example.com",
+            "email": "student21@example.com",
             "type": "student",
         },
         {
             "username": "99243022",
             "password": "Hosein@1382",
-            "email": "student3@example.com",
+            "email": "student22@example.com",
             "type": "student",
         },
         {
             "username": "99243023",
             "password": "Hosein@1382",
-            "email": "student4@example.com",
+            "email": "student23@example.com",
             "type": "student",
         }
         
@@ -150,7 +150,7 @@ def add_test_users():
         if serializer.is_valid():
             user = serializer.save()
 
-            RegistrationForm.objects.create(student_id=user)
+            RegistrationForm.objects.get_or_create(student_id=user)
 
             print(f"User {user.username} and their registration form created successfully.")
         else:

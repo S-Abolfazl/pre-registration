@@ -32,9 +32,9 @@ class RegistrationFormCreateViewTest(APITestCase):
 
         response = self.client.post("/registration-form/create/")
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data["msg"], "error")
-        self.assertIn("student_id", response.data["data"])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["msg"], "ok")
+        self.assertEqual(response.data["data"], 'فرم پیش ثبت نام برای این دانشجو قبلا ساخته شده است')
 
     def test_create_registration_form_unauthenticated(self):
         self.client.logout()

@@ -8,6 +8,11 @@ __pycache__/
 .venv
 .env
 **/migrations/*.py
+!**/migrations/__init__.py
 Back/static
 Back/staticfiles
 Back/media
+Front/node_modules
+Front/jsconfig.json
+Front/.nuxt
+Front/static/sw.js
