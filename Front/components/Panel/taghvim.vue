@@ -28,7 +28,7 @@
     export default {
       methods: {
         goToTaghvim() {
-          this.$router.push('');
+          this.$router.push('/Taghvim/taghvim');
         },
         imgWidth() {
           // if (window.innerWidth > 2300)

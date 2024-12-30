@@ -18,7 +18,7 @@
           <td>{{ row.unit }}</td>
           <td>{{ row.type }}</td>
           <td>{{ row.capacity }}</td>
-          <td>{{ row.teacher }}</td>
+          <td>{{ row.teacherName }}</td>
           <td>{{ row.schedule }}</td>
           <td>{{ row.description }}</td>
         </tr>
@@ -84,6 +84,7 @@ export default {
   margin: 0 auto;
   width: calc(100% - 20px); /* جلوگیری از چسبیدن به لبه‌ها */
   padding: 10px; /* افزودن فاصله از لبه‌ها */
+  
 }
 
 .responsive-table {
@@ -96,6 +97,7 @@ export default {
 }
 
 .responsive-table th {
+  
   background-color: #7B5FF1;
   color: white;
   border: 3px solid #7B5FF1; /* هم‌رنگ با خطوط کلی جدول */
@@ -104,12 +106,13 @@ export default {
 }
 
 .responsive-table td {
+ 
   border: 3px solid #7B5FF1; /* یکنواخت‌سازی خطوط داخلی */
   padding: 8px;
 }
 
 .responsive-table tr.alt-row td {
-  background-color: rgba(123, 95, 241, 0.15);
+  background-color: rgba(123, 95, 241, 0.15); 
 }
 
 @media (max-width: 768px) {

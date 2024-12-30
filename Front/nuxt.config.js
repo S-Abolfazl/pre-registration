@@ -95,6 +95,7 @@ export default {
           blue2: '#7B5FF1',
 
           red1: '#FF1100',
+          blue3: '#EBE7FD',
         }
       },
     },
