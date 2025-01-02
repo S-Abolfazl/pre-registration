@@ -125,7 +125,10 @@ export default {
       localStorage.setItem('user', JSON.stringify(this.user));
       this.user.password = '';
       this.previewImage = this.user.avatar;
-      this.the_username = this.user.first_name + ' ' + this.user.last_name;
+      this.the_username = this.user?.first_name + ' ' + this?.user.last_name;
+      if (this.user.first_name == null || this.user.last_name == null){
+        this.the_username = "";
+      }
     })
     .catch((error) => {
       this.$toast.error(error);

@@ -1,8 +1,6 @@
 export const state = () => ({
   page_title: 'سامانه پیش ثبت نام',
   server_url: 'http://127.0.0.1:8000',
-  // TODO
-  // file_url: 'https://file.ir/',
 })
 
 export const mutations = {

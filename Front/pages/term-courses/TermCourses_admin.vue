@@ -1,14 +1,32 @@
 <template>
-  <v-form v-model="valid">
+  <v-form >
     <v-col  class="my-4">
-
-      <v-row class="align-center">
+      
+      <v-row class="align-center mb-6">
         <h1 class="font_43 flex-end mt-6 black1--text">دروس ارائه شده در نیم سال اول</h1>
 
         <year_card class="font_24" text="1403-1404" ></year_card>
       </v-row>
 
-      <v-row class="mt-4 justify-end ">
+      <addCourse
+      :showAddCourse="showAddCourseModal"
+      @course-added="sendNewCourse"
+      @close-modal="showAddCourseModal = false"
+      />
+
+      <v-row class="mt-14 mr-6 justify-end ">
+          <v-col cols="2" >
+              <BaseButton 
+              text="اضافه کردن درس" 
+              color="blue2" 
+              border-radius="15px"
+              textClass="white1--text"
+              class="font_40"
+              width="85%"
+              @click="show_AddCourse"
+              />
+              
+          </v-col>
         <v-col cols="3" class="mr-auto searchbar">
           <SearchBar @search-updated="handleSearchUpdate" />
         </v-col>
@@ -25,6 +43,8 @@
 import Tabledata from '~/components/nextTerm_courses/Table.vue';
 import SearchBar from '~/components/nextTerm_courses/SearchBar.vue';
 import year_card from '~/components/nextTerm_courses/year_card.vue';
+import BaseButton from '~/components/Base/BaseButton.vue';
+import addCourse from '~/components/nextTerm_courses/addCourse.vue';
 
 export default {
 
@@ -32,9 +52,13 @@ export default {
     Tabledata,
     SearchBar,
     year_card,
+    BaseButton,
+    addCourse,
   },
   data: () => ({
+    
     searchQuery:'',
+    showAddCourseModal: false,
     ComponentTabeleData:[
   {
     "courseName": "آزمایشگاه شبکه های کامپیوتری",
@@ -42,6 +66,7 @@ export default {
     "type": "عملی",
     "capacity": 15,
     "teacherName": "دکتر وزین نژاد",
+    
     "schedule": "سه‌شنبه‌ها 19:00-17:00",
     "description": "مدرس: دکتر وزین نژاد"
   },
@@ -56,7 +81,6 @@ export default {
   }
 ],
   DataSearch:[],
-  main: [],
 }),
   watch:{
     searchQuery(newvalue){
@@ -72,25 +96,41 @@ export default {
   },
   head(){
     return {
-      title: 'دروس ارائه شده'
+      title: '  '
     }
   },
-  mounted(){
-    this.$reqApi("course/courses-in-term/data/", {}, {}, true, 'get')
-        .then((response) => {
-          this.main = response;
-          this.ComponentTabeleData = response;
-        })
-        .catch((error) => {
-          this.$toast.error(error);
-        });
+  computed: {
+  },
+  beforeMount() {
+    //this.$store.dispatch('setPageTitle', this.title);
+    // this.$store.dispatch('setTableData', this.TabeleData);
   },
   methods: {
-    handleSearchUpdate(data) {
-      this.ComponentTabeleData = this.main.filter((course) =>
-        course.courseName.toLowerCase().includes(data.toLowerCase())
-      );
+    handleSearchUpdate(newSearch) {
+      this.searchQuery = newSearch;   
     },
+
+    show_AddCourse() {
+    this.showAddCourseModal = true;
+    },
+
+    sendNewCourse(course){
+      this.$reqApi.post('/courses', course)
+      .then(response => {
+        console.log('Course added:', response.data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    },
+  
+
+    // addCourseToTable(newCourse) {
+    
+    // this.ComponentTabeleData.push(newCourse);
+    // console.log('درس جدید به جدول اضافه شد:', newCourse);
+    // },
   },
 };
 </script>

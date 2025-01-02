@@ -53,8 +53,8 @@ export default {
         this.$toast.error("ابتدا دروسی که پاس کرده اید را مشحص کنید");
         this.$router.push('/passed-courses');
       }
-      localStorage.setItem("passed_courses", response.completed_courses)
-      })
+      localStorage.setItem("passed_courses", response.completed_courses);
+    })
     .catch((error) => {
       this.$toast.error(error);
     });
@@ -63,8 +63,30 @@ export default {
     this.getDatas();
     this.detail_data = this.main_data;
   },
+  mounted(){
+    this.$reqApi('/registration-form/create/')
+      .then((_) => {})
+      .catch((error) => {
+        this.$toast.error(error);
+      });
+  },
   methods: {
-    register() {},
+    register() {
+      let datas = [];
+      this.detail_data.forEach(course => {
+        if (course.selected) {
+          datas.push(course.c_id)
+        }
+      });
+
+      this.$reqApi("/registration-form/confirm/", { course_ids: datas } )
+      .then((response) => {
+        this.$toast.success(response);
+      })
+      .catch((error) => {
+        this.$toast.error(error);
+      });
+    },
     search(data) {
       this.detail_data = this.main_data.filter((course) =>
         course.name.toLowerCase().includes(data.toLowerCase())

@@ -31,12 +31,6 @@
           this.$router.push('/term-courses');
         },
         imgWidth() {
-          // if (window.innerWidth > 2300)
-          //   return '30%'
-          // else if (window.innerWidth > 2050)
-          //   return '34%'
-          // else if (window.innerWidth > 1900)
-          //   return '38%'
 
           if (this.$vuetify.breakpoint.mdOnly){
             if (window.innerWidth > 1080){

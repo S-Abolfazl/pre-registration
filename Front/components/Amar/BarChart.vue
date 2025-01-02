@@ -1,16 +1,16 @@
 <template>
-  <v-container>
-    <v-carousel hide-delimiters>
+  <v-row no-gutters class="mt-10">
+    <v-carousel hide-delimiters height="100%">
       <v-carousel-item v-for="(chunk, chunkIndex) in chunkedCourses" :key="chunkIndex">
         <apexchart
+          v-if="chunk.length > 0"
           type="bar"
           :options="getChartOptions(chunk)"
           :series="getSeriesData(chunk)">
         </apexchart>
-
       </v-carousel-item>
     </v-carousel>
-  </v-container>
+  </v-row>
 </template>
 
 <script>
@@ -20,20 +20,14 @@ export default {
       series: [
         {
           name: 'ظرفیت',
-          data: [80, 90, 40, 70, 50, 60, 55, 30, 45, 50, 40, 60, 70, 85, 20],
+          data: [],
         },
         {
           name: 'ثبت‌نام شده',
-          data: [58, 35, 40, 50, 45, 30, 55, 20, 25, 30, 20, 40, 50, 60, 10],
+          data: [],
         },
       ],
-      courseData: [
-        { name: 'زبان تخصصی', instructor: 'علی جهانبان', capacity: 50, registered: 58, time: '13:30-15:00', day: 'دوشنبه' },
-        { name: 'هوش مصنوعی', instructor: 'محمد رضایی', capacity: 40, registered: 35, time: '10:00-12:00', day: 'شنبه' },
-        { name: 'شبکه', instructor: 'محمد رضایی', capacity: 45, registered: 35, time: '10:00-12:00', day: 'شنبه' },
-        { name: 'سیستم عامل', instructor: 'محمد رضایی', capacity: 40, registered: 70, time: '10:00-12:00', day: 'شنبه' },
-        // More courses...
-      ],
+      courseData: [],
       chartOptions: {
         chart: {
           type: 'bar',
@@ -63,26 +57,13 @@ export default {
           },
         },
         xaxis: {
-          categories: [
-            'زبان تخصصی',
-            'هوش مصنوعی',
-            'شبکه',
-            'سیستم عامل',
-            'مهندسی نرم افزار',
-            'سیستم های خبره',
-            'پایگاه داده',
-            'محاسبات عددی',
-            'ریاضی مهندسی',
-            'نظریه زبان ها و ماشین ها',
-            'مدارهای منطقی',
-            'الکترونیک',
-            'ساختمان داده ها',
-            'برنامه نویسی پیشرفته',
-            'فیزیک 2',
-          ],
+          categories: [],
         },
       },
     };
+  },
+  mounted() {
+    this.getDatas();
   },
   computed: {
     chunkedCourses() {
@@ -118,22 +99,31 @@ export default {
     },
     getDemand(course) {
       const index = this.chartOptions.xaxis.categories.indexOf(course);
-      return this.series[0].data[index];
-    },
-    getInstructor(course) {
-      return this.courseData.find(c => c.name === course)?.instructor || '';
-    },
-    getCapacity(course) {
-      return this.courseData.find(c => c.name === course)?.capacity || '';
+      return index !== -1 ? this.series[0].data[index] : 0;
     },
     getRegistered(course) {
-      return this.courseData.find(c => c.name === course)?.registered || '';
+      const index = this.chartOptions.xaxis.categories.indexOf(course);
+      return index !== -1 ? this.series[1].data[index] : 0;
     },
-    getTime(course) {
-      return this.courseData.find(c => c.name === course)?.time || '';
-    },
-    getDay(course) {
-      return this.courseData.find(c => c.name === course)?.day || '';
+    getDatas() {
+      this.$reqApi('/academic-assistant/statistics/bar-chart', {}, {}, true, 'get')
+        .then((response) => {
+          // Reset series data before updating
+          this.series[0].data = [];
+          this.series[1].data = [];
+
+          this.courseData = response;
+          response.forEach(element => {
+            this.series[0].data.push(element.capacity || 0); // Fallback to 0 if no data
+            this.series[1].data.push(element.registered || 0); // Fallback to 0 if no data
+          });
+
+          // Update chart categories
+          this.chartOptions.xaxis.categories = response.map(item => item.name || ''); // Fallback to empty string
+        })
+        .catch((error) => {
+          this.$toast.error(error.message || 'Error fetching data.');
+        });
     },
   },
 };
