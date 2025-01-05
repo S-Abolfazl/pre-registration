@@ -7,7 +7,7 @@
   <script>
   import PassedCourses from "~/components/Courses/PassedCoursesForm.vue";
   export default {
-    layout: 'site',
+    layout: 'default',
     head() {
       return {
         title: 'واحد هاي پيشين',
