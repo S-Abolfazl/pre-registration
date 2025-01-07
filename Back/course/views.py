@@ -8,7 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import Course, AllCourses
-from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer
+from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer, CourseRuleSerializer
 from user.permissions import IsAcademicAssistantOrAdmin, IsStudentOrIsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
@@ -20,7 +20,7 @@ class CourseCreateApi(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'course': openapi.Schema(type=openapi.TYPE_STRING, description='course name'),
+                'courseName': openapi.Schema(type=openapi.TYPE_STRING, description='course name'),
                 'teacherName': openapi.Schema(type=openapi.TYPE_STRING, description='teacher name'),
                 'isExperimental': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='is experimental'),
                 'class_time1': openapi.Schema(type=openapi.TYPE_STRING, description='class time1'),
@@ -32,13 +32,14 @@ class CourseCreateApi(APIView):
                 'exam_end_time': openapi.Schema(type=openapi.TYPE_STRING, description='exam end time'),
                 'capacity': openapi.Schema(type=openapi.TYPE_INTEGER, description='capacity'),
                 'description': openapi.Schema(type=openapi.TYPE_STRING, description='description'),
+                'entry_years': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_STRING), description='entry years'),
             }
         )
     )
     def post(self, request):
         
         try:
-            course_instance = AllCourses.objects.get(courseName=request.data['course'])
+            course_instance = AllCourses.objects.get(courseName=request.data['courseName'])
         except Exception as e:
             return Response(data={
                 "msg":"error",
@@ -47,11 +48,28 @@ class CourseCreateApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
             
         request_data = request.data.copy()
+        request_data.pop('courseName', None)
         request_data['course'] = course_instance.course_id
         
         serializer = CourseSerializer(data=request_data)
         if serializer.is_valid():
             course = serializer.save()
+            entry_years = request.data['entry_years']
+            if entry_years:
+                entry_years = [year[-3:] if year[:2] == "14" else year[-2:] for year in entry_years]
+                course_rule = CourseRuleSerializer(data={
+                    'course': course.c_id,
+                    'type': 'entry_rule',
+                    'values': entry_years,
+                })
+                if course_rule.is_valid():
+                    course_rule.save()
+                else:
+                    return Response(data={
+                        "msg":"error",
+                        "data":course_rule.errors,
+                        "status":status.HTTP_400_BAD_REQUEST
+                    }, status=status.HTTP_400_BAD_REQUEST)
             return Response(data={
                 "msg":"ok",
                 "data":f'درس با شناسه:{course.c_id} ایجاد شد',
