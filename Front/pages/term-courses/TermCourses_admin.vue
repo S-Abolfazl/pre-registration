@@ -1,26 +1,32 @@
 <template>
-  <v-form v-model="valid">
+  <v-form >
     <v-col  class="my-4">
       
-      <v-row class="align-center">
-        <v-col cols="12" md="6" class="d-flex align-center">
-          <span>
-            <b class="black1--text font_43">دروس ارائه شده در نیم سال اول </b>
-          </span>
-          <v-card class="year-card blue2 ml-4">
-            <v-row no-gutters>
-              <span class="title">
-                <b class="font_40 black1--text">1403-1404</b>
-              </span>
-              <span class="image-wrapper">
-                <img src="/image/panel/term_courses.png" alt="course" class="course-image" />
-              </span>
-            </v-row>
-          </v-card>
-        </v-col>
+      <v-row class="align-center mb-6">
+        <h1 class="font_43 flex-end mt-6 black1--text">دروس ارائه شده در نیم سال اول</h1>
+
+        <year_card class="font_24" text="1403-1404" ></year_card>
       </v-row>
 
-      <v-row class="mt-4 justify-end ">
+      <addCourse
+      :showAddCourse="showAddCourseModal"
+      @course-added="sendNewCourse"
+      @close-modal="showAddCourseModal = false"
+      />
+
+      <v-row class="mt-14 mr-6 justify-end ">
+          <v-col cols="2" >
+              <BaseButton 
+              text="اضافه کردن درس" 
+              color="blue2" 
+              border-radius="15px"
+              textClass="white1--text"
+              class="font_40"
+              width="85%"
+              @click="show_AddCourse"
+              />
+              
+          </v-col>
         <v-col cols="3" class="mr-auto searchbar">
           <SearchBar @search-updated="handleSearchUpdate" />
         </v-col>
@@ -36,23 +42,31 @@
 <script>
 import Tabledata from '~/components/nextTerm_courses/Table.vue';
 import SearchBar from '~/components/nextTerm_courses/SearchBar.vue';
-// import { filter } from 'core-js/core/array';
+import year_card from '~/components/nextTerm_courses/year_card.vue';
+import BaseButton from '~/components/Base/BaseButton.vue';
+import addCourse from '~/components/nextTerm_courses/addCourse.vue';
+
 export default {
-  layouts:'Navigationbar',
 
   components: {
     Tabledata,
     SearchBar,
+    year_card,
+    BaseButton,
+    addCourse,
   },
   data: () => ({
+    
     searchQuery:'',
+    showAddCourseModal: false,
     ComponentTabeleData:[
   {
     "courseName": "آزمایشگاه شبکه های کامپیوتری",
     "unit": 1,
     "type": "عملی",
     "capacity": 15,
-    "teacher": "دکتر وزین نژاد",
+    "teacherName": "دکتر وزین نژاد",
+    
     "schedule": "سه‌شنبه‌ها 19:00-17:00",
     "description": "مدرس: دکتر وزین نژاد"
   },
@@ -61,7 +75,7 @@ export default {
     "unit": 3,
     "type": "نظری",
     "capacity": 60,
-    "teacher": "مهندس حمیدرضا",
+    "teacherName": "مهندس حمیدرضا",
     "schedule": "یک‌شنبه 09:00-12:00",
     "description": "امتحان: 13/03/1403"
   }
@@ -95,6 +109,28 @@ export default {
     handleSearchUpdate(newSearch) {
       this.searchQuery = newSearch;   
     },
+
+    show_AddCourse() {
+    this.showAddCourseModal = true;
+    },
+
+    sendNewCourse(course){
+      this.$reqApi.post('/courses', course)
+      .then(response => {
+        console.log('Course added:', response.data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    },
+  
+
+    // addCourseToTable(newCourse) {
+    
+    // this.ComponentTabeleData.push(newCourse);
+    // console.log('درس جدید به جدول اضافه شد:', newCourse);
+    // },
   },
 };
 </script>

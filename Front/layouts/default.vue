@@ -1,8 +1,7 @@
 <template>
   <v-app>
     <Bar></Bar>
-    <!-- v-if="show_body"  -->
-    <v-main class="ma-3 h-max w-max">
+    <v-main v-if="show_body" class="w-max">
       <nuxt />
     </v-main>
   </v-app>
@@ -11,15 +10,21 @@
 <script>
 import Bar from '~/components/Layout/Bar.vue';
 export default {
-  name: 'default',
   components: { Bar },
   data: () => ({
     show_body: false,
   }),
   beforeMount() {
     document.getElementById('loading').style.display = 'none';
-    // should set
-    // this.checkAuth();
+
+    setTimeout(() => {
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
+    }, 2);
+
+    this.checkAuth();
   },
   methods: {
     checkAuth() {

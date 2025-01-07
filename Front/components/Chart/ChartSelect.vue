@@ -7,6 +7,7 @@
         mandatory
         :width="width"
         :style="{ height: height }"
+        passed_courses
         color="orange1"
       >
         <v-btn
@@ -47,6 +48,11 @@
         default: '100px',
       },
 },
+    watch: {
+      selected(newVal) {
+        this.$emit("select", newVal)
+      },
+    },
 mounted() {
 }
 

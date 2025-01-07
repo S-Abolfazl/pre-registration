@@ -67,13 +67,10 @@ export default {
     taghvim,
     term_course,
   },
-  data: () => ({
-    title: 'پنل اصلی',
-  }),
-  computed: {},
-  beforeMount() {
-    this.$store.dispatch('setPageTitle', this.title);
+  head() {
+    return{
+      title: 'پنل اصلی',
+    }
   },
-  methods: {},
 }
 </script>

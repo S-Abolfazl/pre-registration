@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="the-border">
     <v-card class="amar-card orange2" elevation="3" @click="goToAmar">
       <v-col no-gutters align="center">
 
@@ -27,7 +27,7 @@
 export default {
   methods: {
     goToAmar() {
-      this.$router.push('/panel/Amar');
+      this.$router.push('/amar');
     },
     imgWidth() {
       // if (window.innerWidth > 2300)
@@ -62,12 +62,15 @@ export default {
 
 
 <style scoped>
-
+.the-border {
+  border-radius: 25px;
+  border: 3px solid #ff6d05;
+}
 .amar-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
-  border: 3px solid #FF8B37;
-  
+  /* border: 3px solid #FF8B37; */
+
   /* width: 13%; */
   height: auto;
   min-height: 280px;

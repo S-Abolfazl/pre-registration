@@ -1,29 +1,30 @@
 <template>
-    <div>
-   <v-row :style="{  padding: '2%' }">
-  <!-- Header Section -->
-  <v-col cols="9"  >
-    <v-row>
-    <header>
-      <h1 class="font_40" style="text-align: right ">چارت درسی رشته مهندسی کامپیوتر</h1>
-    </header>
-    <Year text="1400"></Year>
-  </v-row>
-  </v-col>
+  <div>
+    <v-row :style="{  padding: '2%' }">
+    <!-- Header Section -->
+      <v-col cols="9"  >
+        <v-row>
+        <header>
+          <h1 class="font_40" style="text-align: right ">چارت درسی رشته مهندسی کامپیوتر</h1>
+        </header>
+        <Year text="1400"></Year>
+      </v-row>
+      </v-col>
 
-  <!-- Chart Select -->
-  <v-col  cols="3" class="align-left">
-    <ChartSelect width="80%" height="40px" />
-  </v-col>
-</v-row>
+      <!-- Chart Select -->
+      <v-col  cols="3" class="align-left">
+        <ChartSelect width="80%" height="40px" @select="getData" />
+      </v-col>
+    </v-row>
 
-    <v-row class="align-center no-gutters" :style="{  paddingTop: '5%', width: '100%' }">
+    <v-row class="align-center no-gutters mr-4" :style="{  paddingTop: '5%', width: '100%' }">
       <!-- Header Section -->
         <header>
           <h1 class="font_20" style="text-align: left;">دوستان برای دیدن پیش نیاز و هم نیاز درس مورد نظر خودتون کافیه که اون درس رو انتخاب کنید.  </h1>
         </header>
     </v-row>
-    <v-row class="align-center no-gutters mb-13" :style="{  paddingTop: '1%', width: '100%' }">
+
+    <v-row class="align-center no-gutters mb-13 mr-4" :style="{  paddingTop: '1%', width: '100%' }">
       <!-- Header Section -->
 
       <header>
@@ -54,29 +55,32 @@
         <h1 class="font_20" style="text-align: left;">ميباشد.</h1>
       </header>
     </v-row>
-    <div v-for="(term, index) in courses" :key="term.term">
-    <header>
-      <h1 class="font_24" style="text-align: right; padding: 2%;">
-        ترم {{ getPersianTermLabel(term.term) }}
-        <span style="color: gray;">{{ sumCourseNumbers(term.courses) }} واحد</span>
-      </h1>
-    </header>
-    <v-chip-group column multiple>
-      <Course
-        v-for="course in term.courses"
-        :key="course.id"
-        :text="course.name"
-        :number="course.number"
-        :kind="course.kind"
+
+    <div v-if="Object.keys(the_data).length > 0" v-for="(value, key) in the_data.terms" :key="key + '-' + the_data.units[key]">
+      <header>
+        <h1 class="font_24" style="text-align: right; padding: 2%;">
+          ترم {{ getPersianTermLabel(key) }}
+          <span style="color: gray;">{{ the_data.units[key] }} واحد</span>
+        </h1>
+      </header>
+
+      <v-chip-group column multiple>
+        <Course
+          v-for="course in value"
+          :key="course.course_id"
+          :courseName="course.courseName"
+          :unit="course.unit"
+          :kind="course.kind"
+          :coreq="course.coreq"
+          :prereq="course.prereq"
+        />
+      </v-chip-group>
+
+      <hr
+        v-if="key != 8"
+        style="border: 1px solid gray; margin: 20px 50px;"
       />
-    </v-chip-group>
-    <hr
-      v-if="index + 1 !== courses.length"
-      style="border: 1px solid gray; margin: 20px 50px;"
-    />
-  </div>
-
-
+    </div>
   </div>
 </template>
 
@@ -94,6 +98,23 @@ export default {
     ChartSelect,
     Course,
   },
+  data() {
+    return {
+      main: [],
+      the_data: [],
+    }
+  },
+  mounted() {
+    this.$reqApi("student/chart/", {}, {}, true, 'get')
+        .then((response) => {
+          this.main = response;
+          this.the_data = response.even;
+        })
+        .catch((error) => {
+          this.$toast.error(error);
+        })
+
+  },
   methods: {
     getPersianTermLabel(termNumber) {
       const persianTerms = [
@@ -108,51 +129,15 @@ export default {
       ];
       return persianTerms[termNumber - 1] || termNumber;
     },
-    sumCourseNumbers(courses) {
-      return courses.reduce((sum, course) => sum + (course.number || 0), 0);
-    }
-  },
-  data() {
-      return {
-        courses: [
-      {
-        term: 1,
-        courses: [
-          { id: 1, name: "فیزیک 1", kind: "پايه", number: 3 },
-          { id: 2, name: "ریاضی 1", kind: "پايه", number: 3 },
-          { id: 3, name: "مبانی کامپوتر و برنامه سازی", kind: "اختصاصي", number: 3 },
-          { id: 4, name: "مهارت های کاربردی کامپیوتر", kind: "اختصاصي", number: 1 },
-          { id: 5, name: "زبان خارجی", kind: "عمومي", number: 2 },
-          { id: 6, name: "فارسی", kind: "عمومي", number: 2 },
-        ],
-      },
-      {
-        term: 2,
-        courses: [
-          { id: 7, name: "برنامه نویسی پیشرفته", kind: "اختصاصي", number: 3 },
-          { id: 8, name: "ریاضی گسسته", kind: "اختصاصي", number: 3 },
-          { id: 9, name: "مدار منطقی", kind: "اختصاصي", number: 3 },
-          { id: 10, name: "معادلات دیفرانسیل", kind: "پايه", number: 3 },
-          { id: 11, name: "فیزیک 2", kind: "پايه", number: 3 },
-          { id: 12, name: "آز فیزیک 2", kind: "پايه", number: 1 },
-        ],
-      },
-      {
-        term: 3,
-        courses: [
-          { id: 13, name: "زبان تخصصی", kind: "اختصاصي", number: 2 },
-          { id: 14, name: "ساختمان داده", kind: "اختصاصي", number: 3 },
-          { id: 15, name: "نظریه زبان ها و ماشین ها", kind: "اختصاصي", number: 3 },
-          { id: 16, name: "معماری کامپیوتر", kind: "اختصاصي", number: 3 },
-          { id: 17, name: "مدارهای الکتریکی و الکترونیکی", kind: "اختصاصي", number: 3 },
-          { id: 18, name: "آز منطقی معماری", kind: "اختياري", number: 1 },
-          { id: 19, name: "ریاضی 2", kind: "پايه", number: 3 },
-        ],
+    getData(data) {
+      if (data == "odd") {
+        this.the_data = this.main.odd;
       }
-    ],
-  }
-}
-
+      else{
+        this.the_data = this.main.even;
+      }
+    },
+  },
 }
 </script>
 
@@ -168,4 +153,5 @@ export default {
     text-align: center;
     box-sizing: border-box; /* Prevent padding/margin issues */
     margin-left: 0.2rem;
-  }</style>
+  }
+</style>

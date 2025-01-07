@@ -9,6 +9,14 @@
       <b class="font_30 mt-15">
         متاسفانه صفحه مورد نظر یافت نشد
       </b>
+
+      <BaseButton
+        text="بازگشت به صفحه اصلی"
+        @click="goToPanel"
+        width="29%"
+        borderRadius="99px"
+        class="my-5"
+      />
     </v-row>
   </v-col>
 </template>
@@ -32,6 +40,9 @@ export default {
       else if (width >= 576 && width < 768) return "md";
       else if (width >= 768 && width < 992) return "lg";
       else return "xl";
+    },
+    goToPanel() {
+      this.$router.push('/panel');
     },
   }
 }
