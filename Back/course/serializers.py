@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .PersianModelserializer import PersianModelserializer
 
-from .models import Course, AllCourses
+from .models import Course, AllCourses, CourseRule
 
 class CourseSerializer(PersianModelserializer): 
     class Meta:
@@ -22,4 +22,9 @@ class AllCoursesSerializer(PersianModelserializer):
 class AllCoursesDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllCourses
+        fields = '__all__'
+        
+class CourseRuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseRule
         fields = '__all__'       
