@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Course, AllCourses
+from .models import Course, AllCourses, CourseRule
 from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer, CourseRuleSerializer
 from user.permissions import IsAcademicAssistantOrAdmin, IsStudentOrIsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
@@ -87,7 +87,7 @@ class CourseCreateApi(APIView):
 
 
 class CourseListApi(APIView):
-    # permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Course List",
@@ -99,10 +99,23 @@ class CourseListApi(APIView):
             if pk:
                 course = Course.objects.get(c_id=pk)
                 serializer = CourseDetailSerializer(course)
+                data = serializer.data
+                course_rules = CourseRule.objects.filter(course=course.c_id)
+                for rule in course_rules:
+                    if rule.type == 'entry_rule':
+                        data['entry_years'] = rule.values
             else:
                 courses = Course.objects.all()
                 serializer = CourseDetailSerializer(courses, many=True)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+                course_rules = CourseRule.objects.all()
+                data = serializer.data
+                for course in data:
+                    rules = course_rules.filter(course=course['c_id'])
+                    for rule in rules:
+                        if rule.type == 'entry_rule':
+                            course['entry_years'] = rule.values 
+                    
+            return Response(data=data, status=status.HTTP_200_OK)
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",
