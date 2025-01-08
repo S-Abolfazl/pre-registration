@@ -60,6 +60,24 @@ class UserSerializer(serializers.ModelSerializer):
             'blank': self.default_error_messages['mobile_number_blank']
         })
         
+    def validate(self, data):
+        username = data.get('username')
+        user_type = data.get('type')
+        if username:
+            if len(username) < 8:
+                raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد")
+            
+            if not username.isdigit():
+                if user_type == "student":
+                    raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد")
+                else:
+                    raise serializers.ValidationError("نام کاربری باید فقط شامل اعداد باشد")
+            
+            if username[0] != '4' and username[0] != '9' and user_type == "student":
+                raise serializers.ValidationError("شماره دانشجویی معتبر نیست")
+        
+        return data
+        
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         user_type = validated_data.get('type', None)
@@ -128,17 +146,6 @@ class UserSerializer(serializers.ModelSerializer):
         
         user.save()
         return user
-    def validate_username(self, value):
-        if len(value) < 8:
-            raise serializers.ValidationError("نام کاربری باید بیشتر از 8 کاراکتر باشد")
-        
-        if not value.isdigit():
-            raise serializers.ValidationError("نام کاربری باید شماره دانشجویی باشد")
-        
-        if value[0] != '4' and value[0] != '9':
-            raise serializers.ValidationError("نام کاربری معتبر نیست")
-        
-        return value
 
     
     def validate_password(self, value):

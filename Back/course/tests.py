@@ -16,7 +16,7 @@ class CourseCreateTest(APITestCase):
         )
         
         self.valid_payload = {
-            "course": str(self.all_course.course_id),
+            "courseName": str(self.all_course.courseName),
             "teacherName": "Dr. Smith",
             "isExperimental": False,
             "class_time1": "شنبه",
@@ -27,7 +27,8 @@ class CourseCreateTest(APITestCase):
             "exam_start_time": "08:00:00",
             "exam_end_time": "10:00:00",
             "capacity": 30,
-            "description": "This is a sample course description."
+            "description": "This is a sample course description.",
+            "entry_years": []
         }
         
         self.invalid_payload = {
@@ -37,7 +38,8 @@ class CourseCreateTest(APITestCase):
         }
         
     def test_create_course_success(self):
-        response = self.client.post("/course/create-courses-in-term/", self.valid_payload, format="json")
+        valid_payload = self.valid_payload.copy()
+        response = self.client.post("/course/create-courses-in-term/", valid_payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("data", response.data)
         self.assertIn("msg", response.data)

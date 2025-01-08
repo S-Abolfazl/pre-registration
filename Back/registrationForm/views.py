@@ -76,11 +76,11 @@ class RegistrationFormCreateView(APIView):
             )
         return Response(
             data={
-                'msg': 'error',
-                'data': serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST
+                'msg': 'ok',
+                'data': 'فرم پیش ثبت نام برای این دانشجو قبلا ساخته شده است',
+                "status": status.HTTP_200_OK
             },
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_200_OK
         )
 
 

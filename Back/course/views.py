@@ -7,8 +7,8 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .models import Course, AllCourses
-from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer
+from .models import Course, AllCourses, CourseRule
+from .serializers import CourseSerializer, AllCoursesSerializer, CourseDetailSerializer, AllCoursesDetailSerializer, CourseRuleSerializer
 from user.permissions import IsAcademicAssistantOrAdmin, IsStudentOrIsAcademicAssistantOrAdmin
 from django.views.decorators.csrf import csrf_exempt
 
@@ -17,12 +17,29 @@ class CourseCreateApi(APIView):
     @swagger_auto_schema(
         operation_summary="Course Create",
         operation_description="Endpoint to create a new course in term.",
-        request_body=CourseSerializer
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'courseName': openapi.Schema(type=openapi.TYPE_STRING, description='course name'),
+                'teacherName': openapi.Schema(type=openapi.TYPE_STRING, description='teacher name'),
+                'isExperimental': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='is experimental'),
+                'class_time1': openapi.Schema(type=openapi.TYPE_STRING, description='class time1'),
+                'class_time2': openapi.Schema(type=openapi.TYPE_STRING, description='class time2'),
+                'class_start_time': openapi.Schema(type=openapi.TYPE_STRING, description='class start time'),
+                'class_end_time': openapi.Schema(type=openapi.TYPE_STRING, description='class end time'),
+                'exam_date': openapi.Schema(type=openapi.TYPE_STRING, description='exam date'),
+                'exam_start_time': openapi.Schema(type=openapi.TYPE_STRING, description='exam start time'),
+                'exam_end_time': openapi.Schema(type=openapi.TYPE_STRING, description='exam end time'),
+                'capacity': openapi.Schema(type=openapi.TYPE_INTEGER, description='capacity'),
+                'description': openapi.Schema(type=openapi.TYPE_STRING, description='description'),
+                'entry_years': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_STRING), description='entry years'),
+            }
+        )
     )
     def post(self, request):
         
         try:
-            course_instance = AllCourses.objects.get(course_id=request.data['course'])
+            course_instance = AllCourses.objects.get(courseName=request.data['courseName'])
         except Exception as e:
             return Response(data={
                 "msg":"error",
@@ -31,11 +48,28 @@ class CourseCreateApi(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
             
         request_data = request.data.copy()
+        request_data.pop('courseName', None)
         request_data['course'] = course_instance.course_id
         
         serializer = CourseSerializer(data=request_data)
         if serializer.is_valid():
             course = serializer.save()
+            entry_years = request.data['entry_years']
+            if entry_years:
+                entry_years = [year[-3:] if year[:2] == "14" else year[-2:] for year in entry_years]
+                course_rule = CourseRuleSerializer(data={
+                    'course': course.c_id,
+                    'type': 'entry_rule',
+                    'values': entry_years,
+                })
+                if course_rule.is_valid():
+                    course_rule.save()
+                else:
+                    return Response(data={
+                        "msg":"error",
+                        "data":course_rule.errors,
+                        "status":status.HTTP_400_BAD_REQUEST
+                    }, status=status.HTTP_400_BAD_REQUEST)
             return Response(data={
                 "msg":"ok",
                 "data":f'درس با شناسه:{course.c_id} ایجاد شد',
@@ -65,10 +99,23 @@ class CourseListApi(APIView):
             if pk:
                 course = Course.objects.get(c_id=pk)
                 serializer = CourseDetailSerializer(course)
+                data = serializer.data
+                course_rules = CourseRule.objects.filter(course=course.c_id)
+                for rule in course_rules:
+                    if rule.type == 'entry_rule':
+                        data['entry_years'] = rule.values
             else:
                 courses = Course.objects.all()
                 serializer = CourseDetailSerializer(courses, many=True)
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+                course_rules = CourseRule.objects.all()
+                data = serializer.data
+                for course in data:
+                    rules = course_rules.filter(course=course['c_id'])
+                    for rule in rules:
+                        if rule.type == 'entry_rule':
+                            course['entry_years'] = rule.values 
+                    
+            return Response(data=data, status=status.HTTP_200_OK)
         except Course.DoesNotExist:
             return Response(data={
                 "msg":"error",

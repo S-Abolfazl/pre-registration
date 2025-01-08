@@ -40,5 +40,21 @@ services:
       postgres:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./Front
+      dockerfile: Dockerfile
+    container_name: my-frontend
+    ports:
+      - "3000:3000"
+    # volumes:
+    #   - ./Front:/app
+    # - /app/node_modules
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+    depends_on:
+      - django
+
 volumes:
   postgres_data:

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main v-if="show_body">
+    <v-main>
       <nuxt />
     </v-main>
   </v-app>
@@ -8,37 +8,55 @@
 
 <script>
 export default {
-  data: () => ({
-    title: '',
-    show_body: false,
-  }),
-  beforeMount() {
-    this.checkAuth()
+  name: "auth",
+  data() {
+    return {
+      title: 'Loading...',
+    };
+  },
+  async mounted() {
+    // Hide the loading element after the component is mounted
+    const loadingElement = document.getElementById('loading');
+    setTimeout(() => {
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
+    }, 2);
+    if (loadingElement) loadingElement.style.display = 'none';
+
+    // should set
+    // await this.checkAuth();
   },
   head() {
-    this.checkDomain()
     return {
       title: this.title,
-    }
+    };
   },
   methods: {
-    showBody() {
-      this.show_body = true
-      setTimeout(() => {
-        document.getElementById('loading-parent').style.display = 'none'
-      }, 1000)
-    },
-    checkAuth() {
-      let user = this.$store.state.auth.user
-      document.getElementById('landing-parent').style.display = 'flex'
-      if (Boolean(user)) {
-        this.showBody()
+    async checkAuth() {
+      let user = this.$store.state.auth.user;
+
+      const landingElement = document.getElementById('landing');
+      if (landingElement) landingElement.style.display = 'flex';
+
+      if (user) {
+        this.showBody();
       } else {
-        this.$store.dispatch('auth/nuxtServerInit').then(() => {
-          this.showBody()
-        })
+        // Wait for the store action to complete before showing the body
+        await this.$store.dispatch('auth/nuxtServerInit');
+        this.showBody();
       }
     },
+    showBody() {
+      this.show_body = true;
+
+      // Hide loading after a short delay
+      setTimeout(() => {
+        const loadingElement = document.getElementById('loading');
+        if (loadingElement) loadingElement.style.display = 'none';
+      }, 1000);
+    },
   },
-}
+};
 </script>
