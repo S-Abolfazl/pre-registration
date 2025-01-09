@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Course, AllCourses, Prereq, Coreq, CourseRule
-from django import forms
 from django.urls import reverse
 from django.utils.html import format_html
 
