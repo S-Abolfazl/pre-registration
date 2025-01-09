@@ -442,6 +442,7 @@ class CourseinTermApi(APIView):
                 combined_schedule += f" | امتحان: {exam_schedule} "
                 
             course_data = {
+                "c_id": course.c_id,
                 "courseName": course.course.courseName,
                 "unit": course.course.unit,
                 "type": course.course.type,
