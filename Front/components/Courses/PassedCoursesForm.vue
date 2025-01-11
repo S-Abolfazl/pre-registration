@@ -40,11 +40,17 @@
         multiple
         class="courses-group"
       >
-        <Course2
-          v-for="(course, courseIndex) in courses"
-          :key="courseIndex"
-          :course="course"
-        />
+        <template v-for="(course, courseIndex) in courses">
+          <Course2
+            v-if="course.courseName != 'اختیاری'"
+            :key="courseIndex"
+            :course="course"
+          />
+          <Course
+            v-else
+
+          />
+        </template>
       </v-chip-group>
     </div>
     </template>
@@ -86,12 +92,14 @@ export default {
       years: ["ورودی 1400", "ورودی 1401", "ورودی 1402"],
       selectedYear: "ورودی 1400",
       terms: [],
+      elective_course: [],
     }
   },
   mounted() {
     this.$reqApi("/student/courses/", {}, {}, true, 'get')
     .then((response) => {
       this.terms = response.terms;
+      this.elective_course = response.elective_course;
     })
     .catch((error) => {
       this.$toast.error(error);
