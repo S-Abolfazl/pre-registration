@@ -44,6 +44,7 @@ urlpatterns = [
     path('registration-form/', include('registrationForm.urls')),
     path('academic-assistant/', include('academic_assistant.urls')),
     path('master/', include('master.urls')),
+    path('notification/', include('notification.urls')),
         
     # swagger
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
