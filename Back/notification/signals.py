@@ -61,7 +61,7 @@ def create_notification_on_course_update(sender, instance, **kwargs):
             content = " ".join(content)
             Notification.objects.create(title=title, content=content)
         
-        if old_instance.class_time1 != instance.class_time1 and old_instance.class_time2 != instance.class_time2:
+        if old_instance.class_time1 != instance.class_time1 or old_instance.class_time2 != instance.class_time2:
             title = "تغییر روز کلاس"
             content = [
                 "روز کلاس درس",
@@ -82,7 +82,7 @@ def create_notification_on_course_update(sender, instance, **kwargs):
             content = " ".join(content)
             Notification.objects.create(title=title, content=content)
         
-        if old_instance.class_start_time != instance.class_start_time and old_instance.class_end_time != instance.class_end_time:
+        if old_instance.class_start_time != instance.class_start_time or old_instance.class_end_time != instance.class_end_time:
             title = "تغییر ساعت کلاس"
             content = [
                 "ساعت کلاس درس",
@@ -102,6 +102,62 @@ def create_notification_on_course_update(sender, instance, **kwargs):
                 if instance.class_time2 != instance.class_time1:
                     content.append("و")
                     content.append(f"{instance.class_time2}")
+            
+            content = " ".join(content)
+            Notification.objects.create(title=title, content=content)
+        
+        if old_instance.exam_date != instance.exam_date:
+            title = "تغییر تاریخ امتحان"
+            content = [
+                "تاریخ امتحان درس",
+                f"{instance.course.courseName}",
+                "ارائه شده توسط استاد",
+                f"{instance.teacherName}",
+                "از",
+                f"{old_instance.exam_date}",
+                "به",
+                f"{instance.exam_date}",
+                "تغییر یافت."
+            ]
+            
+            if instance.class_time1:
+                content.append("روز درس:")
+                content.append(f"{instance.class_time1}")
+                if instance.class_time2 != instance.class_time1:
+                    content.append("و")
+                    content.append(f"{instance.class_time2}")
+                    
+                if instance.class_start_time and instance.class_end_time:
+                    content.append("ساعت درس:")
+                    content.append(f" {str(instance.class_start_time)[:-3]} - {str(instance.class_end_time)[:-3]}")
+            
+            content = " ".join(content)
+            Notification.objects.create(title=title, content=content)
+        
+        if old_instance.exam_start_time != instance.exam_start_time or old_instance.exam_end_time != instance.exam_end_time:
+            title = "تغییر ساعت امتحان"
+            content = [
+                "ساعت امتحان درس",
+                f"{instance.course.courseName}",
+                "ارائه شده توسط استاد",
+                f"{instance.teacherName}",
+                "از",
+                f"{str(old_instance.exam_start_time)[:-3]} - {str(old_instance.exam_end_time)[:-3]}",
+                "به",
+                f"{str(instance.exam_start_time)[:-3]} - {str(instance.exam_end_time)[:-3]}",
+                "تغییر یافت."
+            ]
+            
+            if instance.class_time1:
+                content.append("روز درس:")
+                content.append(f"{instance.class_time1}")
+                if instance.class_time2 != instance.class_time1:
+                    content.append("و")
+                    content.append(f"{instance.class_time2}")
+                    
+                if instance.class_start_time and instance.class_end_time:
+                    content.append("ساعت درس:")
+                    content.append(f" {str(instance.class_start_time)[:-3]} - {str(instance.class_end_time)[:-3]}")
             
             content = " ".join(content)
             Notification.objects.create(title=title, content=content)
