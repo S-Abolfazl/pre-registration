@@ -11,10 +11,10 @@ def create_notification_on_course(sender, instance, **kwargs):
         f"{instance.course.courseName}",
         "ارائه شده توسط استاد",
         f"{instance.teacherName}",
-        "در روز",
     ]
     
     if instance.class_time1:
+        content.append("در روز")
         content.append(f"{instance.class_time1}")
         if instance.class_time2 != instance.class_time1:
             content.append("و")
