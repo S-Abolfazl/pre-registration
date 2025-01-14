@@ -8,7 +8,7 @@ def create_notification_on_course(sender, instance, **kwargs):
     title = "حذف درس"
     content = [
         "درس",
-        f"{instance.course.corseName}",
+        f"{instance.course.courseName}",
         "ارائه شده توسط استاد",
         f"{instance.teacherName}",
         "در روز",

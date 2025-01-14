@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'registrationForm',
     'master',
     'chat',
+    'notification'
 ]
 
 REST_FRAMEWORK = {
