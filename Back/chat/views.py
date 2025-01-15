@@ -9,10 +9,21 @@ from .models import Chat, Message
 from .serializers import ChatSerializer, MessageSerializer
 from user.models import User
 
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 class ChatListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Get all chats",
+        operation_description="Get all chats to show for user",
+        responses={
+            200: openapi.Response("ok", ChatSerializer),
+            404: "Chat not found",
+        },
+    )
+    
     def get(self, request, pk=None):
         user = request.user
 
@@ -44,13 +55,22 @@ class ChatListAPIView(APIView):
 class ChatCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Create chat",
+        operation_description="create a chat between user and supporter",
+        responses={
+            201: "Chat created successfully",
+            400: "Chat not created",
+        },
+    )
+
     def post(self, request):
         sender = request.user
         receiver = User.objects.filter(type='support').first()
         if not receiver:
             return Response({
                 "msg": "error",
-                "data": "dont exist support yet",
+                "data": "support does not exist",
                 "status": status.HTTP_400_BAD_REQUEST,
             }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -66,6 +86,15 @@ class ChatCreateAPIView(APIView):
 class ChatDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Delete chat",
+        operation_description="api for deleting a chat",
+        responses={
+            200: "Chat deleted successfully",
+            400: "Chat not deleted",
+        },
+    )
+    
     def delete(self, request, pk):
         try:
             Chat.objects.get(pk=pk).delete()
@@ -85,6 +114,15 @@ class ChatDeleteAPIView(APIView):
 class MessageListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary = "List messages",
+        operation_description="displays a list of messages",
+        responses={
+            200: openapi.Response("ok", MessageSerializer),
+            400: "there is no message",
+        }
+    )
+    
     def post(self, request):
         try:
             chat_id = Chat.objects.get(id=request.data.get('chat_id')).id
@@ -116,7 +154,7 @@ class MessageCreateAPIView(APIView):
             data['receiver'] = User.objects.get(id=data['receiver'])
         except Exception as e:
             return Response({
-                "msg": "فرستنده یا گیرنده نامعتبر اشت",
+                "msg": "فرستنده یا گیرنده نامعتبر است",
                 "data": "",
                 "status": status.HTTP_400_BAD_REQUEST,
             }, status=status.HTTP_400_BAD_REQUEST)
