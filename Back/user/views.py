@@ -10,6 +10,7 @@ from drf_yasg import openapi
 from social_django.utils import load_strategy
 from social_core.backends.google import GoogleOAuth2
 from rest_framework import serializers
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import User
 from .serializers import UserSerializer, UserDetailSerializer
@@ -79,7 +80,7 @@ class UserListApi(APIView):
             , status=status.HTTP_200_OK)
     
 class UserDetailApi(APIView):
-    permission_classes = [IsAuthenticated, IsStudent]
+    permission_classes = [IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="User Detail",
@@ -260,33 +261,37 @@ class UserDeleteApi(APIView):
 
 
 class UserUpdateApi(APIView):
-    permission_classes = [IsStudent, IsAuthenticated]
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
     
     @swagger_auto_schema(
         operation_summary="User Patch",
         operation_description="Endpoint to partially update a user by id, including uploading an avatar.",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password'),
-                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email'),
-                'type': openapi.Schema(type=openapi.TYPE_STRING, description='Type'),
-                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='First name'),
-                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Last name'),
-                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='Mobile number'),
-                'avatar': openapi.Schema(
-                    type=openapi.TYPE_STRING,
-                    format="binary",
-                    description="Upload an avatar image"
-                )
-            },
-        )
+        manual_parameters=[
+            openapi.Parameter('username', openapi.IN_FORM, description='Username', type=openapi.TYPE_STRING),
+            openapi.Parameter('password', openapi.IN_FORM, description='Password', type=openapi.TYPE_STRING),
+            openapi.Parameter('email', openapi.IN_FORM, description='Email', type=openapi.TYPE_STRING),
+            openapi.Parameter('type', openapi.IN_FORM, description='Type', type=openapi.TYPE_STRING),
+            openapi.Parameter('first_name', openapi.IN_FORM, description='First name', type=openapi.TYPE_STRING),
+            openapi.Parameter('last_name', openapi.IN_FORM, description='Last name', type=openapi.TYPE_STRING),
+            openapi.Parameter('mobile_number', openapi.IN_FORM, description='Mobile number', type=openapi.TYPE_STRING),
+            openapi.Parameter(
+                'avatar', openapi.IN_FORM, description='Upload an avatar image', type=openapi.TYPE_FILE
+            ),
+        ],
+        consumes=["multipart/form-data"]
     )
+    
     def patch(self, request):
         try:
             user = request.user
-            serializer = UserSerializer(user, data=request.data, partial=True)
+            
+            avatar = request.FILES.get('avatar')
+            data = request.data.copy()
+            if avatar:
+                data['avatar'] = avatar
+            
+            serializer = UserSerializer(user, data=data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(data={
