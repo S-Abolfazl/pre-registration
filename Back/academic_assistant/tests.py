@@ -82,6 +82,16 @@ class TestOverflowedCourses(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
         self.assertEqual(len(response.data["data"]), 1)
+        
+    @patch("course.models.Course.objects.annotate")
+    def test_statistics_overflowed_courses_api_exception(self, mock_course):
+        mock_course.side_effect = Exception("Database error")
+
+        response = self.client.get("/academic-assistant/statistics/overflowed-courses")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["msg"], "error")
+        self.assertIn("مشکلی در دریافت اطلاعات", response.data["data"])
 
 class TestParticipationPercent(APITestCase):
     def setUp(self):
@@ -171,5 +181,15 @@ class TestParticipationPercent(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
         self.assertEqual(len(response.data["data"]), 5)
+    
+    @patch("registrationForm.models.RegistrationForm.objects.all")
+    def test_statistics_participation_percent_api_exception(self, mock_registration_form):
+        mock_registration_form.side_effect = Exception("Database error")
+
+        response = self.client.get("/academic-assistant/statistics/participation-percent")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["msg"], "error")
+        self.assertIn("مشکلی در دریافت اطلاعات", response.data["data"])
         
         
