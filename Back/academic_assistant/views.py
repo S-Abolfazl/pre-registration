@@ -19,12 +19,11 @@ class StatisticsBarChartApi(APIView):
         operation_description="This API returns the number of students registered in each course and datas to show in a bar chart",
     )
     
-    def get(self, request):
-        courses = Course.objects.all()
-        
+    def get(self, request):        
         data = []
         
         try:
+            courses = Course.objects.all()
             for course in courses:
                 class_start_end = ""
                 if course.class_start_time and course.class_end_time:

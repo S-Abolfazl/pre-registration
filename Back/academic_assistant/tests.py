@@ -4,6 +4,7 @@ from user.models import User
 from user.serializers import UserSerializer
 from course.models import Course, AllCourses
 from registrationForm.models import RegistrationForm
+from unittest.mock import patch
 
 class TestBarChart(APITestCase):
     def setUp(self):
@@ -31,7 +32,17 @@ class TestBarChart(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["msg"], "ok")
         self.assertEqual(len(response.data["data"]), 1)
+    
+    @patch("course.models.Course.objects.all")
+    def test_statistics_bar_chart_api_exception(self, mock_course):
+        # Simulate an exception during the query
+        mock_course.side_effect = Exception("Database error")
 
+        response = self.client.get("/academic-assistant/statistics/bar-chart")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data["msg"], "error")
+        self.assertIn("مشکلی در دریافت اطلاعات", response.data["data"])
 
 class TestOverflowedCourses(APITestCase):
     def setUp(self):
