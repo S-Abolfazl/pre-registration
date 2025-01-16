@@ -145,6 +145,15 @@ class MessageListAPIView(APIView):
 
 class MessageCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(
+        operation_summary="Create message",
+        operation_description="create a message between user and supporter",
+        responses={
+            200: "Message created successfully",
+            400: "Message not created",
+        },
+    )
 
     def post(self, request):
         data = request.data.copy()
@@ -185,6 +194,15 @@ class MessageCreateAPIView(APIView):
 class MessageUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Update message",
+        operation_description="api to update a message",
+        responses={
+            200: "Message updated successfully",
+            400: "Message not updated",
+        },
+    )
+
     def put(self, request, pk=None):
         try:
             message = Message.objects.get(id=pk)
@@ -221,6 +239,15 @@ class MessageUpdateAPIView(APIView):
 
 class MessageDeleteAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    
+    @swagger_auto_schema(
+        operation_summary="Delete message",
+        operation_description="api for deleting a message",
+        responses={
+            204: "Message deleted successfully",
+            404: "Message not found",
+        },
+    )
 
     def delete(self, request, pk=None):
         try:
