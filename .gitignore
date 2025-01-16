@@ -19,3 +19,5 @@ Front/node_modules
 Front/jsconfig.json
 Front/.nuxt
 Front/static/sw.js
+htmlcov
+.coverage

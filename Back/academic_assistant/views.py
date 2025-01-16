@@ -12,19 +12,18 @@ from user.models import User
 from registrationForm.models import RegistrationForm 
 
 class StatisticsBarChartApi(APIView):
-    # permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Statistics Bar Chart API", 
         operation_description="This API returns the number of students registered in each course and datas to show in a bar chart",
     )
     
-    def get(self, request):
-        courses = Course.objects.all()
-        
+    def get(self, request):        
         data = []
         
         try:
+            courses = Course.objects.all()
             for course in courses:
                 class_start_end = ""
                 if course.class_start_time and course.class_end_time:
@@ -55,7 +54,7 @@ class StatisticsBarChartApi(APIView):
         
              
 class StatisticsParticipationPercentApi(APIView):
-    # permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Statistics Participation Percent API",
@@ -97,7 +96,7 @@ class StatisticsParticipationPercentApi(APIView):
         
         
 class StatisticsOwerFlowedCoursesApi(APIView):
-    # permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
     
     @swagger_auto_schema(
         operation_summary="Statistics OwerFlowed Courses API",
