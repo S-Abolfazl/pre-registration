@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: my-django
     environment:
-      DEBUG: '1'
+      DEBUG: 'True'
       SECRET_KEY: django-insecure-0+)c$i_v#a2s^c=1(qx-lmr5nx+&on1+mf3!d8vu^1bg+*b-ll
       DATABASE_ENGINE: django.db.backends.postgresql
       DATABASE_NAME: mydatabase
@@ -34,7 +34,8 @@ services:
       - "8000:8000"
     
     # volumes:
-    #   - ./Back:/app
+      # - ./Back:/app
+      # - ./media:/app/media
     
     depends_on:
       postgres:
