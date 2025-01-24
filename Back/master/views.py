@@ -20,12 +20,59 @@ class MasterCreateApi(APIView):
     @swagger_auto_schema(
         operation_summary="Master Create",
         operation_description="Endpoint to create a new master (professor).",
-        request_body=MasterSerializer
+        #request_body=MasterSerializer
+        request_body = openapi.Schema(
+            type = openapi.TYPE.OBJECT,
+            properties ={
+                'name': openapi.Schema(type=openapi.TYPE_STRING, description='Name of the master'),
+                'education': openapi.Schema(type=openapi.TYPE_STRING, description='Education details'),
+                'specialization': openapi.Schema(type=openapi.TYPE_STRING, description='Specialization field'),
+                'description': openapi.Schema(type=openapi.TYPE_STRING, description='Description about the master'),
+                'department': openapi.Schema(type=openapi.TYPE_STRING, description='Department name'),
+                'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='Mobile number'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email address'),
+                'avatar': openapi.Schema(type=openapi.TYPE_STRING, format='binary', description='Avatar image'),
+                'rate': openapi.Schema(type=openapi.TYPE_INTEGER, description='Rating of the master'),
+            }
+            
+        )
     )
+
     def post(self, request):
+        try:
+            request_data = request.data.copy()
+            serializer = MasterSerializer(data=request_data)
+            if serializer.is_valid():
+                master = serializer.save()
+                return Response(
+                    data={
+                        "msg": "ok",
+                        "data": f'Master {master.name} created successfully.',
+                        "status": status.HTTP_201_CREATED
+                    },
+                    status=status.HTTP_201_CREATED
+                )
+            return Response(
+                data={
+                    "msg": "error",
+                    "data": serializer.errors,
+                    "status": status.HTTP_400_BAD_REQUEST
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                data={
+                    "msg": "error",
+                    "data": f"An error occurred: {str(e)}",
+                    "status": status.HTTP_500_INTERNAL_SERVER_ERROR
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    #/def post(self, request):
         request_data = request.data.copy()
 
-        serializer = MasterSerializer(data=request_data)
+        serializer = MasterSerializer.objects.get(data=request_data)
         if serializer.is_valid():
             try:
                 master = serializer.save()
@@ -54,7 +101,7 @@ class MasterCreateApi(APIView):
                 "status": status.HTTP_400_BAD_REQUEST
             },
             status=status.HTTP_400_BAD_REQUEST
-        )
+        )#/
     
    # class MasterListApi(APIView):
     #    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
