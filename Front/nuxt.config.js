@@ -22,7 +22,8 @@ export default {
       { rel: 'stylesheet', href: '/css/fonts.css' },
       { rel: 'stylesheet', href: '/css/mobile.css' },
       { rel: 'stylesheet', href: '/css/google_font.css' },
-      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
+
     ],
   },
   plugins: [
@@ -75,6 +76,8 @@ export default {
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
+          gray4: '#F1F7FF',
+          gray5: '#6D678B',
 
           black1: '#100F14',
           black2: '#19181F',
