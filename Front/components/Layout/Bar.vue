@@ -115,7 +115,7 @@ export default {
       this.$router.push('/pre-registration-form'); // Adjust the route path as needed
     },
     navigateToFeedback() {
-      this.$router.push('/feedback');
+      this.$router.push('/professors');
     },
     navigateToNotifications() {
       this.$router.push('/notifications');
