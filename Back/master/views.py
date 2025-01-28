@@ -22,7 +22,7 @@ class MasterCreateApi(APIView):
         operation_description="Endpoint to create a new master (professor).",
         #request_body=MasterSerializer
         request_body = openapi.Schema(
-            type = openapi.TYPE.OBJECT,
+            type = openapi.TYPE_OBJECT,
             properties ={
                 'name': openapi.Schema(type=openapi.TYPE_STRING, description='Name of the master'),
                 'education': openapi.Schema(type=openapi.TYPE_STRING, description='Education details'),
