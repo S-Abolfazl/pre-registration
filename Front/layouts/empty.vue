@@ -10,6 +10,12 @@
 export default {
   mounted() {
     document.getElementById('loading').style.display = 'none';
+    setTimeout(() => {
+      const isDark = localStorage.getItem('isDark');
+      if (isDark !== null) {
+        this.$vuetify.theme.dark = isDark === 'true';
+      }
+    }, 2);
   }
 }
 </script>

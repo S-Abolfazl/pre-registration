@@ -3,8 +3,7 @@
   <v-container fluid class="pa-0">
 
     <v-row justify="center" class="my-4 mx-0 ml-7">
-
-      <v-col cols="5">
+      <v-col v-if="role == 'student'" cols="5">
         <pishsabt />
       </v-col>
 
@@ -19,7 +18,7 @@
 
     <v-row justify="center" align="center" class="my-4 mx-0 ml-7">
 
-      <v-col cols="3" >
+      <v-col cols="3" v-if="role == 'academicassistant'">
         <amar />
       </v-col>
 
@@ -67,13 +66,15 @@ export default {
     taghvim,
     term_course,
   },
-  data: () => ({
-    title: 'پنل اصلی',
-  }),
-  computed: {},
-  beforeMount() {
-    this.$store.dispatch('setPageTitle', this.title);
+  head() {
+    return{
+      title: 'پنل اصلی',
+    }
   },
-  methods: {},
+  computed: {
+    role() {
+      return JSON.parse(localStorage.getItem('user')).type;
+    }
+  },
 }
 </script>

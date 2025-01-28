@@ -2,50 +2,53 @@
   <v-card
     class="menu-container" :width="width"
   >
-    <list dense class="menu-list">
+    <div dense class="menu-list">
       <!-- profile item-->
       <v-list-item @click="goToProfile" class="v-list-item-custom">
-        <img src="image/panel/profile.png" class="menu-icon" alt="profile" />
+        <img src="image/menu/profile.png" class="menu-icon" alt="profile" />
         <span class="menu-text font_24">حساب کاربری</span>
       </v-list-item>
       <!-- course item -->
-      <v-list-item @click="goToLessons" class="v-list-item-custom">
-        <img src="image/panel/course.png" class="menu-icon" alt="courses" />
+      <v-list-item @click="goToLessons" class="v-list-item-custom" v-if="role == 'student'">
+        <img src="image/menu/course.png" class="menu-icon" alt="courses" />
         <span class="menu-text font_24">دروس پاس شده</span>
       </v-list-item>
       <!-- settings item -->
-      <v-list-item @click="goToSettings" class="v-list-item-custom">
-        <img src="image/panel/setting.png" class="menu-icon" alt="settings" />
-        <span class="menu-text font_24">تنظیمات</span>
+      <v-list-item @click="goToUsers" class="v-list-item-custom" v-if="role == 'admin'">
+        <img src="image/menu/Manegement.png" class="menu-icon" alt="management" />
+        <span class="menu-text font_24">مدیریت کاربران</span>
       </v-list-item>
 
 
-      <v-divider></v-divider>
+      <v-divider class="menu-divider"></v-divider>
 
       <!-- آیتم زبان -->
       <v-list-item class="v-list-item-custom">
-        <img src="image/panel/world.png" class="menu-icon" alt="languge" />
+        <img src="image/menu/AboutUs.png" class="menu-icon" alt="AboutUs" />
+        <span class="menu-text font_24">درباره ما</span>
+      </v-list-item>
+
+      <v-list-item class="v-list-item-custom">
+        <img src="image/menu/world.png" class="menu-icon" alt="languge" />
         <span class="menu-text font_24">زبان</span>
         <span class="current-language font_20">{{ currentLanguage }}</span>
       </v-list-item>
 
-      <v-divider></v-divider>
+      <v-divider class="menu-divider"></v-divider>
 
       <!-- حالت شب -->
       <v-list-item class="v-list-item-custom">
-        <img src="image/panel/moon.png" class="menu-icon" alt="Night" />
+        <img src="image/menu/moon.png" class="menu-icon" alt="Night" />
         <span class="menu-text font_24">حالت شب</span>
         <v-switch v-model="darkMode" class="ml-auto"></v-switch>
       </v-list-item>
-
-      <v-divider></v-divider>
 
       <!-- خروج -->
       <v-list-item @click="logout" class="v-list-item-custom">
         <v-icon class="menu-icon" color="red">mdi-logout</v-icon>
         <span class="menu-text text-red font_24">خروج از حساب کاربری</span>
       </v-list-item>
-    </list>
+    </div>
   </v-card>
 </template>
 
@@ -63,18 +66,41 @@ export default {
       currentLanguage: 'فارسی',
     };
   },
+  watch: {
+    darkMode(newVal) {
+      this.$vuetify.theme.dark = newVal;
+      localStorage.setItem('isDark', newVal);
+    },
+  },
+  computed: {
+    role() {
+      return JSON.parse(localStorage.getItem('user')).type;
+    }
+  },
+  mounted() {
+    this.darkMode = this.$vuetify.theme.dark;
+  },
   methods: {
     goToProfile() {
-      console.log('Navigate to profile');
+      this.$router.push("/profile");
     },
     goToLessons() {
-      console.log('Navigate to lessons');
+      this.$router.push("/passed-courses");
     },
-    goToSettings() {
-      console.log('Navigate to settings');
+    goToUsers() {
+      window.location.href = `http://${this.store.state.server_url}/admin`;
     },
     logout() {
-      console.log('Logged out');
+      this.$reqApi(`/user/logout/`, {
+        "refresh_token" : localStorage.getItem("refresh_token")
+      })
+        .then((response) => {
+          this.$store.dispatch('auth/error401');
+          this.$toast.success(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };
@@ -82,10 +108,9 @@ export default {
 
 <style scoped>
 .menu-container {
-  width: 50px;
   height: 600px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   border-radius: 30px;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.61);
@@ -102,16 +127,16 @@ export default {
 .v-list-item-custom {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 2px 16px;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.29);
   flex-grow: 1; /* برای پر کردن فضا */
-  min-height: 60px; /* حداقل ارتفاع */
+
   justify-content: space-between; /* فضای بین متن و آیکون را توزیع کن */
 }
 
 .v-list-item-custom:hover {
-  background-color: rgba(255, 255, 255, 0.1);  
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menu-icon {
@@ -135,6 +160,11 @@ export default {
 
 .text-red {
   color: red;
+}
+
+.menu-divider{
+  border-width: 2px; /* ضخامت */
+  border-color:rgb(255, 255, 255, 0.3); /* رنگ */
 }
 
 </style>

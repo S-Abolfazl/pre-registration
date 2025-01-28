@@ -25,10 +25,14 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' },
 
     ],
+    script: [
+      { src: "https://accounts.google.com/gsi/client", async: true, defer: true },
+    ],
   },
   plugins: [
     '~/plugins/axios',
     '~/plugins/helper',
+    '~/plugins/apexcharts.js',
     { src: '~/plugins/other.js', ssr: false },
     { src: '~/plugins/vue-persian-datetime-picker', ssr: false },
   ],
@@ -58,11 +62,17 @@ export default {
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
+          gray4: '#303030',
 
           black1: '#FFFFFF',
           black2: '#FFFFAA',
 
           white1: '#19181F',
+
+          blue1: '#E3E3FF',
+          blue2: '#7B5FF1',
+
+          red1: '#FF1100',
         },
         light: {
           info: '#00ABE1',
@@ -73,11 +83,13 @@ export default {
           primary: '#6938EF',
           orange1: '#FF8B37',
           orange2: '#FFD7C7',
+
           gray1: '#686677',
           gray2: '#CBCAD7',
           gray3: '#9794AA',
-          gray4: '#F1F7FF',
+          gray4: '#EAE6FA',
           gray5: '#6D678B',
+          gray6: '#F1F7FF',
 
           black1: '#100F14',
           black2: '#19181F',
@@ -87,6 +99,9 @@ export default {
 
           blue1: '#E3E3FF',
           blue2: '#7B5FF1',
+
+          red1: '#FF1100',
+          blue3: '#EBE7FD',
         }
       },
     },
@@ -114,6 +129,7 @@ export default {
     extend(config, ctx) {
       config.resolve.alias['vue'] = 'vue/dist/vue.common';
     },
+    transpile: ['vue-apexcharts', 'apexcharts'],
   },
   css: [
     '@mdi/font/css/materialdesignicons.css'

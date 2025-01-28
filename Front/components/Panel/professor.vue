@@ -1,6 +1,6 @@
 <template>
-  <div >
-    <v-card class="professors-card blue1"  @click="goToProfessor">
+  <div class="the-border">
+    <v-card class="professors-card"  @click="goToProfessor">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -28,7 +28,7 @@
   export default {
     methods: {
       goToProfessor() {
-        this.$router.push('/panel/Professor');
+        this.$router.push('/professors');
       },
       imgWidth() {
           // if (window.innerWidth > 2300)
@@ -65,11 +65,15 @@
 </script>
 
 <style scoped>
+.the-border {
+  border-radius: 25px;
+  border: 3px solid #7B5FF1 !important;
+}
 .professors-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
-  /* background-color: var(blue1); */
-  border: 3px solid #7B5FF1 !important;
+  background-color: #7c5ff12a;
+  /* border: 3px solid #7B5FF1 !important; */
   /* width: 33%;  */
   height: auto;
   min-height: 280px;
