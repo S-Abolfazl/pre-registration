@@ -32,7 +32,7 @@ class MasterCreateApi(APIView):
                 return Response(
                     data={
                         "msg": "ok",
-                        "data": f'Master {master.first_name} {master.last_name} created successfully.',
+                        "data": f'Master {master.name} created successfully.',
                         "status": status.HTTP_201_CREATED
                     },
                     status=status.HTTP_201_CREATED
