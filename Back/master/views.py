@@ -70,67 +70,34 @@ class MasterCreateApi(APIView):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-    #/def post(self, request):
-        request_data = request.data.copy()
-
-        serializer = MasterSerializer.objects.get(data=request_data)
-        if serializer.is_valid():
-            try:
-                master = serializer.save()
-                return Response(
-                    data={
-                        "msg": "ok",
-                        "data": f'Master {master.first_name} {master.last_name} created successfully.',
-                        "status": status.HTTP_201_CREATED
-                    },
-                    status=status.HTTP_201_CREATED
-                )
-            except Exception as e:
-                return Response(
-                    data={
-                        "msg": "error",
-                        "data": f"An error occurred while saving the master: {str(e)}",
-                        "status": status.HTTP_500_INTERNAL_SERVER_ERROR
-                    },
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
-
-        return Response(
-            data={
-                "msg": "error",
-                "data": serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST
-            },
-            status=status.HTTP_400_BAD_REQUEST
-        )#/
     
-    class MasterListApi(APIView):
-        permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
-        @swagger_auto_schema(
-            operation_summary="Masters List",
-            operation_description="Endpoint to list all masters"
-        )
-        def get(self, request, pk = None):
-            try:
-                if pk:
-                    master = master.objects.get(id = pk)
-                    serializer = MasterSerializer(master)
-                else:
-                    master = master.objects.all()
-                    serializer = MasterSerializer(master,many = True)
-                return Response(data = serializer.data, status = status.HTTP_200_ok)
-            except Master.DoesNotExist:
-                return Response(date={
-                    "msg":"error",
-                    "data":"استاد مورد نظر یافت نشد",
-                    "status":status.HTTP_404_NOT_FOUND
-                }, status = status.HTTP_404_NOT_FOUND)
-            except ValidationError:
-                return Response(data={
-                    "msg":"error",
-                    "data":"شناسه استاد نامعتبر است.",
-                    "status":status.HTTP_400_BAD_REQUEST
-            }, status=status.HTTP_400_BAD_REQUEST)
+class MasterListApi(APIView):
+    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    @swagger_auto_schema(
+        operation_summary="Masters List",
+        operation_description="Endpoint to list all masters"
+    )
+    def get(self, request, pk = None):
+        try:
+            if pk:
+                master = master.objects.get(id = pk)
+                serializer = MasterSerializer(master)
+            else:
+                master = master.objects.all()
+                serializer = MasterSerializer(master,many = True)
+            return Response(data = serializer.data, status = status.HTTP_200_ok)
+        except Master.DoesNotExist:
+            return Response(date={
+                "msg":"error",
+                "data":"استاد مورد نظر یافت نشد",
+                "status":status.HTTP_404_NOT_FOUND
+            }, status = status.HTTP_404_NOT_FOUND)
+        except ValidationError:
+            return Response(data={
+                "msg":"error",
+                "data":"شناسه استاد نامعتبر است.",
+                "status":status.HTTP_400_BAD_REQUEST
+        }, status=status.HTTP_400_BAD_REQUEST)
                 
 
 
