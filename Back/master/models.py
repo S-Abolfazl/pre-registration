@@ -3,7 +3,7 @@ import uuid
 
 class Master(models.Model):
 
-    Master_type = {
+    role = {
         ('assistant_professor', 'استادیار'),
         ('associate_professor', 'دانشیار'),
         ('full_professor', 'استاد تمام'),
