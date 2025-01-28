@@ -12,7 +12,7 @@ import Bar from '~/components/Layout/Bar.vue';
 export default {
   components: { Bar },
   data: () => ({
-    show_body: false,
+    show_body: true,
   }),
   beforeMount() {
     document.getElementById('loading').style.display = 'none';
@@ -24,24 +24,24 @@ export default {
       }
     }, 2);
 
-    this.checkAuth();
+    //this.checkAuth();
   },
   methods: {
-    checkAuth() {
-      let user = this.$store.state.auth.user
+    // checkAuth() {
+    //   let user = this.$store.state.auth.user
 
-      document.getElementById('loading').style.display = 'none';
+    //   document.getElementById('loading').style.display = 'none';
 
-      if (Boolean(user)) {
-        this.show_body = true;
-      }
-      else {
-        this.$store.dispatch('auth/nuxtServerInit').then(() => {
-          document.getElementById('loading').style.display = 'none';
-          this.show_body = true;
-        })
-      }
-    },
+    //   if (Boolean(user)) {
+    //     this.show_body = true;
+    //   }
+    //   else {
+    //     this.$store.dispatch('auth/nuxtServerInit').then(() => {
+    //       document.getElementById('loading').style.display = 'none';
+    //       this.show_body = true;
+    //     })
+    //   }
+    // },
   },
 }
 </script>
