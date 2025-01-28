@@ -14,7 +14,7 @@
         <span class="menu-text font_24">دروس پاس شده</span>
       </v-list-item>
       <!-- settings item -->
-      <v-list-item @click="goToUsers" class="v-list-item-custom" v-if="role == 'admin'">
+      <v-list-item @click="goToUsers" class="v-list-item-custom" v-if="role == 'academicassistant'">
         <img src="image/menu/Manegement.png" class="menu-icon" alt="management" />
         <span class="menu-text font_24">مدیریت کاربران</span>
       </v-list-item>
@@ -88,7 +88,7 @@ export default {
       this.$router.push("/passed-courses");
     },
     goToUsers() {
-      window.location.href = `http://${this.store.state.server_url}/admin`;
+      window.location.href = `${this.$store.state.server_url}/admin`;
     },
     logout() {
       this.$reqApi(`/user/logout/`, {

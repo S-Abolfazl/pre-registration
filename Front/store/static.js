@@ -13,7 +13,7 @@ let status = [
 let user_types = [
   { text: 'دانشجو', value: 'student' },
   { text: 'معاون آموزشی', value: 'academicassistant' },
-  // { text: 'ادمین', value: 'admin' },
+  { text: 'ادمین', value: 'admin' },
   // { text: 'پشتیبان', value: 'support' },
 ]
 
