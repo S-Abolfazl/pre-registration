@@ -48,7 +48,8 @@
           />
           <Course
             v-else
-
+            :course="course"
+            :options="elective_course"
           />
         </template>
       </v-chip-group>
@@ -118,6 +119,12 @@ export default {
           }
         }
       }
+
+      this.elective_course.forEach(element => {
+        if (element.passed) {
+          passedCourseIds.push(element.id);
+        }
+      });
 
       this.$reqApi("/student/selecet-passed-course/", {"course_ids" : passedCourseIds})
       .then((response) => {

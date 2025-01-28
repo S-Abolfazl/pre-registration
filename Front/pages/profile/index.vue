@@ -136,18 +136,22 @@ export default {
   },
   methods: {
     sabt(data) {
-      let form = {
-        [data]: this.user[data],
-      }
+      let formData = new FormData();
 
-      this.$reqApi('user/update/', form, {}, true, 'patch')
+      Object.keys(this.user).forEach((key) => {
+        if (this.user[key]) {
+          formData.append(key, this.user[key]);
+        }
+      });
+
+      this.$reqApi('user/update/', formData, {}, true, 'patch')
         .then((response) => {
           localStorage.setItem('user', JSON.stringify(this.user));
           this.user.password = '';
           this.$toast.success(response);
         })
         .catch((error) => {
-          this.$toast.error(error);
+          this.$toast.error(error.response || 'مشکلی پیش آمده است');
         });
     },
     logout() {

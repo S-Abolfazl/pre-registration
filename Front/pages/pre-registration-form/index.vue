@@ -83,9 +83,7 @@ export default {
       .then((response) => {
         this.$toast.success(response);
       })
-      .catch((error) => {
-        this.$toast.error(error);
-      });
+      .catch((error) => {});
     },
     search(data) {
       this.detail_data = this.main_data.filter((course) =>
