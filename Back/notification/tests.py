@@ -26,3 +26,4 @@ class NitificationGetApiTest(APITestCase):
         self.assertEqual(response.data["msg"], "ok")
         self.assertIn("data", response.data)
         self.assertIsInstance(response.data["data"], list)
+        self.assertEqual(self.notification.__str__(), response.data["data"][0]["title"])

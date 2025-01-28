@@ -20,4 +20,4 @@ Front/jsconfig.json
 Front/.nuxt
 Front/static/sw.js
 htmlcov
-.coverage
+Back/.coverage
