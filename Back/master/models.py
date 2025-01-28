@@ -18,7 +18,7 @@ class Master(models.Model):
     department =  models.CharField(max_length = 255 , null = True, blank = True)
     mobile_number = models.CharField(max_length = 8 , null = True, blank = True)
     email = models.EmailField(null= True)
-    avatar = models.ImageField(upload_to = 'masters/', null = True)
+    avatar = models.ImageField(upload_to = 'avatars/', null = True)
     field = models.CharField(max_length = 255 , null = True, blank = True)
     rate = models.IntegerField(null = True, blank = True)
 

@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 class MasterCreateApi(APIView):
-    permission_classes = [IsAuthenticated]  # فقط کاربران احراز هویت شده اجازه دسترسی دارند
+    permission_classes = [IsAuthenticated, IsAcademicAssistantOrAdmin]  # فقط کاربران احراز هویت شده اجازه دسترسی دارند
 
     @swagger_auto_schema(
         operation_summary="Master Create",
