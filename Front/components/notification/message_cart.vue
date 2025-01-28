@@ -6,8 +6,8 @@
         cols="12"
       >
         <v-card :color="cardColor " class="mb-2" outlined :style="{ borderRadius: borderRadius + 'px' }">
-          <v-card-title :class="textColor" class="mx-6 my-3 font_35 bold">{{ announcement.title }}</v-card-title>
-          <v-card-subtitle class="mx-6">
+          <v-card-title :class="textColor" class="mx-6 my-4 font_35 bold">{{ announcement.title }}</v-card-title>
+          <v-card-subtitle class="mx-6 font_22">
             {{ formatDate(announcement.created_at) }}
           </v-card-subtitle>
           <v-card-text class="mx-6 mb-3 font_24" :class="textColor">
