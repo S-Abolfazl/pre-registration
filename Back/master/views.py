@@ -32,6 +32,7 @@ class MasterCreateApi(APIView):
                 'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='Mobile number'),
                 'email': openapi.Schema(type=openapi.TYPE_STRING, description='Email address'),
                 'avatar': openapi.Schema(type=openapi.TYPE_STRING, format='binary', description='Avatar image'),
+                'field' : openapi.Schema(type=openapi.TYPE_STRING, description='Field name'),
                 'rate': openapi.Schema(type=openapi.TYPE_INTEGER, description='Rating of the master'),
             }
             
@@ -189,6 +190,7 @@ class MasterUpdateApi(APIView):
                 'rate': openapi.Schema(type=openapi.TYPE_STRING, description='rate'),
                 'Master_type': openapi.Schema(type=openapi.TYPE_STRING, description='Master_type'),
                 'specialization': openapi.Schema(type=openapi.TYPE_STRING, description='specialization'),
+                'field' : openapi.Schema(type=openapi.TYPE_STRING, description='field name'),
                 'mobile_number': openapi.Schema(type=openapi.TYPE_STRING, description='Mobile number'),
                 'avatar': openapi.Schema(
                     type=openapi.TYPE_STRING,
