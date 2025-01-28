@@ -42,6 +42,7 @@
       </div>
       <v-spacer></v-spacer>
       <BaseButton
+        v-if="role == 'student'"
         class="font_20 description"
         text="پيش ثبت نام"
         color="primary"
@@ -94,6 +95,11 @@ export default {
       type: "",
     },
   }),
+  computed: {
+    role() {
+      return JSON.parse(localStorage.getItem('user')).type;
+    }
+  },
   mounted(){
     this.$reqApi('/user/detail/', {}, {}, true, 'get')
     .then((response) => {

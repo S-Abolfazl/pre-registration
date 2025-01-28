@@ -1,7 +1,7 @@
 <template>
   <v-form v-model="valid">
     <v-col  class="my-4">
-      
+
       <v-row class="my-10 mr-12">
         <h1 class="mb-8 font_45 ">پیام ها و اطلاعیه ها</h1>
       </v-row>
@@ -9,7 +9,7 @@
       <v-row class="justify-center">
         <v-col cols="12">
           <message_cart
-            :announcements="announcements.data"
+            :announcements="announcements"
             card-color="blue2"
             text-color="white1--text  "
             :border-radius="20"
@@ -22,67 +22,33 @@
 </template>
 
 <script>
-import message_cart from '~/components/notification/message_cart.vue';  
+import message_cart from '~/components/notification/message_cart.vue';
 export default {
 
   components: {
     message_cart,
   },
   data: () => ({
-    announcements:{
-    "msg": "ok",
-    "data": [
-      {
-        "title": "افزودن درس",
-        "content": "درس مدارهای مجتمع دیجیتال ارائه شده توسط استاد جهانیان علی در روز شنبه و دوشنبه و در ساعت  13 - 15 افزوده شد",
-        "created_at": "2025-01-16T15:13:58.314007Z"
-      },
-      {
-        "title": "افزودن درس",
-        "content": "درس مبانی امنیت سایبری ارائه شده توسط استاد عباسپور مقصود در روز یک‌شنبه و سه‌شنبه و در ساعت  10 - 12 افزوده شد",
-        "created_at": "2025-01-16T15:13:58.325008Z"
-      },
-      {
-        "title": "افزودن درس",
-        "content": "درس پروژه کارشناسی ارائه شده توسط استاد اساتید گروه آموزشی افزوده شد",
-        "created_at": "2025-01-16T15:13:58.337038Z"
-      },
-      {
-        "title": "افزودن درس",
-        "content": "درس طراحی بازی های رایانه ای ارائه شده توسط استاد وحیدی اصل مجتبی در روز یک‌شنبه و سه‌شنبه و در ساعت  09 - 10 افزوده شد",
-        "created_at": "2025-01-16T15:13:58.349103Z"
-      },
-      {
-        "title": "افزودن درس",
-        "content": "درس هوش مصنوعی مقدماتی ارائه شده توسط استاد متقی مریم السادات در روز یک‌شنبه و سه‌شنبه و در ساعت  15 - 17 افزوده شد",
-        "created_at": "2025-01-16T15:13:58.360581Z"
-      },
-      {
-        "title": "افزودن درس",
-        "content": "درس هوش مصنوعی مقدماتی ارائه شده توسط استاد غفاری کرامت اله در روز شنبه و دوشنبه و در ساعت  15 - 17 افزوده شد",
-        "created_at": "2025-01-16T15:13:58.371906Z"
-      },
-      {
-        "title": "افزودن درس",
-        "content": "درس کارآموزی ارائه شده توسط استاد اساتید گروه آموزشی افزوده شد",
-        "created_at": "2025-01-16T15:13:58.383315Z"
-      }
-    ],
-    "status": 200
-    }
+    announcements:[],
   }),
   head(){
     return {
-      title: '  '
+      title: 'پیام ها و اطلاعیه ها'
     }
   },
-  computed: {
-  },
-  beforeMount() {
-    //this.$store.dispatch('setPageTitle', this.title);
-    // this.$store.dispatch('setTableData', this.TabeleData);
+  mounted() {
+    this.getDatas();
   },
   methods: {
+    getDatas() {
+      this.$reqApi('notification/', {}, {}, true, 'get')
+      .then((response) => {
+        this.announcements = response
+      })
+      .catch((error) => {
+        this.$toast.error(error);
+      });
+    },
   },
 };
 </script>
