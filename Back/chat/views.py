@@ -79,8 +79,8 @@ class ChatCreateAPIView(APIView):
         return Response({
             "msg": "ok",
             "data": serializer.data,
-            "status": status.HTTP_200_OK,
-        }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+            "status": status.HTTP_201_CREATED,
+        }, status=status.HTTP_201_CREATED)
 
 
 class ChatDeleteAPIView(APIView):
