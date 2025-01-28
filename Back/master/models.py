@@ -3,7 +3,7 @@ import uuid
 
 class Master(models.Model):
 
-    Master_type = {
+    role = {
         ('assistant_professor', 'استادیار'),
         ('associate_professor', 'دانشیار'),
         ('full_professor', 'استاد تمام'),
@@ -16,9 +16,10 @@ class Master(models.Model):
     specialization = models.CharField(max_length = 255 , null = True, blank = True)
     description = models.TextField(null = True, blank = True)
     department =  models.CharField(max_length = 255 , null = True, blank = True)
-    mobile_number = models.CharField(max_length = 11 , null = True, blank = True)
+    mobile_number = models.CharField(max_length = 8 , null = True, blank = True)
     email = models.EmailField(null= True)
     avatar = models.ImageField(upload_to = 'masters/', null = True)
+    field = models.CharField(max_length = 255 , null = True, blank = True)
     rate = models.IntegerField(null = True, blank = True)
 
 
