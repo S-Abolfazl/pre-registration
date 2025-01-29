@@ -172,6 +172,15 @@ export default {
     select2(event) {
       if ('selected' in event) {
         event.selected = !event.selected;
+        this.events.forEach(the_event => {
+          if (
+            event.name == the_event.name &&
+            event.end != the_event.end &&
+            event.teacherName == the_event.teacherName
+          ) {
+            the_event.selected = !the_event.selected;
+          }
+        });
       }
     },
   },

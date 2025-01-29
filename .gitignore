@@ -2,11 +2,14 @@ Back/sib6/
 Back/.DS_Store
 Back/sib/
 Back/moz/
+Back/venv/
+.idea
 node_modules
 **/__pycache__/
 __pycache__/
 .venv
 .env
+Back/media/avatars/**
 **/migrations/*.py
 !**/migrations/__init__.py
 Back/static
@@ -16,3 +19,5 @@ Front/node_modules
 Front/jsconfig.json
 Front/.nuxt
 Front/static/sw.js
+htmlcov
+Back/.coverage

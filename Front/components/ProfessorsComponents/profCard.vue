@@ -1,7 +1,7 @@
 <template>
     <div class="card" style="width:100%;">
         <div class="header white1--text">
-            <img :src="avatar " alt="Profile" class="profile-image" style="margin-left: 4%;"/>
+            <img :src="$store.state.server_url + avatar" alt="Profile" class="profile-image" style="margin-left: 4%;"/>
             <div>
                 <p class="font_10" style="margin-bottom: 0%;">{{ role }}</p>
                 <h2 class="font_15">{{ name }}</h2>
@@ -54,8 +54,8 @@
           </v-col>
     </v-row>
       </div>
-      
-      
+
+
       <div>
         <v-row  >
             <v-col cols="4">
@@ -81,11 +81,11 @@
           </v-col>
     </v-row>
       </div>
-        
+
       </div>
     </div>
   </template>
-  
+
   <script>
   export default {
     name: "ProfCard",
@@ -152,47 +152,46 @@
 }
   };
   </script>
-  
+
   <style scoped>
   .card {
     border: 1px solid #e0e0e0;
     border-radius: 15px;
     overflow: hidden;
   }
-  
+
   .header {
     display: flex;
     background: linear-gradient(to right, #FF8B37, #7B5FF1);
     padding: 8px 20px;
   }
-  
+
   .profile-image {
     width: 60px;
     height: 60px;
     border-radius: 50%;
     border: 2px solid #fff;
   }
-  
 
-  
+
+
   .footer {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
   }
-  
-  
+
+
   .stars {
     font-size: 1.2em;
     color: linear-gradient(to top, #FF8B37, #7B5FF1);
   }
-  
+
   .stars .filled {
     color: linear-gradient(to top, #FF8B37, #7B5FF1);
   }
-  
+
   .stars span {
     color: linear-gradient(to top, #FF8B37, #7B5FF1);
   }
   </style>
-  

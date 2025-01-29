@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Course, AllCourses, Prereq, Coreq, CourseRule
-from django import forms
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -10,6 +9,7 @@ class AllCoursesAdmin(admin.ModelAdmin):
     list_display = ('course_id', 'courseName', 'unit', 'type')
     search_fields = ('courseName',)
     list_filter = ('type',)
+    readonly_fields = ('course_id',)
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -18,6 +18,7 @@ class CourseAdmin(admin.ModelAdmin):
     
     search_fields = ('course__courseName', 'teacherName')
     list_filter = ('isExperimental', 'class_time1', 'class_time2')
+    readonly_fields = ('c_id',)
     
     def display_class_time1(self, obj):
         return obj.class_time1
@@ -51,6 +52,7 @@ class CourseRuleAdmin(admin.ModelAdmin):
     list_display = ('rule_id', 'linked_course', 'type', 'values')
     search_fields = ('type',)
     list_filter = ('type',)
+    readonly_fields = ('rule_id',)
     
     def linked_course(self , obj):
         link = reverse('admin:course_course_change', args=[obj.course.c_id])

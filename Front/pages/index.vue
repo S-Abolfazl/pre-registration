@@ -1,16 +1,9 @@
 <template>
-  <div>
-    the index page !
-    <br>
-    that is not complete
-    <!-- <BaseInput /> -->
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-  data: () => ({
-  }),
   mounted() {
     this.$router.push('/panel')
   },
