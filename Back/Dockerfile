@@ -17,6 +17,7 @@ ENTRYPOINT ["sh", "-c", "find . -path './*migrations/*' -not -name '__init__.py'
     python manage.py shell -c 'exec(open(\"data/2_data_for_all_courses.py\", encoding=\"utf-8\").read())' && \
     python manage.py shell -c 'exec(open(\"data/3_data_for_prereq_coreq.py\", encoding=\"utf-8\").read())' && \
     python manage.py shell -c 'exec(open(\"data/4_map_courses_data.py\", encoding=\"utf-8\").read())' && \
+    python manage.py shell -c 'exec(open(\"data/6_masters_creation.py\", encoding=\"utf-8\").read())' && \
     python manage.py collectstatic --noinput &&  \
     echo done &&  \
     python manage.py runserver 0.0.0.0:8000"]
