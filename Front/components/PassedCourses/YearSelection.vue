@@ -6,7 +6,7 @@
         class="custom-slide-group"
         center-active
         show-arrows
-        :style="{ height: height }" 
+        :style="{ height: height }"
       >
         <!-- Left Arrow -->
         <template v-slot:prev>
@@ -14,7 +14,7 @@
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </template>
-  
+
         <!-- Slide Items -->
         <v-slide-item
           v-for="(year, index) in years"
@@ -24,7 +24,7 @@
         >
           <div class="entry-content">{{ year }}</div>
         </v-slide-item>
-  
+
         <!-- Right Arrow -->
         <template v-slot:next>
           <v-btn icon @click="nextYear" :disabled="isLast">
@@ -34,7 +34,7 @@
       </v-slide-group>
     </div>
   </template>
-  
+
   <script>
   export default {
     name:"YearSelection",
@@ -78,14 +78,14 @@
     },
   };
   </script>
-  
+
   <style scoped>
   /* Wrapper for alignment */
   .slide-group-wrapper {
     justify-content: center;
     align-items: center;
   }
-  
+
   /* Slide Group Container */
   .custom-slide-group {
     width: v-bind('width');
@@ -94,15 +94,14 @@
     position: relative;
     align-items: center;
   }
-  
+
   /* Each Slide Item */
   .slide-item {
     justify-content: center !important;
     align-items: center !important;
     width: v-bind('width') !important;
-    align-items: center;
   }
-  
+
   .entry-content {
     font-size: 16px;
     font-weight: bold;
@@ -110,19 +109,18 @@
     text-align: center;
     align-items: center;
   }
-  
+
   /* Arrow Button Styling */
   .v-btn {
     color: white;
   }
-  
+
   .v-icon {
     font-size: 24px;
   }
-  
+
   .v-btn[disabled] {
     color: gray;
     cursor: not-allowed;
   }
   </style>
-  

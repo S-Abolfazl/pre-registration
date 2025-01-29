@@ -55,10 +55,6 @@ export default {
       type: String,
       default: '',
     },
-    tooltipWidth: {
-      type: String,
-      default: '350',
-    },
   },
 }
 </script>
