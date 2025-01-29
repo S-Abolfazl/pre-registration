@@ -223,14 +223,13 @@ class CoursesForPassedCoursesApi(APIView):
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
                 
-            data["elective_course"] = {
-                num:{
+            data["elective_course"] = [
+                {
                     "id":  course.course_id,
                     "courseName": course.courseName,
-                } for num, course in enumerate(AllCourses.objects.filter(
-                    type='elective_course'
-                ), start=1) 
-            }
+                    "passed": False,
+                } for num, course in enumerate(AllCourses.objects.filter(type='elective_course'), start=1)
+            ]
 
             return Response(data={
                 "msg": "ok",
