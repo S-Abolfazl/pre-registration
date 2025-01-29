@@ -72,7 +72,7 @@ class MasterCreateApi(APIView):
             )
     
 class MasterListApi(APIView):
-    permission_classes = [IsAcademicAssistantOrAdmin, IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         operation_summary="Masters List",
         operation_description="Endpoint to list all masters"
@@ -80,14 +80,18 @@ class MasterListApi(APIView):
     def get(self, request, pk = None):
         try:
             if pk:
-                master = master.objects.get(id = pk)
+                master = Master.objects.get(id = pk)
                 serializer = MasterSerializer(master)
             else:
-                master = master.objects.all()
+                master = Master.objects.all()
                 serializer = MasterSerializer(master,many = True)
-            return Response(data = serializer.data, status = status.HTTP_200_ok)
+            return Response(data={
+                "msg": "ok",
+                "data": serializer.data,
+                "status": status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
         except Master.DoesNotExist:
-            return Response(date={
+            return Response(data={
                 "msg":"error",
                 "data":"استاد مورد نظر یافت نشد",
                 "status":status.HTTP_404_NOT_FOUND
@@ -117,8 +121,8 @@ class MasterDeleteApi(APIView):
     )
     def delete(self, request, pk):
         try:
-            Master = Master.objects.get(id=pk)
-            Master.delete()
+            master = Master.objects.get(id=pk)
+            master.delete()
             return Response(data={
                 "msg":"ok",
                 "data":f'master by id:{pk} deleted',

@@ -285,9 +285,9 @@ class UserUpdateApi(APIView):
     def patch(self, request):
         try:
             user = request.user
-            
+
             avatar = request.FILES.get('avatar')
-            data = request.data.copy()
+            data = request.data.dict()
             if avatar:
                 data['avatar'] = avatar
             
