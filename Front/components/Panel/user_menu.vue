@@ -9,12 +9,12 @@
         <span class="menu-text font_24">حساب کاربری</span>
       </v-list-item>
       <!-- course item -->
-      <v-list-item @click="goToLessons" class="v-list-item-custom">
+      <v-list-item @click="goToLessons" class="v-list-item-custom" v-if="role == 'student'">
         <img src="image/menu/course.png" class="menu-icon" alt="courses" />
         <span class="menu-text font_24">دروس پاس شده</span>
       </v-list-item>
       <!-- settings item -->
-      <v-list-item @click="goToSettings" class="v-list-item-custom">
+      <v-list-item @click="goToUsers" class="v-list-item-custom" v-if="role == 'academicassistant'">
         <img src="image/menu/Manegement.png" class="menu-icon" alt="management" />
         <span class="menu-text font_24">مدیریت کاربران</span>
       </v-list-item>
@@ -72,6 +72,11 @@ export default {
       localStorage.setItem('isDark', newVal);
     },
   },
+  computed: {
+    role() {
+      return JSON.parse(localStorage.getItem('user')).type;
+    }
+  },
   mounted() {
     this.darkMode = this.$vuetify.theme.dark;
   },
@@ -82,8 +87,8 @@ export default {
     goToLessons() {
       this.$router.push("/passed-courses");
     },
-    goToSettings() {
-      console.log('Navigate to settings');
+    goToUsers() {
+      window.location.href = `${this.$store.state.server_url}/admin`;
     },
     logout() {
       this.$reqApi(`/user/logout/`, {

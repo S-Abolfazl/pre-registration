@@ -72,20 +72,18 @@ export default {
   },
   methods: {
     register() {
-      let datas = [];
+      const datas = new Set();
       this.detail_data.forEach(course => {
         if (course.selected) {
-          datas.push(course.c_id)
+          datas.add(course.c_id);
         }
       });
 
-      this.$reqApi("/registration-form/confirm/", { course_ids: datas } )
+      this.$reqApi("/registration-form/confirm/", { course_ids: [...datas] } )
       .then((response) => {
         this.$toast.success(response);
       })
-      .catch((error) => {
-        this.$toast.error(error);
-      });
+      .catch((error) => {});
     },
     search(data) {
       this.detail_data = this.main_data.filter((course) =>

@@ -1,6 +1,6 @@
 <template>
   <div class="the-border">
-    <v-card class="professors-card blue1"  @click="goToProfessor">
+    <v-card class="professors-card"  @click="goToProfessor">
       <v-row no-gutters align="center">
         <!-- متن توضیحات -->
         <v-col cols="6" >
@@ -72,7 +72,7 @@
 .professors-card {
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.3) !important;
   border-radius: 25px;
-  /* background-color: var(blue1); */
+  background-color: #7c5ff12a;
   /* border: 3px solid #7B5FF1 !important; */
   /* width: 33%;  */
   height: auto;
