@@ -37,7 +37,7 @@ class ChatTest(APITestCase):
     def test_chat_list(self):
         response = self.client.get('/chat/list/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['data']), 1)
+        self.assertEqual(len(response.data['data']), 2)
         
     def test_chat_detail(self):
         response = self.client.get(f'/chat/detail/{self.chat.id}/')
