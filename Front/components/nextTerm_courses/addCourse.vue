@@ -2,13 +2,13 @@
     <div>
       <!-- Overlay -->
       <div class="overlay" v-if="showAddCourse" @click="closeModal"></div>
-  
+
       <!-- Modal -->
       <div class="modal px-4 py-7 white1" v-if="showAddCourse">
         <v-form v-model="formValid">
 
           <!-- header -->
-        
+
           <v-row class="mt-4">
             <h3 class="font_22 addCourse_header mx-5"> اطلاعات درس</h3>
           </v-row>
@@ -24,7 +24,7 @@
                 text="نام درس"
                 rules="require"
                 borderRadius="15px"
-                width="70%" 
+                width="70%"
                 placeholder="نام درس را وارد کنید"
               />
             </v-col>
@@ -35,7 +35,7 @@
                 textClass="font_20 black1--text"
                 text="نام استاد"
                 rules="require"
-                width="70%" 
+                width="70%"
                 borderRadius="15px"
                 placeholder="نام استاد را وارد کنید"
               />
@@ -51,13 +51,13 @@
                 textClass="font_20 black1--text"
                 text="ظرفیت درس"
                 rules="require"
-                width="70%" 
+                width="70%"
                 borderRadius="15px"
                 type="number"
                 placeholder="ظرفیت درس را وارد کنید"
               />
             </v-col>
-            
+
             <v-col cols="7">
               <v-row>
                 <div class="black1--text mx-4 font_20">ورودی</div>
@@ -77,9 +77,9 @@
                   {{ year }}
                   </v-chip>
                 </v-col>
-              </v-row> 
+              </v-row>
             </v-col>
-          </v-row>  
+          </v-row>
           <v-row>
             <v-checkbox
             v-model="newCourse.is_Experimental"
@@ -96,7 +96,7 @@
             <h3 class="font_22 addCourse_header mx-5"> روز و ساعت ارائه</h3>
           </v-row>
           <div class="gradient-divider my-4"></div>
-         
+
             <v-col class="mx-4 my-4">
               <v-row class="mt-4">
                 <div class="black1--text mx-4 font_20">روزهای ارائه درس</div>
@@ -115,7 +115,7 @@
                   >
                     {{ day }}
                   </v-chip>
-                </v-col> 
+                </v-col>
               </v-row>
 
               <v-row class="d-flex align-center mt-6">
@@ -126,15 +126,15 @@
                     textClass="font_20 black1--text"
                     text="شروع"
                     rules="require"
-                    width="100%" 
+                    width="100%"
                     borderRadius="15px"
                     type="time"
                     placeholder="ساعت شروع"
                   />
                 </v-col>
-               
+
                 <div class="mt-5 font_20" style="color: rgb(0, 0, 0,0.4);">تا</div>
-                
+
                 <v-col cols="2" >
                   <BaseInput
                     v-model="newCourse.class_end_time"
@@ -142,7 +142,7 @@
                     textClass="font_20 black1--text"
                     rules="require"
                     text="ساعت پایان"
-                    width="100%" 
+                    width="100%"
                     borderRadius="15px"
                     type="time"
                   />
@@ -162,7 +162,7 @@
                 <v-row >
                 <BaseJdate
                   v-model="newCourse.exam_date"
-                  backgroundColor ="blue3" 
+
                 ></BaseJdate>
               </v-row>
               </v-col>
@@ -174,19 +174,19 @@
                     backgroundColor ="blue3"
                     textClass="font_20 black1--text"
                     text="ساعت شروع"
-                    width="100%" 
+                    width="100%"
                     borderRadius="15px"
                     type="time"
                   />
                 </v-col>
 
                 <div class="mt-5 font_20" style="color: rgb(0, 0, 0,0.4);">تا</div>
-                
+
                 <v-col cols="2" >
                   <BaseInput
                     v-model="newCourse.exam_end_time"
                     backgroundColor ="blue3"
-                    width="100%" 
+                    width="100%"
                     textClass="font_20 black1--text"
                     text="ساعت پایان"
                     borderRadius="15px"
@@ -195,7 +195,7 @@
                 </v-col>
               </v-row>
             </v-col>
-  
+
           <!-- Description -->
           <v-row class="mt-3" >
             <h3 class="font_22 addCourse_header mx-5">توضیحات</h3>
@@ -216,7 +216,7 @@
               </v-textarea>
             </v-row>
           </v-col>
-  
+
           <!-- Buttons -->
           <v-row class="justify-start mt-6 mx-4">
             <v-col cols="3">
@@ -246,7 +246,7 @@
       </div>
     </div>
   </template>
-  
+
   <script>
 import BaseCard from '../Base/BaseCard.vue';
 import BaseDatePicker from '../Base/BaseDatePicker.vue';
@@ -283,7 +283,7 @@ import BaseTitle from '../Base/BaseTitle.vue';
           exam_end_time: "",
           description: "",
         },
-        availableYears: [1399, 1400, 1401, 1402], 
+        availableYears: [1399, 1400, 1401, 1402],
         availableDays: ["شنبه", "یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه"],
       };
     },
@@ -314,7 +314,7 @@ import BaseTitle from '../Base/BaseTitle.vue';
       isSelectedDay(day) {
         return this.newCourse.class_days.includes(day);
       },
-      
+
       processCourseData(course) {
         const processedCourse = { ...course };
 
@@ -337,11 +337,11 @@ import BaseTitle from '../Base/BaseTitle.vue';
 
       addCourse() {
         if (this.formValid) {
-        
+
           const processedCourse = this.processCourseData(this.newCourse);
 
           this.$emit("course-added", processedCourse);
-  
+
           this.newCourse = {
             courseName: "",
             teacherName: "",
@@ -361,30 +361,30 @@ import BaseTitle from '../Base/BaseTitle.vue';
         }
       },
       closeModal() {
-        this.$emit("close-modal"); 
+        this.$emit("close-modal");
       },
-    
+
       formatTime12to24(time) {
-        if (!time || typeof time !== 'string') return '00:00'; 
-        const [timePart, modifier] = time.split(' '); 
+        if (!time || typeof time !== 'string') return '00:00';
+        const [timePart, modifier] = time.split(' ');
         let [hours, minutes] = timePart.split(':').map(Number);
-      
+
         if (modifier === 'PM' && hours < 12) {
           hours += 12;
         }
         if (modifier === 'AM' && hours === 12) {
           hours = 0;
         }
-      
+
         const formattedHours = hours.toString().padStart(2, '0');
         const formattedMinutes = minutes.toString().padStart(2, '0');
-      
+
         return `${formattedHours}:${formattedMinutes}`;
       }
     },
   };
   </script>
-  
+
   <style scoped>
   .overlay {
     position: fixed;
@@ -395,7 +395,7 @@ import BaseTitle from '../Base/BaseTitle.vue';
     background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
   }
-  
+
   .modal {
     position: fixed;
     top: 50%;
@@ -416,28 +416,27 @@ import BaseTitle from '../Base/BaseTitle.vue';
   .addCourse_header {
     color: rgba(0, 0, 0, 0.48);
   }
-  
+
   .gradient-divider {
-  height: 3px; 
-  background: linear-gradient(to right, #FF8B37, #7B5FF1); 
-  border: none; 
+  height: 3px;
+  background: linear-gradient(to right, #FF8B37, #7B5FF1);
+  border: none;
   }
 
   /*.custom-checkbox .v-input__control {
-  border-radius: 50%; /* دایره‌ای کردن 
-  border: 2px solid #1e88e5; /* رنگ دور چک‌باکس 
-  width: 24px; /* اندازه عرض 
-  height: 24px; /* اندازه ارتفاع 
+  border-radius: 50%; /* دایره‌ای کردن
+  border: 2px solid #1e88e5; /* رنگ دور چک‌باکس
+  width: 24px; /* اندازه عرض
+  height: 24px; /* اندازه ارتفاع
   }
   .custom-checkbox input:checked + .v-input__control {
-  background-color: #1e88e5; /* رنگ داخل چک‌باکس 
-  border-color: #1565c0; /* تغییر رنگ خط دور 
+  background-color: #1e88e5; /* رنگ داخل چک‌باکس
+  border-color: #1565c0; /* تغییر رنگ خط دور
   }
 
-  /* تغییر رنگ متن کنار چک‌باکس 
+  /* تغییر رنگ متن کنار چک‌باکس
   .custom-checkbox .v-label {
-    color: #424242; 
+    color: #424242;
   }*/
 
   </style>
-  

@@ -9,7 +9,7 @@
     <div style="text-align: left; padding-bottom: 5px;">
       <span class="font_18" style="font-weight: bold;">{{ senderName }}</span>
     </div>
-    <div 
+    <div
       class="black1--text font_16 gray4 "
       style="display: inline-block; word-wrap: break-word; padding: 10px; border-radius: 0 12px 12px 12px; "
     >
@@ -42,14 +42,14 @@
       </div>
     </div>
 
-    <div 
+    <div
     :style="{
     paddingTop: '5px',
     textAlign: isSupport ? 'left' : 'right',
     paddingLeft:'55px'
   }"
     >
-      <span class="gray5--text text-xs">{{ displayTime }}</span>
+      <span class="gray5--text text-xs">{{ Boolean(time) ? $toJalali(time) : '' }}</span>
     </div>
   </div>
 </template>
@@ -84,7 +84,7 @@ export default {
       currentTime: new Date(),
     };
   },
-  
+
   methods: {
     formatTime(date) {
       // Format the time as 'HH:mm' in Iran Standard Time (IRST)

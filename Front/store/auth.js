@@ -63,16 +63,16 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ _, commit, dispatch }, redirect = true) {
-    return new Promise(async (res, rej) => {
+    return new Promise((res, rej) => {
       try {
         let token = localStorage.getItem('token')
         let refresh_token = localStorage.getItem('refresh_token')
         if (token) {
-          await commit('set_token', {
+          commit('set_token', {
             'token': token,
             'refresh_token': refresh_token,
            })
-          await this.$reqApi(`/user/login`, { get_token: true})
+          this.$reqApi(`/user/login`, { get_token: true})
             .then(async (response) => {
               await dispatch('setAction', response.user)
               await commit('set_user', response.user)

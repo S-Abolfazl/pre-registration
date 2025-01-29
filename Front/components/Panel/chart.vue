@@ -64,8 +64,6 @@
     margin: auto;
     position: relative; /* برای کنترل موقعیت فرزندان مطلق */
     overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
-    box-shadow: 200px 0px 20px rgba(0, 0, 0, 0.2);
-
   }
 
   .image-wrapper {

@@ -91,7 +91,7 @@
         <v-col cols="5" class="d-flex justify-center align-center">
           <img
             :src="this.$vuetify.theme.dark ? '/image/signup/dark.png' : '/image/signup/light.png'"
-            alt="png"
+            alt="ثبت نام"
             width="90%"
           >
         </v-col>

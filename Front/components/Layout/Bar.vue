@@ -95,11 +95,6 @@ export default {
       type: "",
     },
   }),
-  computed: {
-    role() {
-      return JSON.parse(localStorage.getItem('user')).type;
-    }
-  },
   mounted(){
     this.$reqApi('/user/detail/', {}, {}, true, 'get')
     .then((response) => {
@@ -110,18 +105,23 @@ export default {
       this.$toast.error(error);
     });
   },
+  computed: {
+    role() {
+      return JSON.parse(localStorage.getItem('user')).type;
+    }
+  },
   methods: {
     navigateToPreRegistration() {
       this.$router.push('/pre-registration-form'); // Adjust the route path as needed
     },
     navigateToFeedback() {
-      this.$router.push('/professors');
+      this.$router.push('/feedback');
     },
     navigateToNotifications() {
       this.$router.push('/notifications');
     },
     navigateToSupport() {
-      this.$router.push('/support');
+      this.$router.push('/chat');
     },
     toggleMenu() {
       this.menuVisible = !this.menuVisible;

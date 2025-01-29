@@ -78,7 +78,7 @@
       <v-col cols="5" class="d-flex justify-center align-center">
         <img
           :src="this.$vuetify.theme.dark ? '/image/login/dark.png' : '/image/login/light.png'"
-          alt="png"
+          alt="لاگین"
           width="90%"
         >
       </v-col>

@@ -28,7 +28,12 @@
     export default {
       methods: {
         goToTermcourse() {
-          this.$router.push('/term-courses');
+          if (JSON.parse(localStorage.getItem('user')).type != 'student') {
+            this.$router.push('/term-courses/TermCourses_admin');
+          }
+          else {
+            this.$router.push('/term-courses');
+          }
         },
         imgWidth() {
 
@@ -71,8 +76,6 @@
   margin: auto;
   position: relative; /* برای کنترل موقعیت فرزندان مطلق */
   overflow: visible; /* اجازه دهید تصویر از کارت بیرون بزند */
-  box-shadow: 200px 0px 20px rgba(0, 0, 0, 0.2);
-
 }
 
 .image-wrapper {
