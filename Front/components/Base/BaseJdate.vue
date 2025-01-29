@@ -15,7 +15,7 @@
       :type="type"
       :max="max_end"
       :min="min_end"
-      color="#6cc662"
+      color="#7B5FF1"
       :simple="simple"
       :format="format"
       v-model="inp_value"
@@ -23,7 +23,6 @@
       :clearable="clearable"
       :placeholder="placeholder"
       :input-format="inputFormat"
-      :class="[disabled || readonly ? 'opacity_input' : '']"
     >
       <template #close-btn>
         <v-icon color="error" :size="clear ? 20 : 1">close</v-icon>
@@ -242,7 +241,7 @@ export default {
   margin-top: 12px;
   margin-bottom: 12px;
   margin-left: 6px;
-  fill: #51b34e;
+  fill: #7B5FF1;
 }
 
 .vpd-input-group {

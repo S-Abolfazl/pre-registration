@@ -28,7 +28,12 @@
     export default {
       methods: {
         goToTermcourse() {
-          this.$router.push('/term-courses');
+          if (JSON.parse(localStorage.getItem('user')).type != 'student') {
+            this.$router.push('/term-courses/TermCourses_admin');
+          }
+          else {
+            this.$router.push('/term-courses');
+          }
         },
         imgWidth() {
 
