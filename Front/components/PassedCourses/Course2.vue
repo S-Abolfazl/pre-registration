@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{  }}
     <v-chip
       :outlined="!course.passed"
       :color="course.passed ? 'purple' : 'white'"

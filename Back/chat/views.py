@@ -127,11 +127,11 @@ class MessageListAPIView(APIView):
         try:
             chat_id = Chat.objects.get(id=request.data.get('chat_id')).id
         except Exception:
-            Response({
+            return Response({
                 "msg": "error",
                 "data": "چت وجود ندارد",
-                "status": status.HTTP_400_BAD_REQUEST,
-            }, status=status.HTTP_400_BAD_REQUEST)
+                "status": status.HTTP_404_NOT_FOUND,
+            }, status=status.HTTP_404_NOT_FOUND)
 
         msgs = Message.objects.filter(chat=chat_id)
         serializer = MessageSerializer(msgs, many=True)
@@ -181,8 +181,8 @@ class MessageCreateAPIView(APIView):
                     "created": msg.created,
                     "updated": msg.updated,
                 },
-                "status": status.HTTP_200_OK,
-            }, status=status.HTTP_200_OK)
+                "status": status.HTTP_201_CREATED,
+            }, status=status.HTTP_201_CREATED)
 
         return Response({
             "msg": "خطا در ارسال پیام",
@@ -203,7 +203,7 @@ class MessageUpdateAPIView(APIView):
         },
     )
 
-    def put(self, request, pk=None):
+    def patch(self, request, pk=None):
         try:
             message = Message.objects.get(id=pk)
         except Message.DoesNotExist:
@@ -214,7 +214,7 @@ class MessageUpdateAPIView(APIView):
             }, status=status.HTTP_404_NOT_FOUND)
 
         # Update the object
-        serializer = MessageSerializer(message, data=request.data, partial=False)
+        serializer = MessageSerializer(message, data=request.data, partial=True)
 
         if serializer.is_valid():
             updated_message = serializer.save()

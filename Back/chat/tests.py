@@ -59,3 +59,33 @@ class ChatTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['data'], 'deleted success')
         
+        
+    def test_message_list(self):
+        chat_id = self.chat.id
+        response = self.client.post('/chat/get_messages/', {"chat_id": chat_id})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['data']), 1)
+        
+    def test_message_create(self):
+        response = self.client.post('/chat/create_message/', {
+            "content": "hello",
+            "sender": self.user1.id,
+            "receiver": self.user2.id,
+            "chat": self.chat.id,
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["data"]['content'], 'hello')
+        
+    def test_message_update(self):
+        response = self.client.patch(f'/chat/update_message/{self.message.id}/', {
+            "content": "hi",
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["data"]['content'], 'hi')
+        
+    def test_message_delete(self):
+        response = self.client.delete(f'/chat/delete_message/{self.message.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.data['msg'], "پیام با موفقیت حذف شد")
+    
+    

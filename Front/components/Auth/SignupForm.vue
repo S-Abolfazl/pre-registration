@@ -116,6 +116,16 @@ import BaseAutocomplete from '../Base/BaseAutocomplete.vue';
       },
       userTypes: [],
     }),
+    watch: {
+      'form.type': {
+        deep: true,
+        handler(newValue) {
+          if (newValue == 'admin') {
+            window.location.href = `${this.$store.state.server_url}/admin/`;
+          }
+        }
+      },
+    },
     mounted() {
       this.userTypes = this.$store.state.static.user_types;
     },
