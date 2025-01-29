@@ -4,14 +4,14 @@
 }
 
 * {
-  font-family: 'Sahel', 'Sahel';
+  /* font-family: 'Sahel', 'Sahel'; */
   font-size: 14px;
 }
 
-text,
+/* text,
 h2 {
   font-family: 'Sahel', 'Sahel' !important;
-}
+} */
 
 .overline {
   font-family: 'Sahel', 'Sahel' !important;
