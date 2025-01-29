@@ -16,7 +16,7 @@ export default async ({ $axios, $toast, store }, inject) => {
           case 'post':
             $axios.$post(url, data, config)
               .then((response) => {
-                let check = checkResponse(response, getOnlyData, config)
+                let check = checkResponse(response)
                 if (check.status) {
                     resolve(response.data)
                 } else {
@@ -31,7 +31,7 @@ export default async ({ $axios, $toast, store }, inject) => {
           case 'delete':
             $axios.$delete(url, { data, config })
               .then((response) => {
-                let check = checkResponse(response, getOnlyData, config)
+                let check = checkResponse(response)
                 if (check.status) {
                     resolve(check.data)
                 } else {
@@ -46,7 +46,7 @@ export default async ({ $axios, $toast, store }, inject) => {
           case 'put':
             $axios.$put(url, data, config)
               .then((response) => {
-                let check = checkResponse(response, getOnlyData, config)
+                let check = checkResponse(response)
                 if (check.status) {
                   resolve(check.data)
                 } else {
@@ -61,7 +61,7 @@ export default async ({ $axios, $toast, store }, inject) => {
           case 'patch':
             $axios.$patch(url, data)
               .then((response) => {
-                let check = checkResponse(response, getOnlyData, config)
+                let check = checkResponse(response)
                 if (check.status) {
                   resolve(check.data)
                 } else {
@@ -89,7 +89,7 @@ export default async ({ $axios, $toast, store }, inject) => {
             }
             $axios.$get(url)
               .then((response) => {
-                let check = checkResponse(response, getOnlyData, config)
+                let check = checkResponse(response)
                 if (check.status) {
                   resolve(check.data)
                 } else {

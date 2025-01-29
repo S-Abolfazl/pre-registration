@@ -15,13 +15,13 @@
     :large="size === 'large'"
     :style="{ borderRadius: borderRadius }"
   >
-    <img v-if="svg" :src="svg" class="button-svg" />
+    <img v-if="svg" :src="svg" class="button-svg" alt="Some textual description of" />
 
     <v-icon v-if="icon" :color="iconColor">{{ icon }}</v-icon>
 
     <span v-if="!loading" :class="textClass">{{ text }}</span>
 
-    <img v-if="image" :src="image" :class="[imageClass]" :style="imageStyle" />
+    <img v-if="image" :src="image" :class="[imageClass]" :style="imageStyle" alt="Some textual description of .png"  />
   </v-btn>
 </template>
 
