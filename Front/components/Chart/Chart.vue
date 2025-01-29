@@ -255,7 +255,7 @@ export default {
     align-items: center;
     border-radius: 50%;
     width: 2.3vw; /* Ensure equal width and height */
-    height: 1w;
+    height: 1vw;
     margin-right: 1.5rem;
     text-align: center;
     box-sizing: border-box; /* Prevent padding/margin issues */

@@ -6,7 +6,6 @@
   <script>
 import chatForm from "~/components/Chat/chatForm.vue";
   export default {
-    layout: 'site',
     head() {
       return {
         title: 'پشتيباني',
@@ -15,4 +14,3 @@ import chatForm from "~/components/Chat/chatForm.vue";
     components: { chatForm, }
   };
   </script>
-  

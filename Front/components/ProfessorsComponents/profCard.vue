@@ -126,10 +126,6 @@
         type: String,
         required:true
       },
-      education :{
-        type: String,
-        required:true
-      },
       specialization :{
         type: String,
         required:true
